@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.Board;
+import io.github.lonamiwebs.klooni.game.Piece;
 
 public class GameScreen implements Screen {
 
@@ -18,6 +20,11 @@ public class GameScreen implements Screen {
         game = aGame;
         board = new Board(10, 20);
         batch = new SpriteBatch();
+
+        // Fill some random pieces
+        for (int i = 0; i < 10; i++) {
+            board.putPiece(Piece.random(), MathUtils.random(10), MathUtils.random(10));
+        }
     }
 
     @Override

@@ -1,5 +1,8 @@
 package io.github.lonamiwebs.klooni.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Board {
@@ -7,6 +10,8 @@ public class Board {
     Cell[][] cells;
     private final int count; // Cell count
     private final int size; // Size per cell
+
+    private NinePatch cellPatch;
 
     public Board(int boardSize, int cellSize) {
         count = boardSize;
@@ -18,6 +23,9 @@ public class Board {
                 cells[i][j] = new Cell();
             }
         }
+
+        cellPatch = new NinePatch(
+                new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
     }
 
     private boolean inBounds(int x, int y) {
@@ -46,7 +54,7 @@ public class Board {
 
         for (int i = 0; i < piece.height; i++)
             for (int j = 0; j < piece.width; j++)
-                cells[y+i][x+j].set(piece.texture);
+                cells[y+i][x+j].set(piece.color);
 
         return true;
     }
@@ -54,6 +62,6 @@ public class Board {
     public void draw(SpriteBatch batch) {
         for (int i = 0; i < count; i++)
             for (int j = 0; j < count; j++)
-                cells[i][j].draw(batch, j * size, i * size, size);
+                cells[i][j].draw(batch, cellPatch, j * size, i * size, size);
     }
 }

@@ -1,29 +1,28 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 class Cell {
 
     private boolean empty;
-    private Texture texture;
+    private Color color;
 
     Cell() {
         empty = true;
-        texture = Piece.getTexture(Color.WHITE);
-
-        // texture or color? like in a future, uhm, nah, all cells same texture diff colorz
+        color = Color.WHITE;
     }
 
-    void set(Texture tex) {
+    void set(Color c) {
         empty = false;
-        texture = tex; // TODO Disposing uhm? Or use the skin better
+        color = c;
     }
 
-    void draw(SpriteBatch batch, int x, int y, int size) {
-        //batch.setColor(color);
-        batch.draw(texture, x, y, size, size);
+    void draw(SpriteBatch batch, NinePatch patch, int x, int y, int size) {
+        // TODO Use skin atlas
+        batch.setColor(color);
+        patch.draw(batch, x, y, size, size);
     }
 
     boolean isEmpty() {

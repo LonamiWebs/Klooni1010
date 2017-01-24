@@ -1,8 +1,6 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 
 // Pieces can be L shaped and be rotated 0 to 3 times to make it random
@@ -16,11 +14,9 @@ public class Piece {
     };
 
     final int width, height;
-    boolean shape[][];
+    private boolean shape[][];
 
-    final Texture texture;
-
-    private Color color;
+    final Color color;
 
     private Piece(int w, int h, boolean swapSize, int colorIndex) {
         color = new Color(colors[colorIndex]);
@@ -33,18 +29,10 @@ public class Piece {
                 shape[i][j] = true;
             }
         }
-        texture = getTexture(color);
-    }
-
-    static Texture getTexture(Color color) {
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGB888);
-        pixmap.drawPixel(0, 0, color.toIntBits());
-        return new Texture(pixmap);
     }
 
     private Piece(int lSize, int rotateCount, int colorIndex) {
         color = new Color(colors[colorIndex]);
-        texture = getTexture(color);
 
         width = height = lSize;
         shape = new boolean[lSize][lSize];
