@@ -1,6 +1,8 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 // Pieces can be L shaped and be rotated 0 to 3 times to make it random
@@ -87,5 +89,15 @@ public class Piece {
             case 8: return new Piece(3, MathUtils.random(3), color);
         }
         throw new RuntimeException("Random function is broken.");
+    }
+
+    void draw(SpriteBatch batch, NinePatch patch, int x, int y, int size) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (shape[i][j]) {
+                    Cell.draw(color, batch, patch, x + j * size, y + i * size, size);
+                }
+            }
+        }
     }
 }

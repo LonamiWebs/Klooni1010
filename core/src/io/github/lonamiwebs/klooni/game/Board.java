@@ -11,7 +11,7 @@ public class Board {
     private final int count; // Cell count
     private final int size; // Size per cell
 
-    private NinePatch cellPatch;
+    public NinePatch cellPatch;
 
     public Board(int boardSize, int cellSize) {
         count = boardSize;
@@ -26,6 +26,10 @@ public class Board {
 
         cellPatch = new NinePatch(
                 new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
+    }
+
+    public int getPxSize() {
+        return count * size;
     }
 
     private boolean inBounds(int x, int y) {
@@ -59,9 +63,9 @@ public class Board {
         return true;
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, int x, int y) {
         for (int i = 0; i < count; i++)
             for (int j = 0; j < count; j++)
-                cells[i][j].draw(batch, cellPatch, j * size, i * size, size);
+                cells[i][j].draw(batch, cellPatch, x + j * size, y + i * size, size);
     }
 }
