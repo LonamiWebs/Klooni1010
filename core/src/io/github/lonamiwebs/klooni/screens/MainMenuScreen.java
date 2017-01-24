@@ -55,7 +55,8 @@ public class MainMenuScreen implements Screen {
 
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Clicked! Is checked: " + playButton.isChecked());
+                game.setScreen(new GameScreen(game));
+                dispose();
             }
         });
 
