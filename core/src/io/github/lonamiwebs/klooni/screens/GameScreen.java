@@ -22,7 +22,12 @@ public class GameScreen implements Screen, InputProcessor {
 
     public GameScreen(Klooni aGame) {
         game = aGame;
-        board = new Board(10, 20);
+
+        // Board(x, y, cell count, cell size, center)
+        board = new Board(
+                Gdx.graphics.getWidth() / 2,
+                Gdx.graphics.getHeight() * 3 / 4,
+                10, 20, true);
 
         // PieceHolder(pieces, x, y, w, h)
         int holderWidth = Gdx.graphics.getWidth() / 2;
@@ -51,9 +56,7 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        board.draw(batch,
-                Gdx.graphics.getWidth() / 2 - board.getPxSize() / 2,
-                Gdx.graphics.getHeight() * 3 / 4 - board.getPxSize() / 2);
+        board.draw(batch);
 
         holder.update(board.cellSize);
         holder.draw(batch, board.cellPatch);
@@ -112,7 +115,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return holder.dropPiece();
+        return holder.dropPiece(board);
     }
 
     @Override

@@ -58,8 +58,11 @@ public class PieceHolder {
         return false;
     }
 
-    public boolean dropPiece() {
+    public boolean dropPiece(Board board) {
         if (heldPiece > -1) {
+            if (board.putScreenPiece(pieces[heldPiece])) {
+                // TODO Remove the piece
+            }
             heldPiece = -1;
             return true;
         }

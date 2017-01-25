@@ -19,7 +19,7 @@ class Cell {
         color = c;
     }
 
-    void draw(SpriteBatch batch, NinePatch patch, int x, int y, int size) {
+    void draw(SpriteBatch batch, NinePatch patch, float x, float y, int size) {
         draw(color, batch, patch, x, y, size);
     }
 
