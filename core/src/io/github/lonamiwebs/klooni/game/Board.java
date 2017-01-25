@@ -47,7 +47,7 @@ public class Board {
     }
 
     private boolean inBounds(Piece piece, int x, int y) {
-        return inBounds(x, y) && inBounds(x + piece.cellCols, y + piece.celRows - 1);
+        return inBounds(x, y) && inBounds(x + piece.cellCols - 1, y + piece.celRows - 1);
     }
 
     private boolean canPutPiece(Piece piece, int x, int y) {
@@ -75,17 +75,23 @@ public class Board {
         if (!canPutPiece(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.celRows; i++)
-            for (int j = 0; j < piece.cellCols; j++)
-                cells[y+i][x+j].set(piece.color);
+        for (int i = 0; i < piece.celRows; i++) {
+            for (int j = 0; j < piece.cellCols; j++) {
+                if (piece.filled(i, j)) {
+                    cells[y+i][x+j].set(piece.color);
+                }
+            }
+        }
 
         return true;
     }
 
     public void draw(SpriteBatch batch) {
-        for (int i = 0; i < count; i++)
-            for (int j = 0; j < count; j++)
+        for (int i = 0; i < count; i++) {
+            for (int j = 0; j < count; j++) {
                 cells[i][j].draw(batch, cellPatch,
                         pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+            }
+        }
     }
 }
