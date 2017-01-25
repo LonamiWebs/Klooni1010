@@ -23,7 +23,8 @@ class Cell {
         draw(color, batch, patch, x, y, size);
     }
 
-    static void draw(Color color, SpriteBatch batch, NinePatch patch, int x, int y, int size) {
+    static void draw(Color color, SpriteBatch batch, NinePatch patch,
+                     float x, float y, float size) {
         // TODO Use skin atlas
         batch.setColor(color);
         patch.draw(batch, x, y, size, size);

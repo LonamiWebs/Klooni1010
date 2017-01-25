@@ -37,15 +37,15 @@ public class Board {
     }
 
     private boolean inBounds(Piece piece, int x, int y) {
-        return inBounds(x, y) && inBounds(x + piece.width, y + piece.height - 1);
+        return inBounds(x, y) && inBounds(x + piece.cellCols, y + piece.celRows - 1);
     }
 
     private boolean canPutPiece(Piece piece, int x, int y) {
         if (!inBounds(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.height; i++)
-            for (int j = 0; j < piece.width; j++)
+        for (int i = 0; i < piece.celRows; i++)
+            for (int j = 0; j < piece.cellCols; j++)
                 if (!cells[y+i][x+j].isEmpty() && piece.filled(i, j))
                     return false;
 
@@ -56,8 +56,8 @@ public class Board {
         if (!canPutPiece(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.height; i++)
-            for (int j = 0; j < piece.width; j++)
+        for (int i = 0; i < piece.celRows; i++)
+            for (int j = 0; j < piece.cellCols; j++)
                 cells[y+i][x+j].set(piece.color);
 
         return true;

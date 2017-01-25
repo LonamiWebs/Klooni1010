@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 // Pieces can be L shaped and be rotated 0 to 3 times to make it random
 // Maximum size = 4
@@ -15,19 +17,23 @@ public class Piece {
             0x57cb84ff, 0x5abee2ff                          // L's
     };
 
-    final int width, height;
+    final Vector2 pos;
+    float cellSize = 10f; // Default
+
+    final int cellCols, celRows;
     private boolean shape[][];
 
     final Color color;
 
-    private Piece(int w, int h, boolean swapSize, int colorIndex) {
+    private Piece(int cols, int rows, boolean swapSize, int colorIndex) {
         color = new Color(colors[colorIndex]);
 
-        width = swapSize ? h : w;
-        height = swapSize ? w : h;
-        shape = new boolean[height][width];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        pos = new Vector2();
+        cellCols = swapSize ? rows : cols;
+        celRows = swapSize ? cols : rows;
+        shape = new boolean[celRows][cellCols];
+        for (int i = 0; i < celRows; i++) {
+            for (int j = 0; j < cellCols; j++) {
                 shape[i][j] = true;
             }
         }
@@ -36,7 +42,8 @@ public class Piece {
     private Piece(int lSize, int rotateCount, int colorIndex) {
         color = new Color(colors[colorIndex]);
 
-        width = height = lSize;
+        pos = new Vector2();
+        cellCols = celRows = lSize;
         shape = new boolean[lSize][lSize];
         switch (rotateCount % 4) {
             case 0: // ┌
@@ -91,11 +98,16 @@ public class Piece {
         throw new RuntimeException("Random function is broken.");
     }
 
-    void draw(SpriteBatch batch, NinePatch patch, int x, int y, int size) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+    Rectangle getRectangle() {
+        return new Rectangle(pos.x, pos.y, cellCols * cellSize, celRows * cellSize);
+    }
+
+    void draw(SpriteBatch batch, NinePatch patch) {
+        for (int i = 0; i < celRows; i++) {
+            for (int j = 0; j < cellCols; j++) {
                 if (shape[i][j]) {
-                    Cell.draw(color, batch, patch, x + j * size, y + i * size, size);
+                    Cell.draw(color, batch, patch,
+                            pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
                 }
             }
         }
