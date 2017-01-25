@@ -3,6 +3,7 @@ package io.github.lonamiwebs.klooni.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
 public class PieceHolder {
@@ -32,7 +33,7 @@ public class PieceHolder {
         for (int i = 0; i < count; i++) {
             pieces[i] = Piece.random();
 
-            // Set the local position and the cell size
+            // Set the local position and the cell cellSize
             pieces[i].pos.set(pos.x + i * perPieceSize, pos.y);
             pieces[i].cellSize = Math.min(
                     perPieceSize / pieces[i].cellCols,
@@ -65,7 +66,7 @@ public class PieceHolder {
         return false;
     }
 
-    public void update() {
+    public void update(float cellSizeOnBoard) {
         if (heldPiece > -1) {
             Piece piece = pieces[heldPiece];
 
@@ -77,6 +78,7 @@ public class PieceHolder {
             mouse.sub(piece.getRectangle().width / 2, piece.getRectangle().height / 2);
 
             piece.pos.lerp(mouse, 0.4f);
+            piece.cellSize = Interpolation.linear.apply(piece.cellSize, cellSizeOnBoard, 0.4f);
         }
     }
 

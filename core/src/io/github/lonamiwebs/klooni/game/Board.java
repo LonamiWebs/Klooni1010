@@ -9,13 +9,13 @@ public class Board {
 
     Cell[][] cells;
     private final int count; // Cell count
-    private final int size; // Size per cell
+    public final int cellSize; // Size per cell
 
     public NinePatch cellPatch;
 
     public Board(int boardSize, int cellSize) {
         count = boardSize;
-        size = cellSize;
+        this.cellSize = cellSize;
 
         cells = new Cell[count][count];
         for (int i = 0; i < count; i++) {
@@ -29,7 +29,7 @@ public class Board {
     }
 
     public int getPxSize() {
-        return count * size;
+        return count * cellSize;
     }
 
     private boolean inBounds(int x, int y) {
@@ -66,6 +66,6 @@ public class Board {
     public void draw(SpriteBatch batch, int x, int y) {
         for (int i = 0; i < count; i++)
             for (int j = 0; j < count; j++)
-                cells[i][j].draw(batch, cellPatch, x + j * size, y + i * size, size);
+                cells[i][j].draw(batch, cellPatch, x + j * cellSize, y + i * cellSize, cellSize);
     }
 }

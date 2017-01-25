@@ -55,7 +55,7 @@ public class GameScreen implements Screen, InputProcessor {
                 Gdx.graphics.getWidth() / 2 - board.getPxSize() / 2,
                 Gdx.graphics.getHeight() * 3 / 4 - board.getPxSize() / 2);
 
-        holder.update();
+        holder.update(board.cellSize);
         holder.draw(batch, board.cellPatch);
 
         batch.end();

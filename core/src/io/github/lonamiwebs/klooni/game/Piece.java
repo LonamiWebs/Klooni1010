@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 // Pieces can be L shaped and be rotated 0 to 3 times to make it random
-// Maximum size = 4
+// Maximum cellSize = 4
 public class Piece {
 
     private final static int[] colors = {
