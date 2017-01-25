@@ -41,6 +41,14 @@ public class PieceHolder {
         }
     }
 
+    boolean handFinished() {
+        for (int i = 0; i < count; i++)
+            if (pieces[i] != null)
+                return false;
+
+        return true;
+    }
+
     // Pick the piece below the finger/mouse
     public boolean pickPiece() {
         Vector2 mouse = new Vector2(
@@ -48,7 +56,7 @@ public class PieceHolder {
                 Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
         for (int i = 0; i < count; i++) {
-            if (pieces[i].getRectangle().contains(mouse)) {
+            if (pieces[i] != null && pieces[i].getRectangle().contains(mouse)) {
                 heldPiece = i;
                 return true;
             }
@@ -61,9 +69,12 @@ public class PieceHolder {
     public boolean dropPiece(Board board) {
         if (heldPiece > -1) {
             if (board.putScreenPiece(pieces[heldPiece])) {
-                // TODO Remove the piece
+                pieces[heldPiece] = null;
             }
             heldPiece = -1;
+            if (handFinished())
+                takeMore();
+
             return true;
         }
         return false;
