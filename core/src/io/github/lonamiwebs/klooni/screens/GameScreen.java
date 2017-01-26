@@ -115,7 +115,13 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return holder.dropPiece(board);
+        int area = holder.calculateHeldPieceArea();
+        if (holder.dropPiece(board)) {
+            int cleared = board.clearComplete();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

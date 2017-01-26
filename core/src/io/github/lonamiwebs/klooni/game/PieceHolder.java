@@ -37,7 +37,7 @@ public class PieceHolder {
             pieces[i].pos.set(pos.x + i * perPieceSize, pos.y);
             pieces[i].cellSize = Math.min(
                     perPieceSize / pieces[i].cellCols,
-                    height / pieces[i].celRows);
+                    height / pieces[i].cellRows);
         }
     }
 
@@ -64,6 +64,10 @@ public class PieceHolder {
 
         heldPiece = -1;
         return false;
+    }
+
+    public int calculateHeldPieceArea() {
+        return pieces[heldPiece].calculateArea();
     }
 
     public boolean dropPiece(Board board) {

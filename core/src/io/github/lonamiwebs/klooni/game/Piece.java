@@ -20,7 +20,7 @@ public class Piece {
     final Vector2 pos;
     float cellSize = 10f; // Default
 
-    final int cellCols, celRows;
+    final int cellCols, cellRows;
     private boolean shape[][];
 
     final Color color;
@@ -30,9 +30,9 @@ public class Piece {
 
         pos = new Vector2();
         cellCols = swapSize ? rows : cols;
-        celRows = swapSize ? cols : rows;
-        shape = new boolean[celRows][cellCols];
-        for (int i = 0; i < celRows; i++) {
+        cellRows = swapSize ? cols : rows;
+        shape = new boolean[cellRows][cellCols];
+        for (int i = 0; i < cellRows; i++) {
             for (int j = 0; j < cellCols; j++) {
                 shape[i][j] = true;
             }
@@ -43,7 +43,7 @@ public class Piece {
         color = new Color(colors[colorIndex]);
 
         pos = new Vector2();
-        cellCols = celRows = lSize;
+        cellCols = cellRows = lSize;
         shape = new boolean[lSize][lSize];
         switch (rotateCount % 4) {
             case 0: // ┌
@@ -99,11 +99,23 @@ public class Piece {
     }
 
     Rectangle getRectangle() {
-        return new Rectangle(pos.x, pos.y, cellCols * cellSize, celRows * cellSize);
+        return new Rectangle(pos.x, pos.y, cellCols * cellSize, cellRows * cellSize);
+    }
+
+    int calculateArea() {
+        int area = 0;
+        for (int i = 0; i < cellRows; i++) {
+            for (int j = 0; j < cellCols; j++) {
+                if (shape[i][j]) {
+                    area++;
+                }
+            }
+        }
+        return area;
     }
 
     void draw(SpriteBatch batch, NinePatch patch) {
-        for (int i = 0; i < celRows; i++) {
+        for (int i = 0; i < cellRows; i++) {
             for (int j = 0; j < cellCols; j++) {
                 if (shape[i][j]) {
                     Cell.draw(color, batch, patch,

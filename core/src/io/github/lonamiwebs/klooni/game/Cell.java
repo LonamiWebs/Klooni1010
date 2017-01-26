@@ -10,13 +10,17 @@ class Cell {
     private Color color;
 
     Cell() {
-        empty = true;
-        color = Color.WHITE;
+        setEmpty();
     }
 
     void set(Color c) {
         empty = false;
         color = c;
+    }
+
+    void setEmpty() {
+        empty = true;
+        color = Color.WHITE;
     }
 
     void draw(SpriteBatch batch, NinePatch patch, float x, float y, int size) {

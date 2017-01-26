@@ -47,14 +47,14 @@ public class Board {
     }
 
     private boolean inBounds(Piece piece, int x, int y) {
-        return inBounds(x, y) && inBounds(x + piece.cellCols - 1, y + piece.celRows - 1);
+        return inBounds(x, y) && inBounds(x + piece.cellCols - 1, y + piece.cellRows - 1);
     }
 
     private boolean canPutPiece(Piece piece, int x, int y) {
         if (!inBounds(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.celRows; i++)
+        for (int i = 0; i < piece.cellRows; i++)
             for (int j = 0; j < piece.cellCols; j++)
                 if (!cells[y+i][x+j].isEmpty() && piece.filled(i, j))
                     return false;
@@ -71,11 +71,72 @@ public class Board {
         return putPiece(piece, x, y);
     }
 
+    public int clearComplete() {
+        // This will clear both complete rows and columns, all at once.
+        // The reason why we can't check first rows and then columns
+        // (or vice versa) is because the following case (* filled, _ empty):
+        //
+        // 4x4 board    piece
+        // _ _ * *      * *
+        // _ * * *      *
+        // * * _ _
+        // * * _ _
+        //
+        // If the piece is put on the top left corner, all the cells will be cleared.
+        // If we first cleared the columns, then the rows wouldn't have been cleared.
+        int clearCount = 0;
+        boolean[] clearedRows = new boolean[count];
+        boolean[] clearedCols = new boolean[count];
+
+        // Analyze rows and columns that will be cleared
+        for (int i = 0; i < count; i++) {
+            clearedRows[i] = true;
+            for (int j = 0; j < count; j++) {
+                if (cells[i][j].isEmpty()) {
+                    clearedRows[i] = false;
+                    break;
+                }
+            }
+            if (clearedRows[i])
+                clearCount++;
+        }
+        for (int j = 0; j < count; j++) {
+            clearedCols[j] = true;
+            for (int i = 0; i < count; i++) {
+                if (cells[i][j].isEmpty()) {
+                    clearedCols[j] = false;
+                    break;
+                }
+            }
+            if (clearedCols[j])
+                clearCount++;
+        }
+        if (clearCount > 0) {
+            // Do clear those rows and columns
+            for (int i = 0; i < count; i++) {
+                if (clearedRows[i]) {
+                    for (int j = 0; j < count; j++) {
+                        cells[i][j].setEmpty();
+                    }
+                }
+            }
+            for (int j = 0; j < count; j++) {
+                if (clearedCols[j]) {
+                    for (int i = 0; i < count; i++) {
+                        cells[i][j].setEmpty();
+                    }
+                }
+            }
+        }
+
+        return clearCount;
+    }
+
     public boolean putPiece(Piece piece, int x, int y) {
         if (!canPutPiece(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.celRows; i++) {
+        for (int i = 0; i < piece.cellRows; i++) {
             for (int j = 0; j < piece.cellCols; j++) {
                 if (piece.filled(i, j)) {
                     cells[y+i][x+j].set(piece.color);
