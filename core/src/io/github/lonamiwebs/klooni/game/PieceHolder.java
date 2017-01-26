@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class PieceHolder {
 
@@ -66,8 +67,22 @@ public class PieceHolder {
         return false;
     }
 
+    public Array<Piece> getAvailablePieces() {
+        Array<Piece> result = new Array<Piece>(count);
+        for (int i = 0; i < count; i++) {
+            if (pieces[i] != null) {
+                result.add(pieces[i]);
+            }
+        }
+        return result;
+    }
+
     public int calculateHeldPieceArea() {
-        return pieces[heldPiece].calculateArea();
+        if (heldPiece > -1) {
+            return pieces[heldPiece].calculateArea();
+        } else {
+            return 0;
+        }
     }
 
     public boolean dropPiece(Board board) {

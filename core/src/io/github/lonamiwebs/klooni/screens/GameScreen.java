@@ -3,6 +3,7 @@ package io.github.lonamiwebs.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,10 +21,15 @@ public class GameScreen implements Screen, InputProcessor {
 
     private SpriteBatch batch;
 
+    private final Color clearColor;
+    private int score;
+
     public GameScreen(Klooni aGame) {
         game = aGame;
+        score = 0;
+        clearColor = new Color(0.9f, 0.9f, 0.7f, 1f);
 
-        // Board(x, y, cell count, cell size, center)
+        // Board(x, y, cell cellCount, cell size, center)
         board = new Board(
                 Gdx.graphics.getWidth() / 2,
                 Gdx.graphics.getHeight() * 3 / 4,
@@ -43,6 +49,25 @@ public class GameScreen implements Screen, InputProcessor {
         }
     }
 
+    int calculateClearScore(int cleared) {
+        // The original game seems to work as follows:
+        // If < 1 were cleared, score = 0
+        // If = 1  was cleared, score = cells cleared
+        // If > 1 were cleared, score = cells cleared + score(cleared - 1)
+        if (cleared < 1) return 0;
+        if (cleared == 1) return board.cellCount;
+        else return board.cellCount * cleared + calculateClearScore(cleared - 1);
+    }
+
+    boolean isGameOver() {
+        for (Piece piece : holder.getAvailablePieces()) {
+            if (board.canPutPiece(piece)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //region Screen
 
     @Override
@@ -52,7 +77,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.9f, 0.9f, 0.7f, 1);
+        Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
@@ -118,6 +143,12 @@ public class GameScreen implements Screen, InputProcessor {
         int area = holder.calculateHeldPieceArea();
         if (holder.dropPiece(board)) {
             int cleared = board.clearComplete();
+            score += area + calculateClearScore(cleared);
+
+            if (isGameOver()) {
+                clearColor.set(0.4f, 0.1f, 0.1f, 1f);
+            }
+
             return true;
         } else {
             return false;

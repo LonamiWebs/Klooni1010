@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Board {
 
     Cell[][] cells;
-    private final int count; // Cell count
+    public final int cellCount; // Cell count
     public final int cellSize; // Size per cell
 
     final Vector2 pos;
@@ -19,12 +19,12 @@ public class Board {
 
     public Board(float x, float y, int cellCount, int cellSize, boolean center) {
         pos = new Vector2(x, y);
-        count = cellCount;
+        this.cellCount = cellCount;
         this.cellSize = cellSize;
 
-        cells = new Cell[count][count];
-        for (int i = 0; i < count; i++) {
-            for (int j = 0; j < count; j++) {
+        cells = new Cell[this.cellCount][this.cellCount];
+        for (int i = 0; i < this.cellCount; i++) {
+            for (int j = 0; j < this.cellCount; j++) {
                 cells[i][j] = new Cell();
             }
         }
@@ -39,11 +39,11 @@ public class Board {
     }
 
     public int getPxSize() {
-        return count * cellSize;
+        return cellCount * cellSize;
     }
 
     private boolean inBounds(int x, int y) {
-        return x >= 0 && x < count && y >= 0 && y < count;
+        return x >= 0 && x < cellCount && y >= 0 && y < cellCount;
     }
 
     private boolean inBounds(Piece piece, int x, int y) {
@@ -60,6 +60,17 @@ public class Board {
                     return false;
 
         return true;
+    }
+
+    public boolean canPutPiece(Piece piece) {
+        for (int i = 0; i < piece.cellRows; i++) {
+            for (int j = 0; j < piece.cellCols; j++) {
+                if (canPutPiece(piece, j, i)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean putScreenPiece(Piece piece) {
@@ -85,13 +96,13 @@ public class Board {
         // If the piece is put on the top left corner, all the cells will be cleared.
         // If we first cleared the columns, then the rows wouldn't have been cleared.
         int clearCount = 0;
-        boolean[] clearedRows = new boolean[count];
-        boolean[] clearedCols = new boolean[count];
+        boolean[] clearedRows = new boolean[cellCount];
+        boolean[] clearedCols = new boolean[cellCount];
 
         // Analyze rows and columns that will be cleared
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < cellCount; i++) {
             clearedRows[i] = true;
-            for (int j = 0; j < count; j++) {
+            for (int j = 0; j < cellCount; j++) {
                 if (cells[i][j].isEmpty()) {
                     clearedRows[i] = false;
                     break;
@@ -100,9 +111,9 @@ public class Board {
             if (clearedRows[i])
                 clearCount++;
         }
-        for (int j = 0; j < count; j++) {
+        for (int j = 0; j < cellCount; j++) {
             clearedCols[j] = true;
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < cellCount; i++) {
                 if (cells[i][j].isEmpty()) {
                     clearedCols[j] = false;
                     break;
@@ -113,16 +124,16 @@ public class Board {
         }
         if (clearCount > 0) {
             // Do clear those rows and columns
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < cellCount; i++) {
                 if (clearedRows[i]) {
-                    for (int j = 0; j < count; j++) {
+                    for (int j = 0; j < cellCount; j++) {
                         cells[i][j].setEmpty();
                     }
                 }
             }
-            for (int j = 0; j < count; j++) {
+            for (int j = 0; j < cellCount; j++) {
                 if (clearedCols[j]) {
-                    for (int i = 0; i < count; i++) {
+                    for (int i = 0; i < cellCount; i++) {
                         cells[i][j].setEmpty();
                     }
                 }
@@ -148,8 +159,8 @@ public class Board {
     }
 
     public void draw(SpriteBatch batch) {
-        for (int i = 0; i < count; i++) {
-            for (int j = 0; j < count; j++) {
+        for (int i = 0; i < cellCount; i++) {
+            for (int j = 0; j < cellCount; j++) {
                 cells[i][j].draw(batch, cellPatch,
                         pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
             }
