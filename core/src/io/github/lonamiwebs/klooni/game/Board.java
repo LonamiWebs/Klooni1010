@@ -55,8 +55,8 @@ public class Board {
     }
 
     public boolean canPutPiece(Piece piece) {
-        for (int i = 0; i < piece.cellRows; i++) {
-            for (int j = 0; j < piece.cellCols; j++) {
+        for (int i = 0; i < cellCount; i++) {
+            for (int j = 0; j < cellCount; j++) {
                 if (canPutPiece(piece, j, i)) {
                     return true;
                 }
