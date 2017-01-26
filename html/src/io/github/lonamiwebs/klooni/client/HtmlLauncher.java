@@ -7,13 +7,13 @@ import io.github.lonamiwebs.klooni.Klooni;
 
 public class HtmlLauncher extends GwtApplication {
 
-        @Override
-        public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(480, 320);
-        }
+    @Override
+    public GwtApplicationConfiguration getConfig () {
+        return new GwtApplicationConfiguration(408, 680);
+    }
 
-        @Override
-        public ApplicationListener createApplicationListener () {
-                return new Klooni();
-        }
+    @Override
+    public ApplicationListener createApplicationListener () {
+        return new Klooni();
+    }
 }

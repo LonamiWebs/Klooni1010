@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.Board;
+import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
 
@@ -18,6 +19,8 @@ public class GameScreen implements Screen, InputProcessor {
     private Klooni game;
     private Board board;
     private PieceHolder holder;
+
+    private final GameLayout layout;
 
     private SpriteBatch batch;
 
@@ -28,20 +31,12 @@ public class GameScreen implements Screen, InputProcessor {
         game = aGame;
         score = 0;
         clearColor = new Color(0.9f, 0.9f, 0.7f, 1f);
-
-        // Board(x, y, cell cellCount, cell size, center)
-        board = new Board(
-                Gdx.graphics.getWidth() / 2,
-                Gdx.graphics.getHeight() * 3 / 4,
-                10, 20, true);
-
-        // PieceHolder(pieces, x, y, w, h)
-        int holderWidth = Gdx.graphics.getWidth() / 2;
-        holder = new PieceHolder(3,
-                Gdx.graphics.getWidth() / 2 - holderWidth / 2, Gdx.graphics.getHeight() / 4,
-                Gdx.graphics.getWidth() / 2, 80);
-
         batch = new SpriteBatch();
+
+        layout = new GameLayout();
+
+        board = new Board(layout, 10);
+        holder = new PieceHolder(layout, 3);
 
         // Fill some random pieces
         for (int i = 0; i < 10; i++) {

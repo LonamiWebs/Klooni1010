@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -14,31 +15,31 @@ public class PieceHolder {
 
     int heldPiece;
 
-    final Vector2 pos;
-    final int width, height;
+    final Rectangle area;
 
-    public PieceHolder(int pieceCount, float x, float y, int holderWidth, int holderHeight) {
+    public PieceHolder(final GameLayout layout, final int pieceCount) {
         count = pieceCount;
         pieces = new Piece[count];
-
         heldPiece = -1;
-        pos = new Vector2(x, y);
-        width = holderWidth;
-        height = holderHeight;
 
+        area = new Rectangle();
+        layout.update(this);
+
+        // takeMore depends on the layout to be ready
+        // TODO So, how would pieces handle a layout update?
         takeMore();
     }
 
     void takeMore() {
-        int perPieceSize = width / 3;
+        float perPieceSize = area.width / count;
         for (int i = 0; i < count; i++) {
             pieces[i] = Piece.random();
 
-            // Set the local position and the cell cellSize
-            pieces[i].pos.set(pos.x + i * perPieceSize, pos.y);
+            // Set the absolute position on screen and the cells' cellSize
+            pieces[i].pos.set(area.x + i * perPieceSize, area.y);
             pieces[i].cellSize = Math.min(
                     perPieceSize / pieces[i].cellCols,
-                    height / pieces[i].cellRows);
+                    area.height / pieces[i].cellRows);
         }
     }
 

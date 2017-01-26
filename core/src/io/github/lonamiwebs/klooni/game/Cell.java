@@ -23,7 +23,7 @@ class Cell {
         color = Color.WHITE;
     }
 
-    void draw(SpriteBatch batch, NinePatch patch, float x, float y, int size) {
+    void draw(SpriteBatch batch, NinePatch patch, float x, float y, float size) {
         draw(color, batch, patch, x, y, size);
     }
 
@@ -38,6 +38,7 @@ class Cell {
         return empty;
     }
 
+    // TODO Use vanish with a pretty animation instead .setEmpty()
     public void vanish() {
         empty = true;
     }

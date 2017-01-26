@@ -10,17 +10,15 @@ import com.badlogic.gdx.math.Vector2;
 public class Board {
 
     Cell[][] cells;
-    public final int cellCount; // Cell count
-    public final int cellSize; // Size per cell
+    public final int cellCount;
+    public float cellSize;
 
     final Vector2 pos;
 
     public NinePatch cellPatch;
 
-    public Board(float x, float y, int cellCount, int cellSize, boolean center) {
-        pos = new Vector2(x, y);
+    public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
-        this.cellSize = cellSize;
 
         cells = new Cell[this.cellCount][this.cellCount];
         for (int i = 0; i < this.cellCount; i++) {
@@ -32,14 +30,8 @@ public class Board {
         cellPatch = new NinePatch(
                 new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
 
-        if (center) {
-            float half = getPxSize() / 2;
-            pos.sub(half, half);
-        }
-    }
-
-    public int getPxSize() {
-        return cellCount * cellSize;
+        pos = new Vector2();
+        layout.update(this);
     }
 
     private boolean inBounds(int x, int y) {
@@ -87,7 +79,7 @@ public class Board {
         // The reason why we can't check first rows and then columns
         // (or vice versa) is because the following case (* filled, _ empty):
         //
-        // 4x4 board    piece
+        // 4x4 boardHeight    piece
         // _ _ * *      * *
         // _ * * *      *
         // * * _ _
