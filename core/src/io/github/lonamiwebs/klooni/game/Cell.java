@@ -20,14 +20,13 @@ class Cell {
     private float vanishElapsed;
     private float vanishLifetime;
 
-    private static float vanishDelta = 0.1f;
-
     Cell(float x, float y, float cellSize) {
         pos = new Vector2(x, y);
         size = cellSize;
 
         empty = true;
         color = Color.WHITE;
+        vanishElapsed = Float.POSITIVE_INFINITY;
     }
 
     void set(Color c) {
@@ -39,7 +38,7 @@ class Cell {
         draw(color, batch, patch, pos.x, pos.y, size);
 
         // Draw the previous vanishing cell
-        if (vanishSize > vanishDelta) {
+        if (vanishElapsed <= vanishLifetime) {
             vanishElapsed += Gdx.graphics.getDeltaTime();
 
             // vanishElapsed might be < 0 (delay), so clamp to 0
@@ -50,10 +49,6 @@ class Cell {
 
             float centerOffset = size * 0.5f - vanishSize * 0.5f;
             draw(vanishColor, batch, patch, pos.x + centerOffset, pos.y + centerOffset, vanishSize);
-
-            if (progress == 1f) {
-                vanishSize = 0f; // Stop vanishing
-            }
         }
     }
 
@@ -72,8 +67,10 @@ class Cell {
     // in this case, a piece was put. The closer it was put, the faster
     // this piece will vanish.
     void vanish(Vector2 vanishFrom) {
-        empty = true;
+        if (empty) // We cannot vanish twice
+            return;
 
+        empty = true;
         vanishSize = size;
         vanishColor = color.cpy();
         vanishLifetime = 1f;
