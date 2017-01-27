@@ -76,17 +76,18 @@ class Cell {
 
         vanishSize = size;
         vanishColor = color.cpy();
-        vanishLifetime = 1.5f;
+        vanishLifetime = 1f;
 
-        // Square the size when calculating the vanish distance
-        // because it will be used as delay, and without squaring,
-        // the delay would be too large
+        // The vanish distance is this measure (distance² + size³ * 20% size)
+        // because it seems good enough. The more the distance, the more the
+        // delay, but we decrease the delay depending on the cell size too or
+        // it would be way too high
         Vector2 center = new Vector2(pos.x + size * 0.5f, pos.y + 0.5f);
-        float vanishDist = Vector2.dst(
-                vanishFrom.x, vanishFrom.y, center.x, center.y) / (size * size);
+        float vanishDist = Vector2.dst2(
+                vanishFrom.x, vanishFrom.y, center.x, center.y) / (size * size * size * size * 0.2f);
 
-        // Negative time indicates delay, + half lifetime because elastic has that delay
-        vanishElapsed = vanishLifetime * 0.5f - vanishDist;
+        // Negative time = delay, + 0.4*lifetime because elastic interpolation has that delay
+        vanishElapsed = vanishLifetime * 0.4f - vanishDist;
 
         color = Color.WHITE;
     }
