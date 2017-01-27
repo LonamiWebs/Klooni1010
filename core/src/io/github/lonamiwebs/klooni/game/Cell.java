@@ -39,6 +39,8 @@ class Cell {
     }
 
     // TODO Use vanish with a pretty animation instead .setEmpty()
+    // It would be AWESOME if the delay from vanishing (bounce -> big -> small -> gone)
+    // was delayed by how far this cell is from the cleared piece, I mean cool!!
     public void vanish() {
         empty = true;
     }

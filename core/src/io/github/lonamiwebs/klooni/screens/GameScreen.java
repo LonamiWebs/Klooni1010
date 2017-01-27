@@ -13,10 +13,13 @@ import io.github.lonamiwebs.klooni.game.Board;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
+import io.github.lonamiwebs.klooni.game.Scorer;
 
 public class GameScreen implements Screen, InputProcessor {
 
     private Klooni game;
+
+    private Scorer scorer;
     private Board board;
     private PieceHolder holder;
 
@@ -35,6 +38,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         layout = new GameLayout();
 
+        scorer = new Scorer(layout, 10);
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3);
 
@@ -42,16 +46,6 @@ public class GameScreen implements Screen, InputProcessor {
         for (int i = 0; i < 10; i++) {
             board.putPiece(Piece.random(), MathUtils.random(10), MathUtils.random(10));
         }
-    }
-
-    int calculateClearScore(int cleared) {
-        // The original game seems to work as follows:
-        // If < 1 were cleared, score = 0
-        // If = 1  was cleared, score = cells cleared
-        // If > 1 were cleared, score = cells cleared + score(cleared - 1)
-        if (cleared < 1) return 0;
-        if (cleared == 1) return board.cellCount;
-        else return board.cellCount * cleared + calculateClearScore(cleared - 1);
     }
 
     boolean isGameOver() {
@@ -76,8 +70,9 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        board.draw(batch);
 
+        scorer.draw(batch);
+        board.draw(batch);
         holder.update(board.cellSize);
         holder.draw(batch, board.cellPatch);
 
@@ -137,13 +132,13 @@ public class GameScreen implements Screen, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int area = holder.calculateHeldPieceArea();
         if (holder.dropPiece(board)) {
-            int cleared = board.clearComplete();
-            score += area + calculateClearScore(cleared);
+            scorer.addPieceScore(area);
+            scorer.addBoardScore(board.clearComplete());
 
+            // After the piece was put, check if it's game over
             if (isGameOver()) {
                 clearColor.set(0.4f, 0.1f, 0.1f, 1f);
             }
-
             return true;
         } else {
             return false;

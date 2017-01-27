@@ -87,17 +87,17 @@ public class PieceHolder {
     }
 
     public boolean dropPiece(Board board) {
+        boolean put = false;
         if (heldPiece > -1) {
             if (board.putScreenPiece(pieces[heldPiece])) {
                 pieces[heldPiece] = null;
+                put = true;
             }
             heldPiece = -1;
             if (handFinished())
                 takeMore();
-
-            return true;
         }
-        return false;
+        return put;
     }
 
     public void update(float cellSizeOnBoard) {
