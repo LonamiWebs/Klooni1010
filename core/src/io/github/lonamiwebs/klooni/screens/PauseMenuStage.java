@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.game.Scorer;
 
 public class PauseMenuStage extends Stage {
 
@@ -23,7 +24,10 @@ public class PauseMenuStage extends Stage {
     private boolean shown;
     private boolean hiding;
 
-    public PauseMenuStage(final Klooni game) {
+    private Scorer scorer;
+
+    public PauseMenuStage(final Klooni game, final Scorer aScorer) {
+        scorer = aScorer;
 
         Table table = new Table();
         table.setFillParent(true);
@@ -90,7 +94,9 @@ public class PauseMenuStage extends Stage {
         });
     }
 
-    public void show() {
+    void show() {
+        scorer.saveScore();
+
         lastInputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(this);
         shown = true;

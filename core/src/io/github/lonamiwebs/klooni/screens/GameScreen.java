@@ -17,9 +17,7 @@ import io.github.lonamiwebs.klooni.game.Scorer;
 
 public class GameScreen implements Screen, InputProcessor {
 
-    private Klooni game;
-
-    private Scorer scorer;
+    private final Scorer scorer;
     private Board board;
     private PieceHolder holder;
 
@@ -28,26 +26,23 @@ public class GameScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
 
     private final Color clearColor;
-    private int score;
 
     private final PauseMenuStage pauseMenu;
 
-    public GameScreen(Klooni aGame) {
-        game = aGame;
-        score = 0;
+    GameScreen(final Klooni game) {
         clearColor = new Color(0.9f, 0.9f, 0.7f, 1f);
         batch = new SpriteBatch();
-
-        pauseMenu = new PauseMenuStage(game);
 
         layout = new GameLayout();
 
         scorer = new Scorer(layout, 10);
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3);
+
+        pauseMenu = new PauseMenuStage(game, scorer);
     }
 
-    boolean isGameOver() {
+    private boolean isGameOver() {
         for (Piece piece : holder.getAvailablePieces()) {
             if (board.canPutPiece(piece)) {
                 return false;

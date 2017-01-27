@@ -1,6 +1,7 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,7 +14,10 @@ import com.badlogic.gdx.utils.Align;
 
 public class Scorer {
 
-    private int currentScore;
+    private final Preferences prefs;
+    private int currentScore, maxScore;
+    private boolean newRecord;
+
     private float shownScore; // To interpolate between shown score -> real score
     private final int boardSize;
 
@@ -24,7 +28,10 @@ public class Scorer {
     final Rectangle cupArea;
 
     public Scorer(GameLayout layout, int boardSize) {
+        prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
+
         currentScore = 0;
+        maxScore = prefs.getInteger("maxScore", 0);
         this.boardSize = boardSize;
 
         cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
@@ -35,17 +42,29 @@ public class Scorer {
 
         currentScoreLabel = new Label("0", scoreStyle);
         currentScoreLabel.setAlignment(Align.right);
-        maxScoreLabel = new Label("0", scoreStyle);
+        maxScoreLabel = new Label(Integer.toString(maxScore), scoreStyle);
 
         layout.update(this);
     }
 
     public void addPieceScore(int areaPut) {
-        currentScore += areaPut;
+        addScore(areaPut);
     }
 
     public void addBoardScore(int stripsCleared) {
-        currentScore += calculateClearScore(stripsCleared);
+        addScore(calculateClearScore(stripsCleared));
+    }
+
+    private void addScore(int score) {
+        currentScore += score;
+        newRecord = currentScore > maxScore;
+    }
+
+    public void saveScore() {
+        if (newRecord) {
+            prefs.putInteger("maxScore", currentScore);
+            prefs.flush();
+        }
     }
 
     int calculateClearScore(int stripsCleared) {
