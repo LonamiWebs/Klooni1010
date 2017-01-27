@@ -13,6 +13,8 @@ public class Board {
     public final int cellCount;
     public float cellSize;
 
+    private final Vector2 lastPutPiecePos; // Used to animate cleared cells vanishing
+
     final Vector2 pos;
 
     public NinePatch cellPatch;
@@ -20,18 +22,21 @@ public class Board {
     public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
 
-        cells = new Cell[this.cellCount][this.cellCount];
-        for (int i = 0; i < this.cellCount; i++) {
-            for (int j = 0; j < this.cellCount; j++) {
-                cells[i][j] = new Cell();
-            }
-        }
-
         cellPatch = new NinePatch(
                 new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
 
+        lastPutPiecePos = new Vector2();
         pos = new Vector2();
         layout.update(this);
+
+        // Cell size depends on the layout to be updated
+        cells = new Cell[this.cellCount][this.cellCount];
+        for (int i = 0; i < this.cellCount; i++) {
+            for (int j = 0; j < this.cellCount; j++) {
+                cells[i][j] = new Cell(
+                        pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+            }
+        }
     }
 
     private boolean inBounds(int x, int y) {
@@ -119,14 +124,14 @@ public class Board {
             for (int i = 0; i < cellCount; i++) {
                 if (clearedRows[i]) {
                     for (int j = 0; j < cellCount; j++) {
-                        cells[i][j].setEmpty();
+                        cells[i][j].vanish(lastPutPiecePos);
                     }
                 }
             }
             for (int j = 0; j < cellCount; j++) {
                 if (clearedCols[j]) {
                     for (int i = 0; i < cellCount; i++) {
-                        cells[i][j].setEmpty();
+                        cells[i][j].vanish(lastPutPiecePos);
                     }
                 }
             }
@@ -139,6 +144,7 @@ public class Board {
         if (!canPutPiece(piece, x, y))
             return false;
 
+        lastPutPiecePos.set(piece.calculateGravityCenter());
         for (int i = 0; i < piece.cellRows; i++) {
             for (int j = 0; j < piece.cellCols; j++) {
                 if (piece.filled(i, j)) {
@@ -153,8 +159,7 @@ public class Board {
     public void draw(SpriteBatch batch) {
         for (int i = 0; i < cellCount; i++) {
             for (int j = 0; j < cellCount; j++) {
-                cells[i][j].draw(batch, cellPatch,
-                        pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+                cells[i][j].draw(batch, cellPatch);
             }
         }
     }

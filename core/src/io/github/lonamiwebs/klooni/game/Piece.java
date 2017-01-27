@@ -114,6 +114,22 @@ public class Piece {
         return area;
     }
 
+    Vector2 calculateGravityCenter() {
+        int filledCount = 0;
+        Vector2 result = new Vector2();
+        for (int i = 0; i < cellRows; i++) {
+            for (int j = 0; j < cellCols; j++) {
+                if (shape[i][j]) {
+                    filledCount++;
+                    result.add(
+                            pos.x + j * cellSize - cellSize * 0.5f,
+                            pos.y + i * cellSize - cellSize * 0.5f);
+                }
+            }
+        }
+        return result.scl(1f / filledCount);
+    }
+
     void draw(SpriteBatch batch, NinePatch patch) {
         for (int i = 0; i < cellRows; i++) {
             for (int j = 0; j < cellCols; j++) {
