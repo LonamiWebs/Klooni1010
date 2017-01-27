@@ -1,12 +1,12 @@
 package io.github.lonamiwebs.klooni.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.Board;
@@ -30,22 +30,21 @@ public class GameScreen implements Screen, InputProcessor {
     private final Color clearColor;
     private int score;
 
+    private final PauseMenuStage pauseMenu;
+
     public GameScreen(Klooni aGame) {
         game = aGame;
         score = 0;
         clearColor = new Color(0.9f, 0.9f, 0.7f, 1f);
         batch = new SpriteBatch();
 
+        pauseMenu = new PauseMenuStage(game);
+
         layout = new GameLayout();
 
         scorer = new Scorer(layout, 10);
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3);
-
-        // Fill some random pieces
-        for (int i = 0; i < 10; i++) {
-            board.putPiece(Piece.random(), MathUtils.random(10), MathUtils.random(10));
-        }
     }
 
     boolean isGameOver() {
@@ -77,6 +76,11 @@ public class GameScreen implements Screen, InputProcessor {
         holder.draw(batch, board.cellPatch);
 
         batch.end();
+
+        if (pauseMenu.isShown() || pauseMenu.isHiding()) {
+            pauseMenu.act(delta);
+            pauseMenu.draw();
+        }
     }
 
     @Override
@@ -101,7 +105,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        pauseMenu.dispose();
     }
 
     //endregion
@@ -115,6 +119,9 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.P) // Pause
+            pauseMenu.show();
+
         return false;
     }
 
@@ -137,7 +144,7 @@ public class GameScreen implements Screen, InputProcessor {
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
-                clearColor.set(0.4f, 0.1f, 0.1f, 1f);
+                pauseMenu.show();
             }
             return true;
         } else {
