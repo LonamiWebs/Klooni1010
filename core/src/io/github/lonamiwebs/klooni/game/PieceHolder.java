@@ -10,17 +10,29 @@ import com.badlogic.gdx.utils.Array;
 
 public class PieceHolder {
 
-    final Piece[] pieces;
-    final int count;
+    private final Piece[] pieces;
+    private final Rectangle[] originalPositions; // Needed after a piece is dropped
 
-    int heldPiece;
+    private final int count;
+
+    private int heldPiece;
 
     final Rectangle area;
 
-    public PieceHolder(final GameLayout layout, final int pieceCount) {
+    // The size the cells will adopt once picked
+    private final float pickedCellSize;
+
+    public static final int NO_DROP = 0;
+    public static final int NORMAL_DROP = 1;
+    public static final int ON_BOARD_DROP = 2;
+
+    public PieceHolder(final GameLayout layout, final int pieceCount, final float pickedCellSize) {
         count = pieceCount;
         pieces = new Piece[count];
+        originalPositions = new Rectangle[count];
+
         heldPiece = -1;
+        this.pickedCellSize = pickedCellSize;
 
         area = new Rectangle();
         layout.update(this);
@@ -31,15 +43,27 @@ public class PieceHolder {
     }
 
     void takeMore() {
-        float perPieceSize = area.width / count;
+        float perPieceWidth = area.width / count;
         for (int i = 0; i < count; i++) {
             pieces[i] = Piece.random();
 
             // Set the absolute position on screen and the cells' cellSize
-            pieces[i].pos.set(area.x + i * perPieceSize, area.y);
-            pieces[i].cellSize = Math.min(
-                    perPieceSize / pieces[i].cellCols,
-                    area.height / pieces[i].cellRows);
+            // Also clamp the cell size to be the picked * 2 as maximum, or
+            // it would be too big in some cases.
+            pieces[i].pos.set(area.x + i * perPieceWidth, area.y);
+            pieces[i].cellSize = Math.min(Math.min(
+                    perPieceWidth / pieces[i].cellCols,
+                    area.height / pieces[i].cellRows), pickedCellSize * 2f);
+
+            // Center the piece on the X and Y axes. For this we see how
+            // much up we can go, this is, (area.height - piece.height) / 2
+            Rectangle rectangle = pieces[i].getRectangle();
+            pieces[i].pos.y += (area.height - rectangle.height) * 0.5f;
+            pieces[i].pos.x += (perPieceWidth - rectangle.width) * 0.5f;
+
+            originalPositions[i] = new Rectangle(
+                    pieces[i].pos.x, pieces[i].pos.y,
+                    pieces[i].cellSize, pieces[i].cellSize);
         }
     }
 
@@ -86,23 +110,26 @@ public class PieceHolder {
         }
     }
 
-    public boolean dropPiece(Board board) {
-        boolean put = false;
+    // Returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
+    public int dropPiece(Board board) {
         if (heldPiece > -1) {
-            if (board.putScreenPiece(pieces[heldPiece])) {
+            boolean put = board.putScreenPiece(pieces[heldPiece]);
+            if (put)
                 pieces[heldPiece] = null;
-                put = true;
-            }
+
             heldPiece = -1;
             if (handFinished())
                 takeMore();
-        }
-        return put;
+
+            return put ? ON_BOARD_DROP : NORMAL_DROP;
+        } else
+            return NO_DROP;
     }
 
-    public void update(float cellSizeOnBoard) {
+    public void update() {
+        Piece piece;
         if (heldPiece > -1) {
-            Piece piece = pieces[heldPiece];
+            piece = pieces[heldPiece];
 
             Vector2 mouse = new Vector2(
                     Gdx.input.getX(),
@@ -112,7 +139,23 @@ public class PieceHolder {
             mouse.sub(piece.getRectangle().width / 2, piece.getRectangle().height / 2);
 
             piece.pos.lerp(mouse, 0.4f);
-            piece.cellSize = Interpolation.linear.apply(piece.cellSize, cellSizeOnBoard, 0.4f);
+            piece.cellSize = Interpolation.linear.apply(piece.cellSize, pickedCellSize, 0.4f);
+        }
+
+        // Return the pieces to their original position
+        // TODO This seems somewhat expensive, can't it be done any better?
+        Rectangle original;
+        for (int i = 0; i < count; i++) {
+            if (i == heldPiece)
+                continue;
+
+            piece = pieces[i];
+            if (piece == null)
+                continue;
+
+            original = originalPositions[i];
+            piece.pos.lerp(new Vector2(original.x, original.y), 0.3f);
+            piece.cellSize = Interpolation.linear.apply(piece.cellSize, original.width, 0.3f);
         }
     }
 

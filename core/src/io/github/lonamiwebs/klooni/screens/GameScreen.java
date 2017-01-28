@@ -33,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         scorer = new Scorer(layout, 10);
         board = new Board(layout, 10);
-        holder = new PieceHolder(layout, 3);
+        holder = new PieceHolder(layout, 3, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer);
     }
 
@@ -62,7 +62,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         scorer.draw(batch);
         board.draw(batch);
-        holder.update(board.cellSize);
+        holder.update();
         holder.draw(batch, board.cellPatch);
 
         batch.end();
@@ -128,7 +128,11 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int area = holder.calculateHeldPieceArea();
-        if (holder.dropPiece(board)) {
+        int action = holder.dropPiece(board);
+        if (action == PieceHolder.NO_DROP)
+            return false;
+
+        if (action == PieceHolder.ON_BOARD_DROP) {
             scorer.addPieceScore(area);
             scorer.addBoardScore(board.clearComplete());
 
@@ -136,10 +140,8 @@ public class GameScreen implements Screen, InputProcessor {
             if (isGameOver()) {
                 pauseMenu.show(true);
             }
-            return true;
-        } else {
-            return false;
         }
+        return true;
     }
 
     @Override
