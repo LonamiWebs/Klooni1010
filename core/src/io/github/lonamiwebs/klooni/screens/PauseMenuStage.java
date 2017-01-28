@@ -158,7 +158,7 @@ public class PauseMenuStage extends Stage {
 
     @Override
     public boolean keyUp(int keyCode) {
-        if (keyCode == Input.Keys.P) // Pause
+        if (keyCode == Input.Keys.P || keyCode == Input.Keys.BACK) // Pause
             hide();
 
         return super.keyUp(keyCode);

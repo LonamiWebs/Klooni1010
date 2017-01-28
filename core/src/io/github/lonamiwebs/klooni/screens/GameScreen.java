@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -25,12 +24,9 @@ public class GameScreen implements Screen, InputProcessor {
 
     private SpriteBatch batch;
 
-    private final Color clearColor;
-
     private final PauseMenuStage pauseMenu;
 
     GameScreen(final Klooni game) {
-        clearColor = new Color(0.9f, 0.9f, 0.7f, 1f);
         batch = new SpriteBatch();
 
         layout = new GameLayout();
@@ -38,7 +34,6 @@ public class GameScreen implements Screen, InputProcessor {
         scorer = new Scorer(layout, 10);
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3);
-
         pauseMenu = new PauseMenuStage(layout, game, scorer);
     }
 
@@ -60,7 +55,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+        Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
@@ -114,7 +109,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.P) // Pause
+        if (keycode == Input.Keys.P || keycode == Input.Keys.BACK) // Pause
             pauseMenu.show(false);
 
         return false;

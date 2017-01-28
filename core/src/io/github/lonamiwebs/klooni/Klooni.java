@@ -32,6 +32,7 @@ public class Klooni extends Game {
         skin.add("replay_texture", new Texture(Gdx.files.internal("ui/replay.png")));
         skin.add("share_texture", new Texture(Gdx.files.internal("ui/share.png")));
 
+        Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
     }
 
