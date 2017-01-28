@@ -4,6 +4,8 @@ package io.github.lonamiwebs.klooni.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 
+import io.github.lonamiwebs.klooni.actors.Band;
+
 // Helper class to calculate the size of each element
 //
 // TODO In a future, perhaps this could handle landscape mode differently
@@ -70,5 +72,21 @@ public class GameLayout {
         holder.area.set(
                 marginWidth, 0f,
                 availableWidth, pieceHolderHeight);
+    }
+
+    public void update(Band band) {
+        final Rectangle area = new Rectangle(
+                0, pieceHolderHeight + boardHeight,
+                screenWidth, scoreHeight);
+
+        band.setBounds(area.x, area.y, area.width, area.height);
+        // Let the band have the following shape:
+        // 10% (100) padding
+        // 35% (90%) score label
+        // 10% (55%) padding
+        // 35% (45%) info label
+        // 10% (10%) padding
+        band.scoreBounds.set(area.x, area.y + area.height * 0.55f, area.width, area.height * 0.35f);
+        band.infoBounds.set(area.x, area.y + area.height * 0.10f, area.width, area.height * 0.35f);
     }
 }

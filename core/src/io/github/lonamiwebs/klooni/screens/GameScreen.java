@@ -39,7 +39,7 @@ public class GameScreen implements Screen, InputProcessor {
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3);
 
-        pauseMenu = new PauseMenuStage(game, scorer);
+        pauseMenu = new PauseMenuStage(layout, game, scorer);
     }
 
     private boolean isGameOver() {
@@ -115,7 +115,7 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P) // Pause
-            pauseMenu.show();
+            pauseMenu.show(false);
 
         return false;
     }
@@ -139,7 +139,7 @@ public class GameScreen implements Screen, InputProcessor {
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
-                pauseMenu.show();
+                pauseMenu.show(true);
             }
             return true;
         } else {

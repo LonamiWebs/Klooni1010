@@ -41,8 +41,11 @@ public class Scorer {
         scoreStyle.font = new BitmapFont(Gdx.files.internal("font/geosans-light.fnt"));
 
         currentScoreLabel = new Label("0", scoreStyle);
+        currentScoreLabel.setColor(Color.GOLD);
         currentScoreLabel.setAlignment(Align.right);
+
         maxScoreLabel = new Label(Integer.toString(maxScore), scoreStyle);
+        maxScoreLabel.setColor(new Color(0x65D681FF));
 
         layout.update(this);
     }
@@ -58,6 +61,10 @@ public class Scorer {
     private void addScore(int score) {
         currentScore += score;
         newRecord = currentScore > maxScore;
+    }
+
+    public int getCurrentScore() {
+        return currentScore;
     }
 
     public void saveScore() {
@@ -84,7 +91,7 @@ public class Scorer {
             currentScoreLabel.setText(Integer.toString(MathUtils.round(shownScore)));
         }
 
-        batch.setColor(Color.WHITE);
+        batch.setColor(Color.GOLD);
         batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
         currentScoreLabel.draw(batch, 1f);
         maxScoreLabel.draw(batch, 1f);

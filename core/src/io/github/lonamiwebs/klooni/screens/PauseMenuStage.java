@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.actors.Band;
+import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
 public class PauseMenuStage extends Stage {
@@ -24,14 +26,20 @@ public class PauseMenuStage extends Stage {
     private boolean shown;
     private boolean hiding;
 
-    private Scorer scorer;
+    private final Band band;
+    private final Scorer scorer;
 
-    public PauseMenuStage(final Klooni game, final Scorer aScorer) {
+    public PauseMenuStage(final GameLayout layout, final Klooni game, final Scorer aScorer) {
         scorer = aScorer;
 
         Table table = new Table();
         table.setFillParent(true);
         addActor(table);
+
+        // Current and maximum score band.
+        // Do not add it to the table not to over-complicate things.
+        band = new Band(layout, scorer, Color.SKY);
+        addActor(band);
 
         // Home screen button
         ImageButton.ImageButtonStyle homeStyle = new ImageButton.ImageButtonStyle(
@@ -94,13 +102,16 @@ public class PauseMenuStage extends Stage {
         });
     }
 
-    void show() {
+    void show(final boolean gameOver) {
         scorer.saveScore();
 
         lastInputProcessor = Gdx.input.getInputProcessor();
         Gdx.input.setInputProcessor(this);
         shown = true;
         hiding = false;
+
+        if (gameOver)
+            band.setGameOver();
 
         addAction(Actions.moveTo(0, Gdx.graphics.getHeight()));
         addAction(Actions.moveTo(0, 0, 0.75f, Interpolation.swingOut));
@@ -135,7 +146,6 @@ public class PauseMenuStage extends Stage {
         // Draw an overlay rectangle with not all the opacity
         if (shown) {
             ShapeRenderer shapeRenderer = new ShapeRenderer(20);
-
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 0.3f);
