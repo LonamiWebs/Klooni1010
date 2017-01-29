@@ -1,17 +1,25 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import io.github.lonamiwebs.klooni.Klooni;
 
 public class PieceHolder {
 
     private final Piece[] pieces;
     private final Rectangle[] originalPositions; // Needed after a piece is dropped
+
+    private final Sound pieceDropSound;
+    private final Sound invalidPieceDropSound;
+    private final Sound takePiecesSound;
 
     private final int count;
 
@@ -30,6 +38,10 @@ public class PieceHolder {
         count = pieceCount;
         pieces = new Piece[count];
         originalPositions = new Rectangle[count];
+
+        pieceDropSound = Gdx.audio.newSound(Gdx.files.internal("sound/piece_drop.mp3"));
+        invalidPieceDropSound = Gdx.audio.newSound(Gdx.files.internal("sound/invalid_drop.mp3"));
+        takePiecesSound = Gdx.audio.newSound(Gdx.files.internal("sound/take_pieces.mp3"));
 
         heldPiece = -1;
         this.pickedCellSize = pickedCellSize;
@@ -64,6 +76,13 @@ public class PieceHolder {
             originalPositions[i] = new Rectangle(
                     pieces[i].pos.x, pieces[i].pos.y,
                     pieces[i].cellSize, pieces[i].cellSize);
+
+            // Now that we have the original positions, reset the size so it animates and grows
+            pieces[i].cellSize = 0f;
+        }
+        if (Klooni.soundsEnabled()) {
+            // Random pitch so it's not always the same sound
+            takePiecesSound.setPitch(takePiecesSound.play(), MathUtils.random(0.8f, 1.2f));
         }
     }
 
@@ -114,8 +133,18 @@ public class PieceHolder {
     public int dropPiece(Board board) {
         if (heldPiece > -1) {
             boolean put = board.putScreenPiece(pieces[heldPiece]);
-            if (put)
+            if (put) {
+                if (Klooni.soundsEnabled()) {
+                    // The larger the piece size, the smaller the pitch
+                    // Considering 10 cells to be the largest, 1.1 highest pitch, 0.7 lowest
+                    float pitch = 1.104f - pieces[heldPiece].calculateArea() * 0.04f;
+                    pieceDropSound.setPitch(pieceDropSound.play(), pitch);
+                }
                 pieces[heldPiece] = null;
+            } else {
+                if (Klooni.soundsEnabled())
+                    invalidPieceDropSound.play();
+            }
 
             heldPiece = -1;
             if (handFinished())

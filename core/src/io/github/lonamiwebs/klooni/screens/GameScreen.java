@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -21,6 +22,7 @@ public class GameScreen implements Screen, InputProcessor {
     private PieceHolder holder;
 
     private final GameLayout layout;
+    private final Sound gameOverSound;
 
     private SpriteBatch batch;
 
@@ -35,6 +37,8 @@ public class GameScreen implements Screen, InputProcessor {
         board = new Board(layout, 10);
         holder = new PieceHolder(layout, 3, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer);
+
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
     }
 
     private boolean isGameOver() {
@@ -139,6 +143,8 @@ public class GameScreen implements Screen, InputProcessor {
             // After the piece was put, check if it's game over
             if (isGameOver()) {
                 pauseMenu.show(true);
+                if (Klooni.soundsEnabled())
+                    gameOverSound.play();
             }
         }
         return true;

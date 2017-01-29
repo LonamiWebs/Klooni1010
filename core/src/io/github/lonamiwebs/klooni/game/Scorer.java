@@ -1,7 +1,6 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,9 +11,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import io.github.lonamiwebs.klooni.Klooni;
+
 public class Scorer {
 
-    private final Preferences prefs;
     private int currentScore, maxScore;
     private boolean newRecord;
 
@@ -28,10 +28,8 @@ public class Scorer {
     final Rectangle cupArea;
 
     public Scorer(GameLayout layout, int boardSize) {
-        prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
-
         currentScore = 0;
-        maxScore = prefs.getInteger("maxScore", 0);
+        maxScore = Klooni.getMaxScore();
         this.boardSize = boardSize;
 
         cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
@@ -69,8 +67,7 @@ public class Scorer {
 
     public void saveScore() {
         if (newRecord) {
-            prefs.putInteger("maxScore", currentScore);
-            prefs.flush();
+            Klooni.setMaxScore(currentScore);
         }
     }
 

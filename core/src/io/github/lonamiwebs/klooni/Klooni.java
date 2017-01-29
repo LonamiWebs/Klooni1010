@@ -2,6 +2,7 @@ package io.github.lonamiwebs.klooni;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,6 +15,8 @@ public class Klooni extends Game {
 
     @Override
     public void create() {
+        prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
+
         // TODO Better way to have this skin somewhere
         // Gotta create that darn .json…!
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -46,4 +49,22 @@ public class Klooni extends Game {
         super.dispose();
         skin.dispose();
     }
+
+    //region Settings
+
+    private static Preferences prefs;
+
+    public static int getMaxScore() {
+        return prefs.getInteger("maxScore", 0);
+    }
+
+    public static void setMaxScore(int score) {
+        prefs.putInteger("maxScore", score).flush();
+    }
+
+    public static boolean soundsEnabled() {
+        return !prefs.getBoolean("muteSound", false);
+    }
+
+    //endregion
 }
