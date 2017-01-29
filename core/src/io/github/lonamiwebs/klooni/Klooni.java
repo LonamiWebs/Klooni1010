@@ -34,6 +34,12 @@ public class Klooni extends Game {
         skin.add("home_texture", new Texture(Gdx.files.internal("ui/home.png")));
         skin.add("replay_texture", new Texture(Gdx.files.internal("ui/replay.png")));
         skin.add("share_texture", new Texture(Gdx.files.internal("ui/share.png")));
+        skin.add("sound_on_texture", new Texture(Gdx.files.internal("ui/sound_on.png")));
+        skin.add("sound_off_texture", new Texture(Gdx.files.internal("ui/sound_off.png")));
+        skin.add("issues_texture", new Texture(Gdx.files.internal("ui/issues.png")));
+        skin.add("credits_texture", new Texture(Gdx.files.internal("ui/credits.png")));
+        skin.add("web_texture", new Texture(Gdx.files.internal("ui/web.png")));
+        skin.add("back_texture", new Texture(Gdx.files.internal("ui/back.png")));
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
@@ -64,6 +70,10 @@ public class Klooni extends Game {
 
     public static boolean soundsEnabled() {
         return !prefs.getBoolean("muteSound", false);
+    }
+
+    public static void toggleSound() {
+        prefs.putBoolean("muteSound", soundsEnabled()).flush();
     }
 
     //endregion

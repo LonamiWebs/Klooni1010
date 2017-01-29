@@ -54,7 +54,10 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
+        if (pauseMenu.isShown()) // Will happen if we go to the customize menu
+            Gdx.input.setInputProcessor(pauseMenu);
+        else
+            Gdx.input.setInputProcessor(this);
     }
 
     @Override

@@ -85,6 +85,14 @@ public class PauseMenuStage extends Stage {
         final ImageButton paletteButton = new ImageButton(paletteStyle);
         table.add(paletteButton).space(16);
 
+        paletteButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new CustomizeScreen(game, game.getScreen()));
+                // Don't dispose because then it needs to take us to the previous screen
+            }
+        });
+
         // Continue playing OR share (if game over) button
         // TODO Enable both actions for this button
         ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle(

@@ -75,6 +75,13 @@ public class MainMenuScreen extends InputListener implements Screen {
 
         final ImageButton paletteButton = new ImageButton(paletteStyle);
         table.add(paletteButton).space(16);
+
+        paletteButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                game.setScreen(new CustomizeScreen(game, game.getScreen()));
+                // Don't dispose because then it needs to take us to the previous screen
+            }
+        });
     }
 
     @Override
