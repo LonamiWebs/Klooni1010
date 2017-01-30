@@ -8,17 +8,25 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
+// Represents the on screen board, with all the put cells
+// and functions to determine when it is game over given a PieceHolder
 public class Board {
 
-    Cell[][] cells;
+    //region Members
+
     public final int cellCount;
     public float cellSize;
-
-    private final Vector2 lastPutPiecePos; // Used to animate cleared cells vanishing
+    private Cell[][] cells;
 
     final Vector2 pos;
-
     private final Sound stripClearSound;
+
+    // Used to animate cleared cells vanishing
+    private final Vector2 lastPutPiecePos;
+
+    //endregion
+
+    //region Constructor
 
     public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
@@ -27,9 +35,9 @@ public class Board {
 
         lastPutPiecePos = new Vector2();
         pos = new Vector2();
-        layout.update(this);
 
-        // Cell size depends on the layout to be updated
+        // Cell size depends on the layout to be updated first
+        layout.update(this);
         cells = new Cell[this.cellCount][this.cellCount];
         for (int i = 0; i < this.cellCount; i++) {
             for (int j = 0; j < this.cellCount; j++) {
@@ -39,14 +47,21 @@ public class Board {
         }
     }
 
+    //endregion
+
+    //region Private methods
+
+    // True if the given cell coordinates are inside the bounds of the board
     private boolean inBounds(int x, int y) {
         return x >= 0 && x < cellCount && y >= 0 && y < cellCount;
     }
 
+    // True if the given piece at the given coordinates is not outside the bounds of the board
     private boolean inBounds(Piece piece, int x, int y) {
         return inBounds(x, y) && inBounds(x + piece.cellCols - 1, y + piece.cellRows - 1);
     }
 
+    // This only tests for the piece on the given coordinates, not the whole board
     private boolean canPutPiece(Piece piece, int x, int y) {
         if (!inBounds(piece, x, y))
             return false;
@@ -59,39 +74,64 @@ public class Board {
         return true;
     }
 
-    public boolean canPutPiece(Piece piece) {
-        for (int i = 0; i < cellCount; i++) {
-            for (int j = 0; j < cellCount; j++) {
-                if (canPutPiece(piece, j, i)) {
-                    return true;
+    // Returns true iff the piece was put on the board
+    private boolean putPiece(Piece piece, int x, int y) {
+        if (!canPutPiece(piece, x, y))
+            return false;
+
+        lastPutPiecePos.set(piece.calculateGravityCenter());
+        for (int i = 0; i < piece.cellRows; i++) {
+            for (int j = 0; j < piece.cellCols; j++) {
+                if (piece.filled(i, j)) {
+                    cells[y+i][x+j].set(piece.color);
                 }
             }
         }
+
+        return true;
+    }
+
+    //endregion
+
+    //region Public methods
+
+    public void draw(SpriteBatch batch) {
+        for (int i = 0; i < cellCount; i++)
+            for (int j = 0; j < cellCount; j++)
+                cells[i][j].draw(batch);
+    }
+
+    public boolean canPutPiece(Piece piece) {
+        for (int i = 0; i < cellCount; i++)
+            for (int j = 0; j < cellCount; j++)
+                if (canPutPiece(piece, j, i))
+                    return true;
+
         return false;
     }
 
-    public boolean putScreenPiece(Piece piece) {
-        // Get the local piece coordinates
-        // TODO Works weird, it puts the piece like one too low…
+    boolean putScreenPiece(Piece piece) {
+        // Convert the on screen coordinates of the piece to the local-board-space coordinates
+        // This is done by subtracting the piece coordinates from the board coordinates
         Vector2 local = piece.pos.cpy().sub(pos);
         int x = MathUtils.round(local.x / piece.cellSize);
         int y = MathUtils.round(local.y / piece.cellSize);
         return putPiece(piece, x, y);
     }
 
+    // This will clear both complete rows and columns, all at once.
+    // The reason why we can't check first rows and then columns
+    // (or vice versa) is because the following case (* filled, _ empty):
+    //
+    // 4x4 boardHeight    piece
+    // _ _ * *      * *
+    // _ * * *      *
+    // * * _ _
+    // * * _ _
+    //
+    // If the piece is put on the top left corner, all the cells will be cleared.
+    // If we first cleared the columns, then the rows wouldn't have been cleared.
     public int clearComplete() {
-        // This will clear both complete rows and columns, all at once.
-        // The reason why we can't check first rows and then columns
-        // (or vice versa) is because the following case (* filled, _ empty):
-        //
-        // 4x4 boardHeight    piece
-        // _ _ * *      * *
-        // _ * * *      *
-        // * * _ _
-        // * * _ _
-        //
-        // If the piece is put on the top left corner, all the cells will be cleared.
-        // If we first cleared the columns, then the rows wouldn't have been cleared.
         int clearCount = 0;
         boolean[] clearedRows = new boolean[cellCount];
         boolean[] clearedCols = new boolean[cellCount];
@@ -123,13 +163,11 @@ public class Board {
             float pan = 0;
 
             // Do clear those rows and columns
-            for (int i = 0; i < cellCount; i++) {
-                if (clearedRows[i]) {
-                    for (int j = 0; j < cellCount; j++) {
+            for (int i = 0; i < cellCount; i++)
+                if (clearedRows[i])
+                    for (int j = 0; j < cellCount; j++)
                         cells[i][j].vanish(lastPutPiecePos);
-                    }
-                }
-            }
+
             for (int j = 0; j < cellCount; j++) {
                 if (clearedCols[j]) {
                     pan += 2f * (j - cellCount / 2) / (float)cellCount;
@@ -150,27 +188,5 @@ public class Board {
         return clearCount;
     }
 
-    public boolean putPiece(Piece piece, int x, int y) {
-        if (!canPutPiece(piece, x, y))
-            return false;
-
-        lastPutPiecePos.set(piece.calculateGravityCenter());
-        for (int i = 0; i < piece.cellRows; i++) {
-            for (int j = 0; j < piece.cellCols; j++) {
-                if (piece.filled(i, j)) {
-                    cells[y+i][x+j].set(piece.color);
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public void draw(SpriteBatch batch) {
-        for (int i = 0; i < cellCount; i++) {
-            for (int j = 0; j < cellCount; j++) {
-                cells[i][j].draw(batch);
-            }
-        }
-    }
+    //endregion
 }

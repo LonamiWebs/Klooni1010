@@ -13,13 +13,14 @@ import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
+// Used to keep track of the current and maximum
+// score, and to also display it on the screen.
+// The maximum score is NOT saved automatically.
 public class Scorer {
 
-    private int currentScore, maxScore;
-    private boolean newRecord;
+    //region Members
 
-    private float shownScore; // To interpolate between shown score -> real score
-    private final int boardSize;
+    private int currentScore, maxScore;
 
     final Label currentScoreLabel;
     final Label maxScoreLabel;
@@ -27,10 +28,20 @@ public class Scorer {
     final Texture cupTexture;
     final Rectangle cupArea;
 
-    public Scorer(GameLayout layout, int boardSize) {
+    // If the currentScore beat the maxScore, then we have a new record
+    private boolean newRecord;
+
+    // To interpolate between shown score -> real score
+    private float shownScore;
+
+    //endregion
+
+    //region Constructor
+
+    // The board size is required when calculating the score
+    public Scorer(GameLayout layout) {
         currentScore = 0;
         maxScore = Klooni.getMaxScore();
-        this.boardSize = boardSize;
 
         cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
         cupArea = new Rectangle();
@@ -48,17 +59,37 @@ public class Scorer {
         layout.update(this);
     }
 
-    public void addPieceScore(int areaPut) {
-        addScore(areaPut);
-    }
+    //endregion
 
-    public void addBoardScore(int stripsCleared) {
-        addScore(calculateClearScore(stripsCleared));
-    }
+    //region Private methods
 
     private void addScore(int score) {
         currentScore += score;
         newRecord = currentScore > maxScore;
+    }
+
+    // The original game seems to work as follows:
+    // If < 1 were cleared, score = 0
+    // If = 1  was cleared, score = cells cleared
+    // If > 1 were cleared, score = cells cleared + score(cleared - 1)
+    private int calculateClearScore(int stripsCleared, int boardSize) {
+        if (stripsCleared < 1) return 0;
+        if (stripsCleared == 1) return boardSize;
+        else return boardSize * stripsCleared + calculateClearScore(stripsCleared - 1, boardSize);
+    }
+
+    //endregion
+
+    //region Public methods
+
+    // Adds the score a given piece would give
+    public void addPieceScore(int areaPut) {
+        addScore(areaPut);
+    }
+
+    // Adds the score given by the board, this is, the count of cleared strips
+    public void addBoardScore(int stripsCleared, int boardSize) {
+        addScore(calculateClearScore(stripsCleared, boardSize));
     }
 
     public int getCurrentScore() {
@@ -69,16 +100,6 @@ public class Scorer {
         if (newRecord) {
             Klooni.setMaxScore(currentScore);
         }
-    }
-
-    int calculateClearScore(int stripsCleared) {
-        // The original game seems to work as follows:
-        // If < 1 were cleared, score = 0
-        // If = 1  was cleared, score = cells cleared
-        // If > 1 were cleared, score = cells cleared + score(cleared - 1)
-        if (stripsCleared < 1) return 0;
-        if (stripsCleared == 1) return boardSize;
-        else return boardSize * stripsCleared + calculateClearScore(stripsCleared - 1);
     }
 
     public void draw(SpriteBatch batch) {
@@ -93,4 +114,6 @@ public class Scorer {
         currentScoreLabel.draw(batch, 1f);
         maxScoreLabel.draw(batch, 1f);
     }
+
+    //endregion
 }

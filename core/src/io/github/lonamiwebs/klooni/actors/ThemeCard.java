@@ -1,6 +1,5 @@
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,12 +10,20 @@ import io.github.lonamiwebs.klooni.Theme;
 import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
+// Card-like actor used to display information about a given theme
 public class ThemeCard extends Actor {
+
+    //region Members
 
     public final Theme theme;
     private final Texture background;
 
+    //endregion
+
+    //region Constructor
+
     public ThemeCard(final GameLayout layout, final Theme theme) {
+        // A 1x1 pixel map will be enough, the background texture will then be stretched accordingly
         // TODO We could also use white color and then batch.setColor(theme.background)
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(theme.background);
@@ -26,10 +33,11 @@ public class ThemeCard extends Actor {
 
         this.theme = theme;
         layout.update(this);
-
-        setWidth(Gdx.graphics.getWidth());
-        setScaleX(200);
     }
+
+    //endregion
+
+    //region Public methods
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -55,4 +63,6 @@ public class ThemeCard extends Actor {
         Cell.draw(theme.getCellColor(8), batch, x + cellSize * 2, y + cellSize * 3, cellSize);
         Cell.draw(theme.getCellColor(3), batch, x + cellSize * 3, y + cellSize * 3, cellSize);
     }
+
+    //endregion
 }

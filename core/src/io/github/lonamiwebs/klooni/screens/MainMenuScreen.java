@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,16 +14,28 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 
+// Main menu screen, presenting some options (play, customize…)
 public class MainMenuScreen extends InputListener implements Screen {
-    private Klooni game;
 
-    Stage stage;
-    SpriteBatch batch;
+    //region Members
 
-    public MainMenuScreen(Klooni aGame) {
-        game = aGame;
+    private final Klooni game;
+    private final Stage stage;
 
-        batch = new SpriteBatch();
+    //endregion
+
+    //region Static members
+
+    // As the examples show on the LibGdx wiki
+    private static final float minDelta = 1/30f;
+
+    //endregion
+
+    //region Constructor
+
+    public MainMenuScreen(Klooni game) {
+        this.game = game;
+
         stage = new Stage();
 
         Table table = new Table();
@@ -35,7 +46,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         final ImageButton playButton = new SoftButton(0, "play_texture");
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game));
                 dispose();
             }
         });
@@ -55,19 +66,21 @@ public class MainMenuScreen extends InputListener implements Screen {
         final ImageButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new CustomizeScreen(game, game.getScreen()));
+                MainMenuScreen.this.game.setScreen(new CustomizeScreen(MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()));
                 // Don't dispose because then it needs to take us to the previous screen
             }
         });
         table.add(paletteButton).space(16);
     }
 
+    //endregion
+
+    //region Screen
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
-
-    private static final float minDelta = 1/30f;
 
     @Override
     public void render(float delta) {
@@ -87,22 +100,22 @@ public class MainMenuScreen extends InputListener implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         stage.dispose();
     }
+
+    //endregion
+
+    //region Unused methods
+
+    @Override
+    public void pause() { }
+
+    @Override
+    public void resume() { }
+
+    @Override
+    public void hide() { }
+
+    //endregion
 }

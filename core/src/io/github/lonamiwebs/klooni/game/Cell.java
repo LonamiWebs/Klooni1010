@@ -9,18 +9,26 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
+// Represents a single cell, with a position, size and color.
+// Instances will use the cell texture provided by the currently used skin.
 public class Cell {
+
+    //region Members
 
     private boolean empty;
     private Color color;
 
-    Vector2 pos;
-    float size;
+    private Vector2 pos;
+    private float size;
 
     private Color vanishColor;
     private float vanishSize;
     private float vanishElapsed;
     private float vanishLifetime;
+
+    //endregion
+
+    //region Constructor
 
     Cell(float x, float y, float cellSize) {
         pos = new Vector2(x, y);
@@ -31,6 +39,11 @@ public class Cell {
         vanishElapsed = Float.POSITIVE_INFINITY;
     }
 
+    //endregion
+
+    //region Package local methods
+
+    // Sets the cell to be non-empty and of the specified color
     void set(Color c) {
         empty = false;
         color = c;
@@ -54,20 +67,9 @@ public class Cell {
         }
     }
 
-    // TODO Use skin atlas
-    public static void draw(Color color, Batch batch,
-                            float x, float y, float size) {
-        batch.setColor(color);
-        Klooni.theme.cellPatch.draw(batch, x, y, size, size);
-    }
-
-    boolean isEmpty() {
-        return empty;
-    }
-
     // Vanish from indicates the point which caused the vanishing to happen,
     // in this case, a piece was put. The closer it was put, the faster
-    // this piece will vanish.
+    // this piece will vanish. This immediately marks the piece as empty.
     void vanish(Vector2 vanishFrom) {
         if (empty) // We cannot vanish twice
             return;
@@ -90,4 +92,21 @@ public class Cell {
 
         color = Color.WHITE;
     }
+
+    boolean isEmpty() {
+        return empty;
+    }
+
+    //endregion
+
+    //region Static methods
+
+    // TODO Use skin atlas
+    public static void draw(Color color, Batch batch,
+                            float x, float y, float size) {
+        batch.setColor(color);
+        Klooni.theme.cellPatch.draw(batch, x, y, size, size);
+    }
+
+    //endregion
 }

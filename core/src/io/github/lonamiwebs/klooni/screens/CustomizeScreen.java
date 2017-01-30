@@ -22,15 +22,29 @@ import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
-public class CustomizeScreen implements Screen {
-    private Klooni game;
+// Screen where the user can customize the look and feel of the game
+class CustomizeScreen implements Screen {
 
+    //region Members
+
+    private Klooni game;
     private Stage stage;
 
-    public CustomizeScreen(Klooni aGame, final Screen lastScreen) {
+    //endregion
+
+    //region Static members
+
+    // As the examples show on the LibGdx wiki
+    private static final float minDelta = 1/30f;
+
+    //endregion
+
+    //region Constructor
+
+    CustomizeScreen(Klooni game, final Screen lastScreen) {
         final GameLayout layout = new GameLayout();
 
-        game = aGame;
+        this.game = game;
         stage = new Stage();
 
         Table table = new Table();
@@ -45,7 +59,7 @@ public class CustomizeScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(lastScreen);
+                CustomizeScreen.this.game.setScreen(lastScreen);
                 dispose();
             }
         });
@@ -59,7 +73,7 @@ public class CustomizeScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Klooni.toggleSound();
-                soundButton.getStyle().imageUp = game.skin.getDrawable(
+                soundButton.getStyle().imageUp = CustomizeScreen.this.game.skin.getDrawable(
                         Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
             }
         });
@@ -86,8 +100,9 @@ public class CustomizeScreen implements Screen {
         optionsGroup.addActor(webButton);
 
         table.add(new ScrollPane(optionsGroup)).pad(20, 4, 12, 4);
-        table.row();
 
+        // Load all the available themes
+        table.row();
         VerticalGroup themesGroup = new VerticalGroup();
         for (Theme theme : Theme.getThemes()) {
             final ThemeCard card = new ThemeCard(layout, theme);
@@ -105,12 +120,14 @@ public class CustomizeScreen implements Screen {
         table.add(new ScrollPane(themesGroup)).expand().fill();
     }
 
+    //endregion
+
+    //region Public methods
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
-
-    private static final float minDelta = 1/30f;
 
     @Override
     public void render(float delta) {
@@ -131,22 +148,22 @@ public class CustomizeScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         stage.dispose();
     }
+
+    //endregion
+
+    //region Empty methods
+
+    @Override
+    public void pause() { }
+
+    @Override
+    public void resume() { }
+
+    @Override
+    public void hide() { }
+
+    //endregion
 }

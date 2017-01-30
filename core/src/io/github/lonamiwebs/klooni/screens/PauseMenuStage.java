@@ -21,7 +21,11 @@ import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
-public class PauseMenuStage extends Stage {
+// The pause stage is not a whole screen but rather a menu
+// which can be overlaid on top of another screen
+class PauseMenuStage extends Stage {
+
+    //region Members
 
     private InputProcessor lastInputProcessor;
     private boolean shown;
@@ -32,8 +36,13 @@ public class PauseMenuStage extends Stage {
     private final Band band;
     private final Scorer scorer;
 
-    public PauseMenuStage(final GameLayout layout, final Klooni game, final Scorer aScorer) {
-        scorer = aScorer;
+    //endregion
+
+    //region Constructor
+
+    // We need the score to save the maximum score if a new record was beaten
+    PauseMenuStage(final GameLayout layout, final Klooni game, final Scorer scorer) {
+        this.scorer = scorer;
 
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
 
@@ -43,7 +52,7 @@ public class PauseMenuStage extends Stage {
 
         // Current and maximum score band.
         // Do not add it to the table not to over-complicate things.
-        band = new Band(layout, scorer, Color.SKY);
+        band = new Band(layout, this.scorer, Color.SKY);
         addActor(band);
 
         // Home screen button
@@ -84,7 +93,7 @@ public class PauseMenuStage extends Stage {
         });
 
         // Continue playing OR share (if game over) button
-        // TODO Enable both actions for this button
+        // TODO Enable both actions for this button? Or leave play?
         final ImageButton playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
 
@@ -95,22 +104,12 @@ public class PauseMenuStage extends Stage {
         });
     }
 
-    void show(final boolean gameOver) {
-        scorer.saveScore();
+    //endregion
 
-        lastInputProcessor = Gdx.input.getInputProcessor();
-        Gdx.input.setInputProcessor(this);
-        shown = true;
-        hiding = false;
+    //region Private methods
 
-        if (gameOver)
-            band.setGameOver();
-
-        addAction(Actions.moveTo(0, Gdx.graphics.getHeight()));
-        addAction(Actions.moveTo(0, 0, 0.75f, Interpolation.swingOut));
-    }
-
-    public void hide() {
+    // Hides the pause menu, setting back the previous input processor
+    private void hide() {
         shown = false;
         hiding = true;
         Gdx.input.setInputProcessor(lastInputProcessor);
@@ -126,19 +125,44 @@ public class PauseMenuStage extends Stage {
         ));
     }
 
-    public boolean isShown() {
+    //endregion
+
+    //region Package local methods
+
+    // Shows the pause menu, indicating whether it's game over or not
+    void show(final boolean gameOver) {
+        scorer.saveScore();
+
+        // Save the last input processor so then we can return the handle to it
+        lastInputProcessor = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(this);
+        shown = true;
+        hiding = false;
+
+        if (gameOver)
+            band.setGameOver();
+
+        addAction(Actions.moveTo(0, Gdx.graphics.getHeight()));
+        addAction(Actions.moveTo(0, 0, 0.75f, Interpolation.swingOut));
+    }
+
+    boolean isShown() {
         return shown;
     }
 
-    public boolean isHiding() {
+    boolean isHiding() {
         return hiding;
     }
 
+    //endregion
+
+    //region Public methods
+
     @Override
     public void draw() {
-        // Draw an overlay rectangle with not all the opacity
-        // This is the only place where ShapeRenderer is OK because the batch hasn't started
         if (shown) {
+            // Draw an overlay rectangle with not all the opacity
+            // This is the only place where ShapeRenderer is OK because the batch hasn't started
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 0.3f);
@@ -156,4 +180,6 @@ public class PauseMenuStage extends Stage {
 
         return super.keyUp(keyCode);
     }
+
+    //endregion
 }

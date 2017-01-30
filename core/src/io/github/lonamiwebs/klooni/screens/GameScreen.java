@@ -15,40 +15,57 @@ import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
-public class GameScreen implements Screen, InputProcessor {
+// Main game screen. Here the board, piece holder and score are shown
+class GameScreen implements Screen, InputProcessor {
+
+    //region Members
 
     private final Scorer scorer;
-    private Board board;
-    private PieceHolder holder;
+    private final Board board;
+    private final PieceHolder holder;
 
-    private final GameLayout layout;
+    private final SpriteBatch batch;
     private final Sound gameOverSound;
 
-    private SpriteBatch batch;
-
     private final PauseMenuStage pauseMenu;
+
+    //endregion
+
+    //region Static members
+
+    private final static int BOARD_SIZE = 10;
+    private final static int HOLDER_PIECE_COUNT = 3;
+
+    //endregion
+
+    //region Constructor
 
     GameScreen(final Klooni game) {
         batch = new SpriteBatch();
 
-        layout = new GameLayout();
-
-        scorer = new Scorer(layout, 10);
-        board = new Board(layout, 10);
-        holder = new PieceHolder(layout, 3, board.cellSize);
+        final GameLayout layout = new GameLayout();
+        scorer = new Scorer(layout);
+        board = new Board(layout, BOARD_SIZE);
+        holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
     }
 
+    //endregion
+
+    //region Private methods
+
+    // If no piece can be put, then it is considered to be game over
     private boolean isGameOver() {
-        for (Piece piece : holder.getAvailablePieces()) {
-            if (board.canPutPiece(piece)) {
+        for (Piece piece : holder.getAvailablePieces())
+            if (board.canPutPiece(piece))
                 return false;
-            }
-        }
+
         return true;
     }
+
+    //endregion
 
     //region Screen
 
@@ -81,26 +98,6 @@ public class GameScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         pauseMenu.dispose();
     }
@@ -110,20 +107,10 @@ public class GameScreen implements Screen, InputProcessor {
     //region Input
 
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P || keycode == Input.Keys.BACK) // Pause
             pauseMenu.show(false);
 
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
         return false;
     }
 
@@ -141,7 +128,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         if (action == PieceHolder.ON_BOARD_DROP) {
             scorer.addPieceScore(area);
-            scorer.addBoardScore(board.clearComplete());
+            scorer.addBoardScore(board.clearComplete(), board.cellCount);
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
@@ -151,6 +138,32 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
         return true;
+    }
+
+    //endregion
+
+    //region Unused methods
+
+    @Override
+    public void resize(int width, int height) { }
+
+    @Override
+    public void pause() { }
+
+    @Override
+    public void resume() { }
+
+    @Override
+    public void hide() { }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
     @Override

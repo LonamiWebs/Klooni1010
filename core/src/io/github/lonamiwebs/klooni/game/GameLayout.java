@@ -13,32 +13,47 @@ import io.github.lonamiwebs.klooni.actors.ThemeCard;
 // For example, the boardHeight on the left and the piece holder on the right
 public class GameLayout {
 
-    // Widths
-    private float screenWidth, marginWidth, availableWidth;
+    //region Members
 
-    // Heights
-    private float screenHeight, logoHeight, scoreHeight, boardHeight, pieceHolderHeight;
+    private float screenWidth, marginWidth, availableWidth;
+    private float scoreHeight, boardHeight, pieceHolderHeight;
+
+    //endregion
+
+    //region Constructor
 
     public GameLayout() {
         calculate();
     }
 
+    //endregion
+
+    //region Private methods
+
     private void calculate() {
         screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
+        float screenHeight = Gdx.graphics.getHeight();
 
         // Widths
         marginWidth = screenWidth * 0.05f;
         availableWidth = screenWidth - marginWidth * 2f;
 
         // Heights
-        logoHeight = screenHeight * 0.10f;
+        // logoHeight = screenHeight * 0.10f; // Unused
         scoreHeight = screenHeight * 0.15f;
         boardHeight = screenHeight * 0.50f;
         pieceHolderHeight = screenHeight * 0.25f;
     }
 
-    // Note that we're now using Y-up coordinates
+    //endregion
+
+    //region Update layout methods
+
+    // These methods take any of the custom objects used in the game
+    // and positions them accordingly on the screen, by using relative
+    // coordinates. Since these objects are not actors and we cannot
+    // add them to a table (and would probably be harder), this approach
+    // was used. Note that all these are using Y-up coordinates.
     void update(Scorer scorer) {
         float cupSize = Math.min(scoreHeight, scorer.cupTexture.getHeight());
         final Rectangle area = new Rectangle(
@@ -94,4 +109,6 @@ public class GameLayout {
     public void update(ThemeCard card) {
         card.setSize(availableWidth - marginWidth, scoreHeight);
     }
+
+    //endregion
 }

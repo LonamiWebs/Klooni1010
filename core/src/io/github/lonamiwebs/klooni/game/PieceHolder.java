@@ -11,27 +11,42 @@ import com.badlogic.gdx.utils.Array;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
+// A holder of pieces that can be drawn on screen.
+// Pieces can be picked up from it and dropped on a board.
 public class PieceHolder {
 
+    //region Members
+
+    final Rectangle area;
     private final Piece[] pieces;
-    private final Rectangle[] originalPositions; // Needed after a piece is dropped
 
     private final Sound pieceDropSound;
     private final Sound invalidPieceDropSound;
     private final Sound takePiecesSound;
 
+    // Count of pieces to be shown
     private final int count;
 
+    // Currently held piece index (picked by the user)
     private int heldPiece;
 
-    final Rectangle area;
+    // Needed after a piece is dropped, so it can go back
+    private final Rectangle[] originalPositions;
 
     // The size the cells will adopt once picked
     private final float pickedCellSize;
 
+    //endregion
+
+    //region Static members
+
     public static final int NO_DROP = 0;
     public static final int NORMAL_DROP = 1;
     public static final int ON_BOARD_DROP = 2;
+
+    //endregion
+
+    //region Constructor
 
     public PieceHolder(final GameLayout layout, final int pieceCount, final float pickedCellSize) {
         count = pieceCount;
@@ -53,7 +68,21 @@ public class PieceHolder {
         takeMore();
     }
 
-    void takeMore() {
+    //endregion
+
+    //region Private methods
+
+    // Determines whether all the pieces have been put (and the "hand" is finished)
+    private boolean handFinished() {
+        for (int i = 0; i < count; i++)
+            if (pieces[i] != null)
+                return false;
+
+        return true;
+    }
+
+    // Takes a new set of pieces. Should be called when there are no more piece left
+    private void takeMore() {
         float perPieceWidth = area.width / count;
         for (int i = 0; i < count; i++) {
             pieces[i] = Piece.random();
@@ -85,15 +114,11 @@ public class PieceHolder {
         }
     }
 
-    boolean handFinished() {
-        for (int i = 0; i < count; i++)
-            if (pieces[i] != null)
-                return false;
+    //endregion
 
-        return true;
-    }
+    //region Public methods
 
-    // Pick the piece below the finger/mouse
+    // Picks the piece below the finger/mouse, returning true if any was picked
     public boolean pickPiece() {
         Vector2 mouse = new Vector2(
                 Gdx.input.getX(),
@@ -112,23 +137,20 @@ public class PieceHolder {
 
     public Array<Piece> getAvailablePieces() {
         Array<Piece> result = new Array<Piece>(count);
-        for (int i = 0; i < count; i++) {
-            if (pieces[i] != null) {
+        for (int i = 0; i < count; i++)
+            if (pieces[i] != null)
                 result.add(pieces[i]);
-            }
-        }
+
         return result;
     }
 
+    // If no piece is currently being held, the area will be 0
     public int calculateHeldPieceArea() {
-        if (heldPiece > -1) {
-            return pieces[heldPiece].calculateArea();
-        } else {
-            return 0;
-        }
+        return heldPiece > -1 ? pieces[heldPiece].calculateArea() : 0;
     }
 
-    // Returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
+    // Tries to drop the piece on the given board. As a result, it
+    // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
     public int dropPiece(Board board) {
         if (heldPiece > -1) {
             boolean put = board.putScreenPiece(pieces[heldPiece]);
@@ -154,6 +176,7 @@ public class PieceHolder {
             return NO_DROP;
     }
 
+    // Updates the state of the piece holder (and the held piece)
     public void update() {
         Piece piece;
         if (heldPiece > -1) {
@@ -163,7 +186,7 @@ public class PieceHolder {
                     Gdx.input.getX(),
                     Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
-            // Center the piece
+            // Center the new piece position
             mouse.sub(piece.getRectangle().width / 2, piece.getRectangle().height / 2);
 
             piece.pos.lerp(mouse, 0.4f);
@@ -194,4 +217,6 @@ public class PieceHolder {
             }
         }
     }
+
+    //endregion
 }

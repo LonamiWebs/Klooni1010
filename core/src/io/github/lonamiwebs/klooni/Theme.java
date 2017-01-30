@@ -10,7 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+// Represents a Theme for the current game.
+// These are loaded from external files, so more
+// can be easily added
 public class Theme {
+
+    //region Members
 
     private String displayName;
     private String name;
@@ -23,19 +28,28 @@ public class Theme {
 
     public NinePatch cellPatch;
 
+    // Save the button styles so the changes here get reflected
     private ImageButton.ImageButtonStyle[] buttonStyles;
+
+    //endregion
+
+    //region Constructor
 
     private Theme() {
         buttonStyles = new ImageButton.ImageButtonStyle[4];
     }
 
+    //endregion
+
+    //region Static methods
+
+    // Gets all the available themes on the available on the internal game storage
     public static Theme[] getThemes() {
         FileHandle[] handles = Gdx.files.internal("themes").list();
 
         Theme[] result = new Theme[handles.length];
-        for (int i = 0; i < handles.length; i++) {
+        for (int i = 0; i < handles.length; i++)
             result[i] = Theme.fromFile(handles[i]);
-        }
 
         return result;
     }
@@ -48,6 +62,11 @@ public class Theme {
         return new Theme().update(handle);
     }
 
+    //endregion
+
+    //region Theme updating
+
+    // Updates the theme with all the values from the specified file or name
     public Theme update(final String name) {
         return update(Gdx.files.internal("themes/"+name+".theme"));
     }
@@ -93,6 +112,14 @@ public class Theme {
         return this;
     }
 
+    //endregion
+
+    //region Applying the theme
+
+    public String getName() {
+        return name;
+    }
+
     public ImageButton.ImageButtonStyle getStyle(int button) {
         return buttonStyles[button];
     }
@@ -101,20 +128,22 @@ public class Theme {
         return cells[colorIndex];
     }
 
-    void dispose() {
-
-    }
-
     public void glClearBackground() {
         Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void updateStyle(ImageButton.ImageButtonStyle style, int styleIndex) {
         style.imageUp = buttonStyles[styleIndex].imageUp;
         style.imageDown = buttonStyles[styleIndex].imageDown;
     }
+
+    //endregion
+
+    //region Disposal
+
+    void dispose() {
+
+    }
+
+    //endregion
 }

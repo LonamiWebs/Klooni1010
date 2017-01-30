@@ -15,8 +15,10 @@ import com.badlogic.gdx.utils.Align;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
-// Score and pause menu band actually
+// Horizontal band, used to show the score on the pause menu
 public class Band extends Actor {
+
+    //region Members
 
     private final Scorer scorer;
     private final Texture bandTexture;
@@ -24,12 +26,17 @@ public class Band extends Actor {
     public final Rectangle scoreBounds;
     public final Rectangle infoBounds;
 
-    public final Label infoLabel;
-    public final Label scoreLabel;
+    private final Label infoLabel;
+    private final Label scoreLabel;
 
-    public Band(final GameLayout layout, final Scorer aScorer, final Color bandColor) {
-        scorer = aScorer;
+    //endregion
 
+    //region Constructor
+
+    public Band(final GameLayout layout, final Scorer scorer, final Color bandColor) {
+        this.scorer = scorer;
+
+        // A 1x1 pixel map will be enough since the band texture will then be expanded
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(bandColor);
         pixmap.fill();
@@ -49,9 +56,9 @@ public class Band extends Actor {
         layout.update(this);
     }
 
-    public void setGameOver() {
-        infoLabel.setText("no moves left");
-    }
+    //endregion
+
+    //region Public methods
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -70,4 +77,11 @@ public class Band extends Actor {
         infoLabel.setBounds(x + infoBounds.x, y + infoBounds.y, infoBounds.width, infoBounds.height);
         infoLabel.draw(batch, parentAlpha);
     }
+
+    // Once game over is set on the menu, it cannot be reverted
+    public void setGameOver() {
+        infoLabel.setText("no moves left");
+    }
+
+    //endregion
 }

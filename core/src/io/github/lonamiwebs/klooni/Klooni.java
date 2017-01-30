@@ -11,9 +11,15 @@ import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 
 public class Klooni extends Game {
 
+    //region Members
+
     // TODO Not sure whether the theme should be static or not since it might load textures
     public static Theme theme;
     public Skin skin;
+
+    //endregion
+
+    //region Creation
 
     @Override
     public void create() {
@@ -51,10 +57,18 @@ public class Klooni extends Game {
         setScreen(new MainMenuScreen(this));
     }
 
+    //endregion
+
+    //region Screen
+
     @Override
     public void render() {
         super.render();
     }
+
+    //endregion
+
+    //region Disposing
 
     @Override
     public void dispose() {
@@ -62,6 +76,8 @@ public class Klooni extends Game {
         skin.dispose();
         theme.dispose();
     }
+
+    //endregion
 
     //region Settings
 

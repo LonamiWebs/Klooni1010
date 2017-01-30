@@ -8,18 +8,31 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
-// Pieces can be L shaped and be rotated 0 to 3 times to make it random
-// Maximum cellSize = 4
+// Represents a piece with an arbitrary shape, which
+// can be either rectangles (squares too) or L shaped
+// with any rotation.
 public class Piece {
 
+    //region Members
+
     final Vector2 pos;
-    float cellSize = 10f; // Default
+    final Color color;
 
     final int cellCols, cellRows;
     private boolean shape[][];
 
-    final Color color;
+    // Default arbitrary value
+    float cellSize = 10f;
 
+    //endregion
+
+    //region Constructors
+
+    // Rectangle-shaped constructor
+    //
+    // If swapSize is true, the rows and columns will be swapped.
+    // colorIndex represents a random index that will be used
+    // to determine the color of this piece when drawn on the screen.
     private Piece(int cols, int rows, boolean swapSize, int colorIndex) {
         color = Klooni.theme.getCellColor(colorIndex);
 
@@ -34,6 +47,7 @@ public class Piece {
         }
     }
 
+    // L-shaped constructor
     private Piece(int lSize, int rotateCount, int colorIndex) {
         color = Klooni.theme.getCellColor(colorIndex);
 
@@ -68,11 +82,12 @@ public class Piece {
         }
     }
 
-    boolean filled(int i, int j) {
-        return shape[i][j];
-    }
+    //endregion
 
-    public static Piece random() {
+    //region Static methods
+
+    // Generates a random piece with always the same color for the generated shape
+    static Piece random() {
         int color = MathUtils.random(8); // 9 pieces
         switch (color) {
             // Squares
@@ -93,10 +108,28 @@ public class Piece {
         throw new RuntimeException("Random function is broken.");
     }
 
+    //endregion
+
+    //region Package local methods
+
+    void draw(SpriteBatch batch) {
+        for (int i = 0; i < cellRows; i++)
+            for (int j = 0; j < cellCols; j++)
+                if (shape[i][j])
+                    Cell.draw(color, batch, pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+    }
+
+    // Calculates the rectangle of the piece with screen coordinates
     Rectangle getRectangle() {
         return new Rectangle(pos.x, pos.y, cellCols * cellSize, cellRows * cellSize);
     }
 
+    // Determines whether the shape is filled on the given row and column
+    boolean filled(int i, int j) {
+        return shape[i][j];
+    }
+
+    // Calculates the area occupied by the shape
     int calculateArea() {
         int area = 0;
         for (int i = 0; i < cellRows; i++) {
@@ -109,6 +142,7 @@ public class Piece {
         return area;
     }
 
+    // Calculates the gravity center of the piece shape
     Vector2 calculateGravityCenter() {
         int filledCount = 0;
         Vector2 result = new Vector2();
@@ -125,14 +159,5 @@ public class Piece {
         return result.scl(1f / filledCount);
     }
 
-    void draw(SpriteBatch batch) {
-        for (int i = 0; i < cellRows; i++) {
-            for (int j = 0; j < cellCols; j++) {
-                if (shape[i][j]) {
-                    Cell.draw(color, batch,
-                            pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
-                }
-            }
-        }
-    }
+    //endregion
 }
