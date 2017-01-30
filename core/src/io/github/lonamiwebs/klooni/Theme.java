@@ -17,7 +17,13 @@ public class Theme {
     private Color[] cells;
     private Color[] buttons;
 
-    private Theme() { }
+    public static Skin skin;
+
+    private ImageButton.ImageButtonStyle[] buttonStyles;
+
+    private Theme() {
+        buttonStyles = new ImageButton.ImageButtonStyle[4];
+    }
 
     public static Theme[] getThemes() {
         FileHandle[] handles = Gdx.files.internal("themes").list();
@@ -43,6 +49,10 @@ public class Theme {
     }
 
     private Theme update(final FileHandle handle) {
+        if (skin == null) {
+            throw new NullPointerException("A Theme.skin must be set before updating any Theme instance");
+        }
+
         final JsonValue json = new JsonReader().parse(handle.readString());
 
         name = handle.nameWithoutExtension();
@@ -57,6 +67,12 @@ public class Theme {
         buttons = new Color[buttonColors.size];
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Color((int)Long.parseLong(buttonColors.getString(i), 16));
+            if (buttonStyles[i] == null) {
+                buttonStyles[i] = new ImageButton.ImageButtonStyle();
+            }
+
+            buttonStyles[i].up = skin.newDrawable("button_up", buttons[i]);
+            buttonStyles[i].down = skin.newDrawable("button_down", buttons[i]);
         }
 
         JsonValue cellColors = colors.get("cells");
@@ -71,10 +87,8 @@ public class Theme {
 
     // TODO Avoid creating game.skin.newDrawable all the time without disposing…
     public ImageButton.ImageButtonStyle getStyle(final Skin skin, int button, final String imageName) {
-        return new ImageButton.ImageButtonStyle(
-                skin.newDrawable("button_up", buttons[button]),
-                skin.newDrawable("button_down", buttons[button]),
-                null, skin.getDrawable(imageName), null, null);
+        buttonStyles[button].imageUp = skin.getDrawable(imageName);
+        return buttonStyles[button];
     }
 
     public Color getCellColor(int colorIndex) {
