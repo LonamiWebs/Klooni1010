@@ -2,9 +2,7 @@ package io.github.lonamiwebs.klooni.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,15 +17,9 @@ public class ThemeCard extends Actor {
 
     public final Theme theme;
 
-    // TODO Use the cell patch given the theme, not basic
-    private final NinePatch cellPatch;
-
     public ThemeCard(final GameLayout layout, final Theme theme) {
         shapeRenderer = new ShapeRenderer(20);
         this.theme = theme;
-        cellPatch = new NinePatch(
-                new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
-
         layout.update(this);
     }
 
@@ -55,16 +47,16 @@ public class ThemeCard extends Actor {
         // 8 7 3
         // 8 8 3
         float cellSize = getHeight() * 0.2f;
-        Cell.draw(theme.getCellColor(0), batch, cellPatch, x + cellSize, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, cellPatch, x + cellSize * 2, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, cellPatch, x + cellSize * 3, y + cellSize, cellSize);
+        Cell.draw(theme.getCellColor(0), batch, x + cellSize, y + cellSize, cellSize);
+        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize, cellSize);
+        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 3, y + cellSize, cellSize);
 
-        Cell.draw(theme.getCellColor(8), batch, cellPatch, x + cellSize, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, cellPatch, x + cellSize * 2, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, cellPatch, x + cellSize * 3, y + cellSize * 2, cellSize);
+        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 2, cellSize);
+        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize * 2, cellSize);
+        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 3, y + cellSize * 2, cellSize);
 
-        Cell.draw(theme.getCellColor(8), batch, cellPatch, x + cellSize, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, cellPatch, x + cellSize * 2, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(3), batch, cellPatch, x + cellSize * 3, y + cellSize * 3, cellSize);
+        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 3, cellSize);
+        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 2, y + cellSize * 3, cellSize);
+        Cell.draw(theme.getCellColor(3), batch, x + cellSize * 3, y + cellSize * 3, cellSize);
     }
 }

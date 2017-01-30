@@ -70,7 +70,7 @@ public class GameScreen implements Screen, InputProcessor {
         scorer.draw(batch);
         board.draw(batch);
         holder.update();
-        holder.draw(batch, board.cellPatch);
+        holder.draw(batch);
 
         batch.end();
 

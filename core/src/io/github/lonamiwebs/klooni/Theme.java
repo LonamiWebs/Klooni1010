@@ -3,6 +3,8 @@ package io.github.lonamiwebs.klooni;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonReader;
@@ -18,6 +20,8 @@ public class Theme {
     private Color[] buttons;
 
     public static Skin skin;
+
+    public NinePatch cellPatch;
 
     private ImageButton.ImageButtonStyle[] buttonStyles;
 
@@ -82,6 +86,9 @@ public class Theme {
         }
 
         String cellTextureFile = json.getString("cell_texture");
+        cellPatch = new NinePatch(new Texture(
+                Gdx.files.internal("ui/cells/"+cellTextureFile)), 4, 4, 4, 4);
+
         return this;
     }
 

@@ -2,7 +2,6 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -188,10 +187,10 @@ public class PieceHolder {
         }
     }
 
-    public void draw(SpriteBatch batch, NinePatch patch) {
+    public void draw(SpriteBatch batch) {
         for (int i = 0; i < count; i++) {
             if (pieces[i] != null) {
-                pieces[i].draw(batch, patch);
+                pieces[i].draw(batch);
             }
         }
     }

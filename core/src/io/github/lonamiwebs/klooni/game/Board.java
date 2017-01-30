@@ -2,8 +2,6 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -20,14 +18,10 @@ public class Board {
 
     final Vector2 pos;
 
-    public NinePatch cellPatch;
     private final Sound stripClearSound;
 
     public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
-
-        cellPatch = new NinePatch(
-                new Texture(Gdx.files.internal("ui/cells/basic.png")), 4, 4, 4, 4);
 
         stripClearSound = Gdx.audio.newSound(Gdx.files.internal("sound/strip_clear.mp3"));
 
@@ -175,7 +169,7 @@ public class Board {
     public void draw(SpriteBatch batch) {
         for (int i = 0; i < cellCount; i++) {
             for (int j = 0; j < cellCount; j++) {
-                cells[i][j].draw(batch, cellPatch);
+                cells[i][j].draw(batch);
             }
         }
     }

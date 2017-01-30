@@ -3,10 +3,11 @@ package io.github.lonamiwebs.klooni.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+
+import io.github.lonamiwebs.klooni.Klooni;
 
 public class Cell {
 
@@ -35,8 +36,8 @@ public class Cell {
         color = c;
     }
 
-    void draw(SpriteBatch batch, NinePatch patch) {
-        draw(color, batch, patch, pos.x, pos.y, size);
+    void draw(SpriteBatch batch) {
+        draw(color, batch, pos.x, pos.y, size);
 
         // Draw the previous vanishing cell
         if (vanishElapsed <= vanishLifetime) {
@@ -49,15 +50,15 @@ public class Cell {
             vanishSize = Interpolation.elasticIn.apply(size, 0, progress);
 
             float centerOffset = size * 0.5f - vanishSize * 0.5f;
-            draw(vanishColor, batch, patch, pos.x + centerOffset, pos.y + centerOffset, vanishSize);
+            draw(vanishColor, batch, pos.x + centerOffset, pos.y + centerOffset, vanishSize);
         }
     }
 
     // TODO Use skin atlas
-    public static void draw(Color color, Batch batch, NinePatch patch,
+    public static void draw(Color color, Batch batch,
                             float x, float y, float size) {
         batch.setColor(color);
-        patch.draw(batch, x, y, size, size);
+        Klooni.theme.cellPatch.draw(batch, x, y, size, size);
     }
 
     boolean isEmpty() {

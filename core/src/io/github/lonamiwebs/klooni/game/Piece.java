@@ -1,7 +1,6 @@
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -126,11 +125,11 @@ public class Piece {
         return result.scl(1f / filledCount);
     }
 
-    void draw(SpriteBatch batch, NinePatch patch) {
+    void draw(SpriteBatch batch) {
         for (int i = 0; i < cellRows; i++) {
             for (int j = 0; j < cellCols; j++) {
                 if (shape[i][j]) {
-                    Cell.draw(color, batch, patch,
+                    Cell.draw(color, batch,
                             pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
                 }
             }
