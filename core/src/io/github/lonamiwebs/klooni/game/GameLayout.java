@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.github.lonamiwebs.klooni.actors.Band;
+import io.github.lonamiwebs.klooni.actors.ThemeCard;
 
 // Helper class to calculate the size of each element
 //
@@ -88,5 +89,9 @@ public class GameLayout {
         // 10% (10%) padding
         band.scoreBounds.set(area.x, area.y + area.height * 0.55f, area.width, area.height * 0.35f);
         band.infoBounds.set(area.x, area.y + area.height * 0.10f, area.width, area.height * 0.35f);
+    }
+
+    public void update(ThemeCard card) {
+        card.setSize(availableWidth, logoHeight);
     }
 }

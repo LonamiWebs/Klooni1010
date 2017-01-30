@@ -2,12 +2,13 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-class Cell {
+public class Cell {
 
     private boolean empty;
     private Color color;
@@ -53,8 +54,8 @@ class Cell {
     }
 
     // TODO Use skin atlas
-    static void draw(Color color, SpriteBatch batch, NinePatch patch,
-                     float x, float y, float size) {
+    public static void draw(Color color, Batch batch, NinePatch patch,
+                            float x, float y, float size) {
         batch.setColor(color);
         patch.draw(batch, x, y, size, size);
     }

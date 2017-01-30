@@ -15,6 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.Theme;
+import io.github.lonamiwebs.klooni.actors.ThemeCard;
+import io.github.lonamiwebs.klooni.game.GameLayout;
 
 public class CustomizeScreen implements Screen {
     private Klooni game;
@@ -22,6 +25,8 @@ public class CustomizeScreen implements Screen {
     private Stage stage;
 
     public CustomizeScreen(Klooni aGame, final Screen lastScreen) {
+        final GameLayout layout = new GameLayout();
+
         game = aGame;
         stage = new Stage();
 
@@ -81,9 +86,12 @@ public class CustomizeScreen implements Screen {
         table.row();
 
         VerticalGroup themesGroup = new VerticalGroup();
-        themesGroup.space(8);
+        for (Theme theme : Theme.getThemes()) {
+            themesGroup.addActor(new ThemeCard(layout, theme));
+        }
 
-        table.add(themesGroup).expandY();
+        themesGroup.space(8);
+        table.add(new ScrollPane(themesGroup)).expandY();
     }
 
     @Override
