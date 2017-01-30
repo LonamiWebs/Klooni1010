@@ -3,7 +3,6 @@ package io.github.lonamiwebs.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,56 +31,34 @@ public class MainMenuScreen extends InputListener implements Screen {
         stage.addActor(table);
 
         // Play button
-        ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.GREEN),
-                game.skin.newDrawable("button_down", Color.GREEN),
-                null, game.skin.getDrawable("play_texture"), null, null);
-
-        final ImageButton playButton = new ImageButton(playStyle);
-        table.add(playButton).colspan(3).fill().space(16);
-
+        final ImageButton playButton = new ImageButton(Klooni.theme.getStyle(game.skin, 0, "play_texture"));
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 game.setScreen(new GameScreen(game));
                 dispose();
             }
         });
+        table.add(playButton).colspan(3).fill().space(16);
 
         table.row();
 
         // Star button (on GitHub)
-        ImageButton.ImageButtonStyle starStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.YELLOW),
-                game.skin.newDrawable("button_down", Color.YELLOW),
-                null, game.skin.getDrawable("star_texture"), null, null);
-
-        final ImageButton starButton = new ImageButton(starStyle);
+        final ImageButton starButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "star_texture"));
         table.add(starButton).space(16);
 
         // Stats button (high scores)
-        ImageButton.ImageButtonStyle statsStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.BLUE),
-                game.skin.newDrawable("button_down", Color.BLUE),
-                null, game.skin.getDrawable("stats_texture"), null, null);
-
-        final ImageButton statsButton = new ImageButton(statsStyle);
+        final ImageButton statsButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "stats_texture"));
         table.add(statsButton).space(16);
 
         // Palette button (buy colors)
-        ImageButton.ImageButtonStyle paletteStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.FIREBRICK),
-                game.skin.newDrawable("button_down", Color.FIREBRICK),
-                null, game.skin.getDrawable("palette_texture"), null, null);
-
-        final ImageButton paletteButton = new ImageButton(paletteStyle);
-        table.add(paletteButton).space(16);
-
+        final ImageButton paletteButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "palette_texture"));
         paletteButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 game.setScreen(new CustomizeScreen(game, game.getScreen()));
                 // Don't dispose because then it needs to take us to the previous screen
             }
         });
+        table.add(paletteButton).space(16);
     }
 
     @Override

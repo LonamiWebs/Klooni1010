@@ -11,11 +11,16 @@ import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 
 public class Klooni extends Game {
 
+    // TODO Not sure whether the theme should be static or not since it might load textures
+    public static Theme theme;
     public Skin skin;
 
     @Override
     public void create() {
         prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
+
+        // Use only one instance for the theme, so anyone using it uses the most up-to-date
+        theme = Theme.getTheme(prefs.getString("themeName", "default"));
 
         // TODO Better way to have this skin somewhere
         // Gotta create that darn .json…!
@@ -54,6 +59,7 @@ public class Klooni extends Game {
     public void dispose() {
         super.dispose();
         skin.dispose();
+        theme.dispose();
     }
 
     //region Settings

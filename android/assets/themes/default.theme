@@ -1,0 +1,19 @@
+{
+    "name": "Default",
+    "price": 0,
+    "colors": {
+        "background": "e6e6e6ff",
+        "buttons": [
+            "00ff33ff",
+            "ffd700ff",
+            "2389fcff",
+            "d94848ff"
+        ],
+        "cells": [
+            "7988bfff", "98dc53ff", "4cd4aeff",
+            "fec63dff", "ec9548ff", "e66a82ff", "da6554ff",
+            "57cb84ff", "5abee2ff"
+        ]
+    },
+    "cell_texture": "basic.png"
+}

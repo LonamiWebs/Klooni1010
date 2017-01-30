@@ -42,12 +42,7 @@ public class PauseMenuStage extends Stage {
         addActor(band);
 
         // Home screen button
-        ImageButton.ImageButtonStyle homeStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.FIREBRICK),
-                game.skin.newDrawable("button_down", Color.FIREBRICK),
-                null, game.skin.getDrawable("home_texture"), null, null);
-
-        final ImageButton homeButton = new ImageButton(homeStyle);
+        final ImageButton homeButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "home_texture"));
         table.add(homeButton).space(16);
 
         homeButton.addListener(new ChangeListener() {
@@ -58,12 +53,7 @@ public class PauseMenuStage extends Stage {
         });
 
         // Replay button
-        ImageButton.ImageButtonStyle replayStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.GREEN),
-                game.skin.newDrawable("button_down", Color.GREEN),
-                null, game.skin.getDrawable("replay_texture"), null, null);
-
-        final ImageButton replayButton = new ImageButton(replayStyle);
+        final ImageButton replayButton = new ImageButton(Klooni.theme.getStyle(game.skin, 0, "replay_texture"));
         table.add(replayButton).space(16);
 
         replayButton.addListener(new ChangeListener() {
@@ -77,12 +67,7 @@ public class PauseMenuStage extends Stage {
         table.row();
 
         // Palette button (buy colors)
-        ImageButton.ImageButtonStyle paletteStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.YELLOW),
-                game.skin.newDrawable("button_down", Color.YELLOW),
-                null, game.skin.getDrawable("palette_texture"), null, null);
-
-        final ImageButton paletteButton = new ImageButton(paletteStyle);
+        final ImageButton paletteButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "palette_texture"));
         table.add(paletteButton).space(16);
 
         paletteButton.addListener(new ChangeListener() {
@@ -95,12 +80,7 @@ public class PauseMenuStage extends Stage {
 
         // Continue playing OR share (if game over) button
         // TODO Enable both actions for this button
-        ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.BLUE),
-                game.skin.newDrawable("button_down", Color.BLUE),
-                null, game.skin.getDrawable("play_texture"), null, null);
-
-        final ImageButton playButton = new ImageButton(playStyle);
+        final ImageButton playButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "play_texture"));
         table.add(playButton).space(16);
 
         playButton.addListener(new ChangeListener() {

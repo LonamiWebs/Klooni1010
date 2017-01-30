@@ -7,15 +7,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.lonamiwebs.klooni.Klooni;
+
 // Pieces can be L shaped and be rotated 0 to 3 times to make it random
 // Maximum cellSize = 4
 public class Piece {
-
-    private final static int[] colors = {
-            0x7988bfff, 0x98dc53ff, 0x4cd4aeff,             // Squares
-            0xfec63dff, 0xec9548ff, 0xe66a82ff, 0xda6554ff, // Lines
-            0x57cb84ff, 0x5abee2ff                          // L's
-    };
 
     final Vector2 pos;
     float cellSize = 10f; // Default
@@ -26,7 +22,7 @@ public class Piece {
     final Color color;
 
     private Piece(int cols, int rows, boolean swapSize, int colorIndex) {
-        color = new Color(colors[colorIndex]);
+        color = Klooni.theme.getCellColor(colorIndex);
 
         pos = new Vector2();
         cellCols = swapSize ? rows : cols;
@@ -40,7 +36,7 @@ public class Piece {
     }
 
     private Piece(int lSize, int rotateCount, int colorIndex) {
-        color = new Color(colors[colorIndex]);
+        color = Klooni.theme.getCellColor(colorIndex);
 
         pos = new Vector2();
         cellCols = cellRows = lSize;

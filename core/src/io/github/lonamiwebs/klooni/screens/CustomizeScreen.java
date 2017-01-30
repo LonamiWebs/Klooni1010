@@ -4,7 +4,6 @@ package io.github.lonamiwebs.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
@@ -35,13 +33,7 @@ public class CustomizeScreen implements Screen {
         optionsGroup.space(12);
 
         // Back to the previous screen
-        ImageButton.ImageButtonStyle backStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.GOLD),
-                game.skin.newDrawable("button_down", Color.GOLD),
-                null, game.skin.getDrawable("back_texture"), null, null);
-
-        final ImageButton backButton = new ImageButton(backStyle);
-        optionsGroup.addActor(backButton);
+        final ImageButton backButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "back_texture"));
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -49,18 +41,12 @@ public class CustomizeScreen implements Screen {
                 dispose();
             }
         });
+        optionsGroup.addActor(backButton);
 
         // Turn sound on/off
-        Drawable soundDrawable = game.skin.getDrawable(
-                Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
+        final ImageButton soundButton = new ImageButton(Klooni.theme.getStyle(
+                game.skin, 0, Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture"));
 
-        ImageButton.ImageButtonStyle soundStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.LIME),
-                game.skin.newDrawable("button_down", Color.LIME),
-                null, soundDrawable, null, null);
-
-        final ImageButton soundButton = new ImageButton(soundStyle);
-        optionsGroup.addActor(soundButton);
         soundButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -69,36 +55,27 @@ public class CustomizeScreen implements Screen {
                         Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
             }
         });
+        optionsGroup.addActor(soundButton);
 
         // Issues
-        ImageButton.ImageButtonStyle issuesStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", Color.FIREBRICK),
-                game.skin.newDrawable("button_down", Color.FIREBRICK),
-                null, game.skin.getDrawable("issues_texture"), null, null);
-
-        final ImageButton issuesButton = new ImageButton(issuesStyle);
-        optionsGroup.addActor(issuesButton);
+        final ImageButton issuesButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "issues_texture"));
         issuesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.net.openURI("https://github.com/LonamiWeb/Klooni1010/issues");
             }
         });
+        optionsGroup.addActor(issuesButton);
 
         // Website
-        ImageButton.ImageButtonStyle webStyle = new ImageButton.ImageButtonStyle(
-                game.skin.newDrawable("button_up", new Color(0x6E99FFFF)),
-                game.skin.newDrawable("button_down", new Color(0x6E99FFFF)),
-                null, game.skin.getDrawable("web_texture"), null, null);
-
-        final ImageButton webButton = new ImageButton(webStyle);
-        optionsGroup.addActor(webButton);
+        final ImageButton webButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "web_texture"));
         webButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.net.openURI("https://lonamiwebs.github.io");
             }
         });
+        optionsGroup.addActor(webButton);
 
         table.add(new ScrollPane(optionsGroup)).pad(20, 4, 12, 4);
         table.row();
