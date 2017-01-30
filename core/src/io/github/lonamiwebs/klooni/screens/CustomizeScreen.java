@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
+import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
@@ -40,7 +41,7 @@ public class CustomizeScreen implements Screen {
         optionsGroup.space(12);
 
         // Back to the previous screen
-        final ImageButton backButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "back_texture"));
+        final ImageButton backButton = new SoftButton(1, "back_texture");
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -51,8 +52,8 @@ public class CustomizeScreen implements Screen {
         optionsGroup.addActor(backButton);
 
         // Turn sound on/off
-        final ImageButton soundButton = new ImageButton(Klooni.theme.getStyle(
-                game.skin, 0, Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture"));
+        final ImageButton soundButton = new SoftButton(
+                0, Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
 
         soundButton.addListener(new ChangeListener() {
             @Override
@@ -65,7 +66,7 @@ public class CustomizeScreen implements Screen {
         optionsGroup.addActor(soundButton);
 
         // Issues
-        final ImageButton issuesButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "issues_texture"));
+        final ImageButton issuesButton = new SoftButton(3, "issues_texture");
         issuesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -75,7 +76,7 @@ public class CustomizeScreen implements Screen {
         optionsGroup.addActor(issuesButton);
 
         // Website
-        final ImageButton webButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "web_texture"));
+        final ImageButton webButton = new SoftButton(2, "web_texture");
         webButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

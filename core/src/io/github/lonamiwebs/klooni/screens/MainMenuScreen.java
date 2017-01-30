@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.actors.SoftButton;
 
 public class MainMenuScreen extends InputListener implements Screen {
     private Klooni game;
@@ -31,7 +32,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         stage.addActor(table);
 
         // Play button
-        final ImageButton playButton = new ImageButton(Klooni.theme.getStyle(game.skin, 0, "play_texture"));
+        final ImageButton playButton = new SoftButton(0, "play_texture");
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 game.setScreen(new GameScreen(game));
@@ -43,15 +44,15 @@ public class MainMenuScreen extends InputListener implements Screen {
         table.row();
 
         // Star button (on GitHub)
-        final ImageButton starButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "star_texture"));
+        final ImageButton starButton = new SoftButton(1, "star_texture");
         table.add(starButton).space(16);
 
         // Stats button (high scores)
-        final ImageButton statsButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "stats_texture"));
+        final ImageButton statsButton = new SoftButton(2, "stats_texture");
         table.add(statsButton).space(16);
 
         // Palette button (buy colors)
-        final ImageButton paletteButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "palette_texture"));
+        final ImageButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 game.setScreen(new CustomizeScreen(game, game.getScreen()));

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.actors.Band;
+import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
@@ -42,7 +43,7 @@ public class PauseMenuStage extends Stage {
         addActor(band);
 
         // Home screen button
-        final ImageButton homeButton = new ImageButton(Klooni.theme.getStyle(game.skin, 3, "home_texture"));
+        final ImageButton homeButton = new SoftButton(3, "home_texture");
         table.add(homeButton).space(16);
 
         homeButton.addListener(new ChangeListener() {
@@ -53,7 +54,7 @@ public class PauseMenuStage extends Stage {
         });
 
         // Replay button
-        final ImageButton replayButton = new ImageButton(Klooni.theme.getStyle(game.skin, 0, "replay_texture"));
+        final ImageButton replayButton = new SoftButton(0, "replay_texture");
         table.add(replayButton).space(16);
 
         replayButton.addListener(new ChangeListener() {
@@ -67,7 +68,7 @@ public class PauseMenuStage extends Stage {
         table.row();
 
         // Palette button (buy colors)
-        final ImageButton paletteButton = new ImageButton(Klooni.theme.getStyle(game.skin, 1, "palette_texture"));
+        final ImageButton paletteButton = new SoftButton(1, "palette_texture");
         table.add(paletteButton).space(16);
 
         paletteButton.addListener(new ChangeListener() {
@@ -80,7 +81,7 @@ public class PauseMenuStage extends Stage {
 
         // Continue playing OR share (if game over) button
         // TODO Enable both actions for this button
-        final ImageButton playButton = new ImageButton(Klooni.theme.getStyle(game.skin, 2, "play_texture"));
+        final ImageButton playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
 
         playButton.addListener(new ChangeListener() {

@@ -74,7 +74,8 @@ public class Theme {
             if (buttonStyles[i] == null) {
                 buttonStyles[i] = new ImageButton.ImageButtonStyle();
             }
-
+            // Update the style. Since every button uses an instance from this
+            // array, the changes will appear on screen automatically.
             buttonStyles[i].up = skin.newDrawable("button_up", buttons[i]);
             buttonStyles[i].down = skin.newDrawable("button_down", buttons[i]);
         }
@@ -92,9 +93,7 @@ public class Theme {
         return this;
     }
 
-    // TODO Avoid creating game.skin.newDrawable all the time without disposing…
-    public ImageButton.ImageButtonStyle getStyle(final Skin skin, int button, final String imageName) {
-        buttonStyles[button].imageUp = skin.getDrawable(imageName);
+    public ImageButton.ImageButtonStyle getStyle(int button) {
         return buttonStyles[button];
     }
 
@@ -112,5 +111,10 @@ public class Theme {
 
     public String getName() {
         return name;
+    }
+
+    public void updateStyle(ImageButton.ImageButtonStyle style, int styleIndex) {
+        style.imageUp = buttonStyles[styleIndex].imageUp;
+        style.imageDown = buttonStyles[styleIndex].imageDown;
     }
 }
