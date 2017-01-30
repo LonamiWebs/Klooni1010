@@ -102,7 +102,7 @@ public class CustomizeScreen implements Screen {
         }
 
         themesGroup.space(8);
-        table.add(new ScrollPane(themesGroup)).expandY();
+        table.add(new ScrollPane(themesGroup)).expand().fill();
     }
 
     @Override

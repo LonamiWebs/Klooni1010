@@ -27,11 +27,15 @@ public class PauseMenuStage extends Stage {
     private boolean shown;
     private boolean hiding;
 
+    private final ShapeRenderer shapeRenderer;
+
     private final Band band;
     private final Scorer scorer;
 
     public PauseMenuStage(final GameLayout layout, final Klooni game, final Scorer aScorer) {
         scorer = aScorer;
+
+        shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
 
         Table table = new Table();
         table.setFillParent(true);
@@ -133,8 +137,8 @@ public class PauseMenuStage extends Stage {
     @Override
     public void draw() {
         // Draw an overlay rectangle with not all the opacity
+        // This is the only place where ShapeRenderer is OK because the batch hasn't started
         if (shown) {
-            ShapeRenderer shapeRenderer = new ShapeRenderer(20);
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1f, 1f, 1f, 0.3f);

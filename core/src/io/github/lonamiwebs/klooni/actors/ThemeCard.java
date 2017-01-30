@@ -1,10 +1,10 @@
 package io.github.lonamiwebs.klooni.actors;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.lonamiwebs.klooni.Theme;
@@ -13,34 +13,30 @@ import io.github.lonamiwebs.klooni.game.GameLayout;
 
 public class ThemeCard extends Actor {
 
-    private final ShapeRenderer shapeRenderer;
-
     public final Theme theme;
+    private final Texture background;
 
     public ThemeCard(final GameLayout layout, final Theme theme) {
-        shapeRenderer = new ShapeRenderer(20);
+        // TODO We could also use white color and then batch.setColor(theme.background)
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(theme.background);
+        pixmap.fill();
+        background = new Texture(pixmap);
+        pixmap.dispose();
+
         this.theme = theme;
         layout.update(this);
+
+        setWidth(Gdx.graphics.getWidth());
+        setScaleX(200);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.end();
-
         final float x = getX(), y = getY();
 
-        Vector2 pos = localToStageCoordinates(new Vector2(x, y));
-
-        // TODO Something is wrong with this code, shape renderer fills one yes one no if multiple themes
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 0.3f);
-        shapeRenderer.rect(pos.x, pos.y, getWidth(), getHeight());
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        batch.begin();
-
+        batch.setColor(Color.WHITE);
+        batch.draw(background, x, y, getWidth(), getHeight());
         // Consider 5 cells on the available size (1/5 height each)
         // Do not draw on the borders to add some padding, colors used:
         // 0 7 7

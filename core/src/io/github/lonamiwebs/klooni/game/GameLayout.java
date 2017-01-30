@@ -92,6 +92,6 @@ public class GameLayout {
     }
 
     public void update(ThemeCard card) {
-        card.setSize(availableWidth, logoHeight);
+        card.setSize(availableWidth - marginWidth, scoreHeight);
     }
 }

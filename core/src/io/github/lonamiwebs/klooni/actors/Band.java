@@ -2,10 +2,12 @@ package io.github.lonamiwebs.klooni.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -17,8 +19,7 @@ import io.github.lonamiwebs.klooni.game.Scorer;
 public class Band extends Actor {
 
     private final Scorer scorer;
-    private final ShapeRenderer shapeRenderer; // To draw the horizontal "Band"
-    private final Color bandColor;
+    private final Texture bandTexture;
 
     public final Rectangle scoreBounds;
     public final Rectangle infoBounds;
@@ -26,10 +27,14 @@ public class Band extends Actor {
     public final Label infoLabel;
     public final Label scoreLabel;
 
-    public Band(final GameLayout layout, final Scorer aScorer, final Color aBandColor) {
+    public Band(final GameLayout layout, final Scorer aScorer, final Color bandColor) {
         scorer = aScorer;
-        bandColor = aBandColor;
-        shapeRenderer = new ShapeRenderer(20); // Only 20 vertex are required, maybe less
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(bandColor);
+        pixmap.fill();
+        bandTexture = new Texture(pixmap);
+        pixmap.dispose();
 
         Label.LabelStyle scoreStyle = new Label.LabelStyle();
         scoreStyle.font = new BitmapFont(Gdx.files.internal("font/geosans-light.fnt"));
@@ -50,20 +55,13 @@ public class Band extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // We need to end (thus flush) the batch or things will mess up!
-        batch.end();
-
-        float w = getWidth();
-        float h = getHeight();
-
         // TODO This is not the best way to apply the transformation, but, oh well
         float x = getParent().getX();
         float y = getParent().getY();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(bandColor);
-        shapeRenderer.rect(x + getX(), y + getY(), w, h);
-        shapeRenderer.end();
-        batch.begin();
+
+        // TODO For some strange reason, the texture coordinates and label coordinates are different
+        Vector2 pos = localToStageCoordinates(new Vector2(x, y));
+        batch.draw(bandTexture, pos.x, pos.y, getWidth(), getHeight());
 
         scoreLabel.setBounds(x + scoreBounds.x, y + scoreBounds.y, scoreBounds.width, scoreBounds.height);
         scoreLabel.setText(Integer.toString(scorer.getCurrentScore()));

@@ -15,7 +15,7 @@ public class Theme {
     private String displayName;
     private String name;
     private int price;
-    private Color background;
+    public Color background;
     private Color[] cells;
     private Color[] buttons;
 
