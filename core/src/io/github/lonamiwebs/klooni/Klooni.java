@@ -82,5 +82,10 @@ public class Klooni extends Game {
         prefs.putBoolean("muteSound", soundsEnabled()).flush();
     }
 
+    public static void updateTheme(Theme newTheme) {
+        prefs.putString("themeName", newTheme.getName()).flush();
+        theme.update(newTheme.getName());
+    }
+
     //endregion
 }

@@ -70,7 +70,7 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.9f, 0.9f, 0.7f, 1);
+        Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), minDelta));
         stage.draw();

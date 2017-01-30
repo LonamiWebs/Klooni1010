@@ -17,7 +17,7 @@ public class ThemeCard extends Actor {
 
     private final ShapeRenderer shapeRenderer;
 
-    private final Theme theme;
+    public final Theme theme;
 
     // TODO Use the cell patch given the theme, not basic
     private final NinePatch cellPatch;

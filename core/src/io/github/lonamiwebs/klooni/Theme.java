@@ -84,4 +84,12 @@ public class Theme {
     void dispose() {
 
     }
+
+    public void glClearBackground() {
+        Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
+    }
+
+    public String getName() {
+        return name;
+    }
 }

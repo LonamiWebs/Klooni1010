@@ -6,6 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -87,7 +89,15 @@ public class CustomizeScreen implements Screen {
 
         VerticalGroup themesGroup = new VerticalGroup();
         for (Theme theme : Theme.getThemes()) {
-            themesGroup.addActor(new ThemeCard(layout, theme));
+            final ThemeCard card = new ThemeCard(layout, theme);
+            card.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    Klooni.updateTheme(card.theme);
+                    return true;
+                }
+            });
+            themesGroup.addActor(card);
         }
 
         themesGroup.space(8);
@@ -103,7 +113,7 @@ public class CustomizeScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.7f, 0.9f, 0.9f, 1);
+        Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), minDelta));
         stage.draw();
