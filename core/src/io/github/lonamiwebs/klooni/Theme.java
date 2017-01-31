@@ -120,6 +120,14 @@ public class Theme {
         return name;
     }
 
+    public String getDisplay() {
+        return displayName;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
     public ImageButton.ImageButtonStyle getStyle(int button) {
         return buttonStyles[button];
     }

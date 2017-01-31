@@ -103,13 +103,18 @@ class CustomizeScreen implements Screen {
 
         // Load all the available themes
         table.row();
-        VerticalGroup themesGroup = new VerticalGroup();
+        final VerticalGroup themesGroup = new VerticalGroup();
         for (Theme theme : Theme.getThemes()) {
-            final ThemeCard card = new ThemeCard(layout, theme);
+            final ThemeCard card = new ThemeCard(game, layout, theme);
             card.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     Klooni.updateTheme(card.theme);
+
+                    for (Actor a : themesGroup.getChildren()) {
+                        ThemeCard c = (ThemeCard)a;
+                        c.usedThemeUpdated();
+                    }
                     return true;
                 }
             });

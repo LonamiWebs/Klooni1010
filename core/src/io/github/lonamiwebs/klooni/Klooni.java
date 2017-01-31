@@ -51,6 +51,7 @@ public class Klooni extends Game {
         skin.add("back_texture", new Texture(Gdx.files.internal("ui/back.png")));
 
         skin.add("font", new BitmapFont(Gdx.files.internal("font/geosans-light.fnt")));
+        skin.add("font_small", new BitmapFont(Gdx.files.internal("font/geosans-light32.fnt")));
 
         // Use only one instance for the theme, so anyone using it uses the most up-to-date
         Theme.skin = skin; // Not the best idea
@@ -100,6 +101,18 @@ public class Klooni extends Game {
 
     public static void toggleSound() {
         prefs.putBoolean("muteSound", soundsEnabled()).flush();
+    }
+
+    public static boolean isThemeBought(Theme theme) {
+        if (theme.getPrice() == 0)
+            return true;
+
+        String[] themes = prefs.getString("boughtThemes", "").split(":");
+        for (String t : themes)
+            if (t.equals(theme.getName()))
+                return true;
+
+        return false;
     }
 
     public static void updateTheme(Theme newTheme) {

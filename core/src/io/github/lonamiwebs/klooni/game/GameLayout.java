@@ -16,7 +16,7 @@ public class GameLayout {
     //region Members
 
     private float screenWidth, marginWidth, availableWidth;
-    private float scoreHeight, boardHeight, pieceHolderHeight;
+    private float scoreHeight, boardHeight, pieceHolderHeight, themeCardHeight;
 
     //endregion
 
@@ -43,6 +43,8 @@ public class GameLayout {
         scoreHeight = screenHeight * 0.15f;
         boardHeight = screenHeight * 0.50f;
         pieceHolderHeight = screenHeight * 0.25f;
+
+        themeCardHeight = screenHeight * 0.15f;
     }
 
     //endregion
@@ -107,7 +109,17 @@ public class GameLayout {
     }
 
     public void update(ThemeCard card) {
-        card.setSize(availableWidth - marginWidth, scoreHeight);
+        card.setSize(availableWidth - marginWidth, themeCardHeight);
+        card.cellSize = themeCardHeight * 0.2f;
+
+        // X offset from the cells (5 cells = themeCardHeight)
+        card.nameBounds.set(
+                themeCardHeight, card.cellSize,
+                availableWidth - themeCardHeight, themeCardHeight);
+
+        card.priceBounds.set(
+                themeCardHeight, -card.cellSize,
+                availableWidth - themeCardHeight, themeCardHeight);
     }
 
     //endregion
