@@ -2,7 +2,7 @@ Klooni 1010!
 ============
 Play 1010! for free! Add your own themes! Contribute! Make the game yours!
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [DBAD License](LICENSE).
 
 **Table of contents**:
 1. [Disclaimer](#disclaimer)
