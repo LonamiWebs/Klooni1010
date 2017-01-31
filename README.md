@@ -32,7 +32,7 @@ is different, there are no ads or in-app purchases, different sounds, etc.
 Building
 --------
 Building the project should be very straight forward:
-1. `git clone https://github.com/LonamiWeb/Klooni1010.git`.
+1. `git clone https://github.com/LonamiWebs/Klooni1010.git`.
 2. `cd Klooni1010`
 3. Now you can choose to either build for `desktop` or `android`:
    1. For desktop, use `./gradlew desktop:dist`
