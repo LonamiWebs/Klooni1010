@@ -20,7 +20,13 @@ public class Theme {
     private String displayName;
     private String name;
     private int price;
+
     public Color background;
+    public Color emptyCell;
+
+    public Color currentScore;
+    public Color highScore;
+
     private Color[] cells;
     private Color[] buttons;
 
@@ -98,6 +104,11 @@ public class Theme {
             buttonStyles[i].up = skin.newDrawable("button_up", buttons[i]);
             buttonStyles[i].down = skin.newDrawable("button_down", buttons[i]);
         }
+
+        currentScore = new Color((int)Long.parseLong(colors.getString("current_score"), 16));
+        highScore = new Color((int)Long.parseLong(colors.getString("high_score"), 16));
+
+        emptyCell = new Color((int)Long.parseLong(colors.getString("empty_cell"), 16));
 
         JsonValue cellColors = colors.get("cells");
         cells = new Color[cellColors.size];

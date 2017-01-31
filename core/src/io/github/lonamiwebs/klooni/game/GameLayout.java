@@ -70,7 +70,7 @@ public class GameLayout {
                 area.x, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
 
-        scorer.maxScoreLabel.setBounds(
+        scorer.highScoreLabel.setBounds(
                 area.x + area.width * 0.5f + cupSize * 0.5f, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
     }

@@ -9,11 +9,14 @@
             "c23a20ff",
             "956fd6ff"
         ],
+        "empty_cell": "292929ff",
         "cells": [
             "7931bfff", "4c87aeff", "3aa853ff",
             "1e984dff", "2e749bff", "db5500ff", "d88109ff",
             "d9294dff", "ac342bff"
-        ]
+        ],
+        "current_score": "c83737ff",
+        "high_score": "d400aaff"
     },
     "cell_texture": "basic.png"
 }

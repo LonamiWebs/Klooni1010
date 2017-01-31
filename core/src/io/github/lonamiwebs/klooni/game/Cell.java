@@ -35,7 +35,6 @@ public class Cell {
         size = cellSize;
 
         empty = true;
-        color = Color.WHITE;
         vanishElapsed = Float.POSITIVE_INFINITY;
     }
 
@@ -50,7 +49,8 @@ public class Cell {
     }
 
     void draw(SpriteBatch batch) {
-        draw(color, batch, pos.x, pos.y, size);
+        // Always query the color to the theme, because it might have changed
+        draw(empty ? Klooni.theme.emptyCell : color, batch, pos.x, pos.y, size);
 
         // Draw the previous vanishing cell
         if (vanishElapsed <= vanishLifetime) {
@@ -89,8 +89,6 @@ public class Cell {
 
         // Negative time = delay, + 0.4*lifetime because elastic interpolation has that delay
         vanishElapsed = vanishLifetime * 0.4f - vanishDist;
-
-        color = Color.WHITE;
     }
 
     boolean isEmpty() {

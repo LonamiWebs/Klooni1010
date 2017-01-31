@@ -22,10 +22,12 @@ public class Scorer {
     private int currentScore, maxScore;
 
     final Label currentScoreLabel;
-    final Label maxScoreLabel;
+    final Label highScoreLabel;
 
     final Texture cupTexture;
     final Rectangle cupArea;
+
+    private final Color cupColor;
 
     // If the currentScore beat the maxScore, then we have a new record
     private boolean newRecord;
@@ -43,17 +45,18 @@ public class Scorer {
         maxScore = Klooni.getMaxScore();
 
         cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
+        cupColor = Klooni.theme.currentScore.cpy();
         cupArea = new Rectangle();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
 
         currentScoreLabel = new Label("0", labelStyle);
-        currentScoreLabel.setColor(Color.GOLD);
+        currentScoreLabel.setColor(Klooni.theme.currentScore);
         currentScoreLabel.setAlignment(Align.right);
 
-        maxScoreLabel = new Label(Integer.toString(maxScore), labelStyle);
-        maxScoreLabel.setColor(new Color(0x65D681FF));
+        highScoreLabel = new Label(Integer.toString(maxScore), labelStyle);
+        highScoreLabel.setColor(Klooni.theme.highScore);
 
         layout.update(this);
     }
@@ -108,10 +111,13 @@ public class Scorer {
             currentScoreLabel.setText(Integer.toString(MathUtils.round(shownScore)));
         }
 
-        batch.setColor(Color.GOLD);
+        // If we beat a new record, the cup color will linear interpolate to the high score color
+        cupColor.lerp(newRecord ? Klooni.theme.highScore : Klooni.theme.currentScore, 0.05f);
+        batch.setColor(cupColor);
         batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
+
         currentScoreLabel.draw(batch, 1f);
-        maxScoreLabel.draw(batch, 1f);
+        highScoreLabel.draw(batch, 1f);
     }
 
     //endregion
