@@ -52,7 +52,7 @@ class PauseMenuStage extends Stage {
 
         // Current and maximum score band.
         // Do not add it to the table not to over-complicate things.
-        band = new Band(layout, this.scorer, Color.SKY);
+        band = new Band(game, layout, this.scorer, Color.SKY);
         addActor(band);
 
         // Home screen button

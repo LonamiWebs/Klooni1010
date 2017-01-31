@@ -1,17 +1,16 @@
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Scorer;
 
@@ -33,7 +32,7 @@ public class Band extends Actor {
 
     //region Constructor
 
-    public Band(final GameLayout layout, final Scorer scorer, final Color bandColor) {
+    public Band(final Klooni game, final GameLayout layout, final Scorer scorer, final Color bandColor) {
         this.scorer = scorer;
 
         // A 1x1 pixel map will be enough since the band texture will then be expanded
@@ -43,12 +42,12 @@ public class Band extends Actor {
         bandTexture = new Texture(pixmap);
         pixmap.dispose();
 
-        Label.LabelStyle scoreStyle = new Label.LabelStyle();
-        scoreStyle.font = new BitmapFont(Gdx.files.internal("font/geosans-light.fnt"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
 
-        scoreLabel = new Label("", scoreStyle);
+        scoreLabel = new Label("", labelStyle);
         scoreLabel.setAlignment(Align.center);
-        infoLabel = new Label("pause menu", scoreStyle);
+        infoLabel = new Label("pause menu", labelStyle);
         infoLabel.setAlignment(Align.center);
 
         scoreBounds = new Rectangle();

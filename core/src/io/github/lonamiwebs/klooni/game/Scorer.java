@@ -3,7 +3,6 @@ package io.github.lonamiwebs.klooni.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
@@ -39,21 +38,21 @@ public class Scorer {
     //region Constructor
 
     // The board size is required when calculating the score
-    public Scorer(GameLayout layout) {
+    public Scorer(final Klooni game, GameLayout layout) {
         currentScore = 0;
         maxScore = Klooni.getMaxScore();
 
         cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
         cupArea = new Rectangle();
 
-        Label.LabelStyle scoreStyle = new Label.LabelStyle();
-        scoreStyle.font = new BitmapFont(Gdx.files.internal("font/geosans-light.fnt"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
 
-        currentScoreLabel = new Label("0", scoreStyle);
+        currentScoreLabel = new Label("0", labelStyle);
         currentScoreLabel.setColor(Color.GOLD);
         currentScoreLabel.setAlignment(Align.right);
 
-        maxScoreLabel = new Label(Integer.toString(maxScore), scoreStyle);
+        maxScoreLabel = new Label(Integer.toString(maxScore), labelStyle);
         maxScoreLabel.setColor(new Color(0x65D681FF));
 
         layout.update(this);

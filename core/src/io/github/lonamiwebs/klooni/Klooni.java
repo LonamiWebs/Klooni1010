@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -48,6 +49,8 @@ public class Klooni extends Game {
         skin.add("credits_texture", new Texture(Gdx.files.internal("ui/credits.png")));
         skin.add("web_texture", new Texture(Gdx.files.internal("ui/web.png")));
         skin.add("back_texture", new Texture(Gdx.files.internal("ui/back.png")));
+
+        skin.add("font", new BitmapFont(Gdx.files.internal("font/geosans-light.fnt")));
 
         // Use only one instance for the theme, so anyone using it uses the most up-to-date
         Theme.skin = skin; // Not the best idea

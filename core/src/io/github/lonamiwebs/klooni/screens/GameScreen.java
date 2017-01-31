@@ -44,7 +44,7 @@ class GameScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
 
         final GameLayout layout = new GameLayout();
-        scorer = new Scorer(layout);
+        scorer = new Scorer(game, layout);
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer);
