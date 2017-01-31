@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="484.58357"
-     inkscape:cy="357.4122"
+     inkscape:zoom="0.49497474"
+     inkscape:cx="517.48669"
+     inkscape:cy="678.08613"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -36,7 +36,8 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     units="px" />
+     units="px"
+     showguides="false" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -45,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -169,27 +170,31 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
-       x="20"
-       y="309.27737"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-10.304577"
+       y="289.07431"
        id="text4167"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan4169"
-         x="20"
-         y="309.27737">Modify the colors from these screens</tspan><tspan
+         x="-10.304577"
+         y="289.07431"
+         id="tspan4175">To easily create a custom theme, copy</tspan><tspan
          sodipodi:role="line"
-         x="20"
-         y="359.27737"
-         id="tspan4171">and then run `generate_theme.py`</tspan><tspan
+         x="-10.304577"
+         y="339.07431"
+         id="tspan4183">this file and rename it as &quot;in.svg&quot;. Place</tspan><tspan
          sodipodi:role="line"
-         x="20"
-         y="409.27737"
-         id="tspan4173">to create a `generated.theme`, ready</tspan><tspan
+         x="-10.304577"
+         y="389.07431"
+         id="tspan4185">it under the same folder, and make your</tspan><tspan
          sodipodi:role="line"
-         x="20"
-         y="459.27737"
-         id="tspan4175">to be dropped under `assets/themes`</tspan></text>
+         x="-10.304577"
+         y="439.07431"
+         id="tspan4187">changes on the new file. Then simply run</tspan><tspan
+         sodipodi:role="line"
+         x="-10.304577"
+         y="489.07431"
+         id="tspan4189">&quot;generate_theme.py&quot; to create &quot;out.theme&quot;</tspan></text>
     <g
        id="export_background"
        style="fill:#e5e5e5;fill-opacity:1">
