@@ -19,7 +19,8 @@ Disclaimer
 which is a *klooni* from the original [1010!](http://1010ga.me/) game by the
 [Gram Games](http://gram.gs/) team. I am **not affiliated** in any way with
 them and this is only a project I made for fun, and to improve the gaming
-experience of the open source community.
+experience of the open source community. If you really enjoy playing this,
+**please support the original developers**. They made this project possible.
 
 Description
 -----------

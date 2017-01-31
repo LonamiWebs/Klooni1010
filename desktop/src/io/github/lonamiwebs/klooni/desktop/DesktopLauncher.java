@@ -8,7 +8,7 @@ import io.github.lonamiwebs.klooni.Klooni;
 public class DesktopLauncher {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "1010! Klooni";
+        config.title = "Klooni 1010!";
         config.width = 408;
         config.height = 680;
         config.addIcon("ic_launcher/icon128.png", Files.FileType.Internal);

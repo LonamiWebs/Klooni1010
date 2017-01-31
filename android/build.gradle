@@ -21,6 +21,9 @@ android {
         applicationId "io.github.lonamiwebs.klooni"
         minSdkVersion 8
         targetSdkVersion 25
+
+        versionCode 100
+        versionName "0.1"
     }
 }
 
