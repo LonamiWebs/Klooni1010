@@ -30,6 +30,8 @@ class CustomizeScreen implements Screen {
     private Klooni game;
     private Stage stage;
 
+    private final Screen lastScreen;
+
     //endregion
 
     //region Static members
@@ -45,6 +47,7 @@ class CustomizeScreen implements Screen {
         final GameLayout layout = new GameLayout();
 
         this.game = game;
+        this.lastScreen = lastScreen;
         stage = new Stage();
 
         Table table = new Table();
@@ -59,8 +62,7 @@ class CustomizeScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                CustomizeScreen.this.game.setScreen(lastScreen);
-                dispose();
+                goBack();
             }
         });
         optionsGroup.addActor(backButton);
@@ -127,6 +129,15 @@ class CustomizeScreen implements Screen {
 
     //endregion
 
+    //region Private methods
+
+    private void goBack() {
+        CustomizeScreen.this.game.setScreen(lastScreen);
+        dispose();
+    }
+
+    //endregion
+
     //region Public methods
 
     @Override
@@ -142,8 +153,7 @@ class CustomizeScreen implements Screen {
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new MainMenuScreen(game));
-            dispose();
+            goBack();
         }
     }
 
