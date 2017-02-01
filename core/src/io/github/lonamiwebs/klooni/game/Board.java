@@ -178,10 +178,9 @@ public class Board {
             }
 
             if (Klooni.soundsEnabled()) {
-                long id = stripClearSound.play();
                 pan = MathUtils.clamp(pan, -1, 1);
-                stripClearSound.setPitch(id, MathUtils.random(0.8f, 1.2f));
-                stripClearSound.setPan(id, pan, MathUtils.random(0.7f, 1f));
+                stripClearSound.play(
+                        MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), pan);
             }
         }
 

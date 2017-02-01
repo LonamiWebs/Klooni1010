@@ -110,7 +110,7 @@ public class PieceHolder {
         }
         if (Klooni.soundsEnabled()) {
             // Random pitch so it's not always the same sound
-            takePiecesSound.setPitch(takePiecesSound.play(), MathUtils.random(0.8f, 1.2f));
+            takePiecesSound.play(1, MathUtils.random(0.8f, 1.2f), 0);
         }
     }
 
@@ -159,7 +159,7 @@ public class PieceHolder {
                     // The larger the piece size, the smaller the pitch
                     // Considering 10 cells to be the largest, 1.1 highest pitch, 0.7 lowest
                     float pitch = 1.104f - pieces[heldPiece].calculateArea() * 0.04f;
-                    pieceDropSound.setPitch(pieceDropSound.play(), pitch);
+                    pieceDropSound.play(1, pitch, 0);
                 }
                 pieces[heldPiece] = null;
             } else {
