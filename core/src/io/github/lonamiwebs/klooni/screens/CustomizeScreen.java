@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -58,7 +57,7 @@ class CustomizeScreen implements Screen {
         optionsGroup.space(12);
 
         // Back to the previous screen
-        final ImageButton backButton = new SoftButton(1, "back_texture");
+        final SoftButton backButton = new SoftButton(1, "back_texture");
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -68,21 +67,21 @@ class CustomizeScreen implements Screen {
         optionsGroup.addActor(backButton);
 
         // Turn sound on/off
-        final ImageButton soundButton = new SoftButton(
+        final SoftButton soundButton = new SoftButton(
                 0, Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
 
         soundButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Klooni.toggleSound();
-                soundButton.getStyle().imageUp = CustomizeScreen.this.game.skin.getDrawable(
+                soundButton.image = CustomizeScreen.this.game.skin.getDrawable(
                         Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
             }
         });
         optionsGroup.addActor(soundButton);
 
         // Issues
-        final ImageButton issuesButton = new SoftButton(3, "issues_texture");
+        final SoftButton issuesButton = new SoftButton(3, "issues_texture");
         issuesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -92,7 +91,7 @@ class CustomizeScreen implements Screen {
         optionsGroup.addActor(issuesButton);
 
         // Website
-        final ImageButton webButton = new SoftButton(2, "web_texture");
+        final SoftButton webButton = new SoftButton(2, "web_texture");
         webButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

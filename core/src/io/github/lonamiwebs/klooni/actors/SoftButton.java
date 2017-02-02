@@ -13,7 +13,7 @@ public class SoftButton extends ImageButton {
     //region Members
 
     private int styleIndex;
-    private Drawable image;
+    public Drawable image;
 
     //endregion
 

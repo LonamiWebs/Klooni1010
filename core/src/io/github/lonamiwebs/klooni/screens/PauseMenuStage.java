@@ -56,7 +56,7 @@ class PauseMenuStage extends Stage {
         addActor(band);
 
         // Home screen button
-        final ImageButton homeButton = new SoftButton(3, "home_texture");
+        final SoftButton homeButton = new SoftButton(3, "home_texture");
         table.add(homeButton).space(16);
 
         homeButton.addListener(new ChangeListener() {
@@ -67,7 +67,7 @@ class PauseMenuStage extends Stage {
         });
 
         // Replay button
-        final ImageButton replayButton = new SoftButton(0, "replay_texture");
+        final SoftButton replayButton = new SoftButton(0, "replay_texture");
         table.add(replayButton).space(16);
 
         replayButton.addListener(new ChangeListener() {
@@ -81,7 +81,7 @@ class PauseMenuStage extends Stage {
         table.row();
 
         // Palette button (buy colors)
-        final ImageButton paletteButton = new SoftButton(1, "palette_texture");
+        final SoftButton paletteButton = new SoftButton(1, "palette_texture");
         table.add(paletteButton).space(16);
 
         paletteButton.addListener(new ChangeListener() {
@@ -94,7 +94,7 @@ class PauseMenuStage extends Stage {
 
         // Continue playing OR share (if game over) button
         // TODO Enable both actions for this button? Or leave play?
-        final ImageButton playButton = new SoftButton(2, "play_texture");
+        final SoftButton playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
 
         playButton.addListener(new ChangeListener() {

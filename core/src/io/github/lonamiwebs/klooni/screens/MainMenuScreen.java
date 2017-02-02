@@ -43,7 +43,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         stage.addActor(table);
 
         // Play button
-        final ImageButton playButton = new SoftButton(0, "play_texture");
+        final SoftButton playButton = new SoftButton(0, "play_texture");
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game));
@@ -55,7 +55,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         table.row();
 
         // Star button (on GitHub)
-        final ImageButton starButton = new SoftButton(1, "star_texture");
+        final SoftButton starButton = new SoftButton(1, "star_texture");
         starButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -65,11 +65,11 @@ public class MainMenuScreen extends InputListener implements Screen {
         table.add(starButton).space(16);
 
         // Stats button (high scores)
-        final ImageButton statsButton = new SoftButton(2, "stats_texture");
+        final SoftButton statsButton = new SoftButton(2, "stats_texture");
         table.add(statsButton).space(16);
 
         // Palette button (buy colors)
-        final ImageButton paletteButton = new SoftButton(3, "palette_texture");
+        final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 MainMenuScreen.this.game.setScreen(new CustomizeScreen(MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()));
