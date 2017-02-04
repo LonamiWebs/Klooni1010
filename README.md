@@ -2,7 +2,9 @@ Klooni 1010!
 ============
 Play 1010! for free! Add your own themes! Contribute! Make the game yours!
 
-This project is licensed under the [DBAD License](LICENSE.md).
+[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/io.github.lonamiwebs.klooni)
+
+This project is licensed under the [MIT License](LICENSE.md).
 
 **Table of contents**:
 
@@ -32,6 +34,7 @@ is different, there are no ads or in-app purchases, different sounds, etc.
 Building
 --------
 Building the project should be very straight forward:
+
 1. `git clone https://github.com/LonamiWebs/Klooni1010.git`.
 2. `cd Klooni1010`
 3. Now you can choose to either build for `desktop` or `android`:
