@@ -56,7 +56,7 @@ public class GameLayout {
     // coordinates. Since these objects are not actors and we cannot
     // add them to a table (and would probably be harder), this approach
     // was used. Note that all these are using Y-up coordinates.
-    void update(Scorer scorer) {
+    void update(BaseScorer scorer) {
         float cupSize = Math.min(scoreHeight, scorer.cupTexture.getHeight());
         final Rectangle area = new Rectangle(
                 marginWidth, pieceHolderHeight + boardHeight,
@@ -66,30 +66,11 @@ public class GameLayout {
                 area.x + area.width * 0.5f - cupSize * 0.5f, area.y,
                 cupSize, cupSize);
 
-        scorer.currentScoreLabel.setBounds(
+        scorer.leftLabel.setBounds(
                 area.x, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
 
         scorer.highScoreLabel.setBounds(
-                area.x + area.width * 0.5f + cupSize * 0.5f, area.y,
-                area.width * 0.5f - cupSize * 0.5f, area.height);
-    }
-
-    void update(TimeScorer scorer) {
-        float cupSize = Math.min(scoreHeight, scorer.cupTexture.getHeight());
-        final Rectangle area = new Rectangle(
-                marginWidth, pieceHolderHeight + boardHeight,
-                availableWidth, scoreHeight);
-
-        scorer.cupArea.set(
-                area.x + area.width * 0.5f - cupSize * 0.5f, area.y,
-                cupSize, cupSize);
-
-        scorer.timeLeftLabel.setBounds(
-                area.x, area.y,
-                area.width * 0.5f - cupSize * 0.5f, area.height);
-
-        scorer.highTimeLabel.setBounds(
                 area.x + area.width * 0.5f + cupSize * 0.5f, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
     }

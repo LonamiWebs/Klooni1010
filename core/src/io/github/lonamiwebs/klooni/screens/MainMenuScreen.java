@@ -66,6 +66,15 @@ public class MainMenuScreen extends InputListener implements Screen {
 
         // Stats button (high scores)
         final SoftButton statsButton = new SoftButton(2, "stats_texture");
+        // TODO For testing purposes, open the time mode
+        statsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                MainMenuScreen.this.game.setScreen(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
+                dispose();
+            }
+        });
         table.add(statsButton).space(16);
 
         // Palette button (buy colors)

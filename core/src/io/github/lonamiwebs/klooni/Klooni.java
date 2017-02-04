@@ -91,6 +91,10 @@ public class Klooni extends Game {
         return prefs.getInteger("maxScore", 0);
     }
 
+    public static int getMaxTimeScore() {
+        return prefs.getInteger("maxTimeScore", 0);
+    }
+
     public static void setMaxScore(int score) {
         prefs.putInteger("maxScore", score).flush();
     }

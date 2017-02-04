@@ -11,15 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.game.BaseScorer;
 import io.github.lonamiwebs.klooni.game.GameLayout;
-import io.github.lonamiwebs.klooni.game.Scorer;
 
 // Horizontal band, used to show the score on the pause menu
 public class Band extends Actor {
 
     //region Members
 
-    private final Scorer scorer;
+    private final BaseScorer scorer;
     private final Texture bandTexture;
 
     public final Rectangle scoreBounds;
@@ -32,7 +32,7 @@ public class Band extends Actor {
 
     //region Constructor
 
-    public Band(final Klooni game, final GameLayout layout, final Scorer scorer, final Color bandColor) {
+    public Band(final Klooni game, final GameLayout layout, final BaseScorer scorer, final Color bandColor) {
         this.scorer = scorer;
 
         // A 1x1 pixel map will be enough since the band texture will then be expanded

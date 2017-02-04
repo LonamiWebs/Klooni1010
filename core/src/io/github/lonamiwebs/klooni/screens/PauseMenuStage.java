@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.actors.Band;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
+import io.github.lonamiwebs.klooni.game.BaseScorer;
 import io.github.lonamiwebs.klooni.game.GameLayout;
-import io.github.lonamiwebs.klooni.game.Scorer;
 
 // The pause stage is not a whole screen but rather a menu
 // which can be overlaid on top of another screen
@@ -33,14 +33,14 @@ class PauseMenuStage extends Stage {
     private final ShapeRenderer shapeRenderer;
 
     private final Band band;
-    private final Scorer scorer;
+    private final BaseScorer scorer;
 
     //endregion
 
     //region Constructor
 
     // We need the score to save the maximum score if a new record was beaten
-    PauseMenuStage(final GameLayout layout, final Klooni game, final Scorer scorer) {
+    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer) {
         this.scorer = scorer;
 
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle

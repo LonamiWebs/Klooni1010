@@ -1,33 +1,19 @@
 package io.github.lonamiwebs.klooni.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
 
 // Used to keep track of the current and maximum
 // score, and to also display it on the screen.
 // The maximum score is NOT saved automatically.
-public class Scorer {
+public class Scorer extends BaseScorer {
 
     //region Members
 
     private int currentScore, maxScore;
-
-    final Label currentScoreLabel;
-    final Label highScoreLabel;
-
-    final Texture cupTexture;
-    final Rectangle cupArea;
-
-    private final Color cupColor;
 
     // If the currentScore beat the maxScore, then we have a new record
     private boolean newRecord;
@@ -41,58 +27,25 @@ public class Scorer {
 
     // The board size is required when calculating the score
     public Scorer(final Klooni game, GameLayout layout) {
+        super(game, layout, Klooni.getMaxScore());
+
         currentScore = 0;
         maxScore = Klooni.getMaxScore();
-
-        cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
-        cupColor = Klooni.theme.currentScore.cpy();
-        cupArea = new Rectangle();
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.skin.getFont("font");
-
-        currentScoreLabel = new Label("0", labelStyle);
-        currentScoreLabel.setColor(Klooni.theme.currentScore);
-        currentScoreLabel.setAlignment(Align.right);
-
-        highScoreLabel = new Label(Integer.toString(maxScore), labelStyle);
-        highScoreLabel.setColor(Klooni.theme.highScore);
-
-        layout.update(this);
     }
 
     //endregion
 
     //region Private methods
 
-    private void addScore(int score) {
+    @Override
+    protected void addScore(int score) {
         currentScore += score;
         newRecord = currentScore > maxScore;
-    }
-
-    // The original game seems to work as follows:
-    // If < 1 were cleared, score = 0
-    // If = 1  was cleared, score = cells cleared
-    // If > 1 were cleared, score = cells cleared + score(cleared - 1)
-    private int calculateClearScore(int stripsCleared, int boardSize) {
-        if (stripsCleared < 1) return 0;
-        if (stripsCleared == 1) return boardSize;
-        else return boardSize * stripsCleared + calculateClearScore(stripsCleared - 1, boardSize);
     }
 
     //endregion
 
     //region Public methods
-
-    // Adds the score a given piece would give
-    public void addPieceScore(int areaPut) {
-        addScore(areaPut);
-    }
-
-    // Adds the score given by the board, this is, the count of cleared strips
-    public void addBoardScore(int stripsCleared, int boardSize) {
-        addScore(calculateClearScore(stripsCleared, boardSize));
-    }
 
     public int getCurrentScore() {
         return currentScore;
@@ -104,20 +57,23 @@ public class Scorer {
         }
     }
 
+    @Override
+    protected boolean isNewRecord() {
+        return newRecord;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
     public void draw(SpriteBatch batch) {
         int roundShown = MathUtils.round(shownScore);
         if (roundShown != currentScore) {
             shownScore = Interpolation.linear.apply(shownScore, currentScore, 0.1f);
-            currentScoreLabel.setText(Integer.toString(MathUtils.round(shownScore)));
+            leftLabel.setText(Integer.toString(MathUtils.round(shownScore)));
         }
-
-        // If we beat a new record, the cup color will linear interpolate to the high score color
-        cupColor.lerp(newRecord ? Klooni.theme.highScore : Klooni.theme.currentScore, 0.05f);
-        batch.setColor(cupColor);
-        batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
-
-        currentScoreLabel.draw(batch, 1f);
-        highScoreLabel.draw(batch, 1f);
+        super.draw(batch);
     }
 
     //endregion
