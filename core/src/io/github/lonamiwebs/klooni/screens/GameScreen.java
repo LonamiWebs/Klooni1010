@@ -14,6 +14,7 @@ import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
 import io.github.lonamiwebs.klooni.game.Scorer;
+import io.github.lonamiwebs.klooni.game.TimeScorer;
 
 // Main game screen. Here the board, piece holder and score are shown
 class GameScreen implements Screen, InputProcessor {
@@ -21,6 +22,8 @@ class GameScreen implements Screen, InputProcessor {
     //region Members
 
     private final Scorer scorer;
+    private final TimeScorer timeScorer;
+
     private final Board board;
     private final PieceHolder holder;
 
@@ -29,6 +32,10 @@ class GameScreen implements Screen, InputProcessor {
 
     private final PauseMenuStage pauseMenu;
 
+    // TODO Perhaps make an abstract base class for the game screen and game modes
+    // by implementing different "isGameOver" etc. logic instead using an integer?
+    private final int gameMode;
+
     //endregion
 
     //region Static members
@@ -36,15 +43,21 @@ class GameScreen implements Screen, InputProcessor {
     private final static int BOARD_SIZE = 10;
     private final static int HOLDER_PIECE_COUNT = 3;
 
+    final static int GAME_MODE_SCORE = 0;
+    final static int GAME_MODE_TIME = 1;
+
     //endregion
 
     //region Constructor
 
-    GameScreen(final Klooni game) {
+    GameScreen(final Klooni game, final int gameMode) {
         batch = new SpriteBatch();
+        this.gameMode = gameMode;
 
         final GameLayout layout = new GameLayout();
         scorer = new Scorer(game, layout);
+        timeScorer = new TimeScorer(game, layout);
+
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer);
@@ -82,9 +95,17 @@ class GameScreen implements Screen, InputProcessor {
         Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // With the time mode, we always need to check whether it's game over or not
+        if (timeScorer.isGameOver() && !pauseMenu.isShown()) {
+            pauseMenu.show(true);
+            if (Klooni.soundsEnabled())
+                gameOverSound.play();
+        }
+
         batch.begin();
 
-        scorer.draw(batch);
+        //scorer.draw(batch);
+        timeScorer.draw(batch);
         board.draw(batch);
         holder.update();
         holder.draw(batch);
@@ -127,8 +148,10 @@ class GameScreen implements Screen, InputProcessor {
             return false;
 
         if (action == PieceHolder.ON_BOARD_DROP) {
-            scorer.addPieceScore(area);
-            scorer.addBoardScore(board.clearComplete(), board.cellCount);
+            //scorer.addPieceScore(area);
+            //scorer.addBoardScore(board.clearComplete(), board.cellCount);
+            timeScorer.addPieceScore(area);
+            timeScorer.addBoardScore(board.clearComplete(), board.cellCount);
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {

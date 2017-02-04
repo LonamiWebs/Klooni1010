@@ -75,6 +75,25 @@ public class GameLayout {
                 area.width * 0.5f - cupSize * 0.5f, area.height);
     }
 
+    void update(TimeScorer scorer) {
+        float cupSize = Math.min(scoreHeight, scorer.cupTexture.getHeight());
+        final Rectangle area = new Rectangle(
+                marginWidth, pieceHolderHeight + boardHeight,
+                availableWidth, scoreHeight);
+
+        scorer.cupArea.set(
+                area.x + area.width * 0.5f - cupSize * 0.5f, area.y,
+                cupSize, cupSize);
+
+        scorer.timeLeftLabel.setBounds(
+                area.x, area.y,
+                area.width * 0.5f - cupSize * 0.5f, area.height);
+
+        scorer.highTimeLabel.setBounds(
+                area.x + area.width * 0.5f + cupSize * 0.5f, area.y,
+                area.width * 0.5f - cupSize * 0.5f, area.height);
+    }
+
     void update(Board board) {
         // We can't leave our area, so pick the minimum between available
         // height and width to determine an appropriated cell size

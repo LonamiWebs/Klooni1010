@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -46,7 +45,8 @@ public class MainMenuScreen extends InputListener implements Screen {
         final SoftButton playButton = new SoftButton(0, "play_texture");
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                MainMenuScreen.this.game.setScreen(new GameScreen(MainMenuScreen.this.game));
+                MainMenuScreen.this.game.setScreen(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
                 dispose();
             }
         });
