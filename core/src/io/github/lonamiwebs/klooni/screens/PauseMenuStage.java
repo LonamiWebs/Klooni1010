@@ -3,7 +3,6 @@ package io.github.lonamiwebs.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
@@ -51,7 +50,7 @@ class PauseMenuStage extends Stage {
 
         // Current and maximum score band.
         // Do not add it to the table not to over-complicate things.
-        band = new Band(game, layout, this.scorer, Color.SKY);
+        band = new Band(game, layout, this.scorer);
         addActor(band);
 
         // Home screen button

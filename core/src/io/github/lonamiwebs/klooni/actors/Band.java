@@ -1,6 +1,5 @@
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -32,12 +31,12 @@ public class Band extends Actor {
 
     //region Constructor
 
-    public Band(final Klooni game, final GameLayout layout, final BaseScorer scorer, final Color bandColor) {
+    public Band(final Klooni game, final GameLayout layout, final BaseScorer scorer) {
         this.scorer = scorer;
 
         // A 1x1 pixel map will be enough since the band texture will then be expanded
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(bandColor);
+        pixmap.setColor(Klooni.theme.getBandColor());
         pixmap.fill();
         bandTexture = new Texture(pixmap);
         pixmap.dispose();

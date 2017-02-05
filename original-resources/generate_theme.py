@@ -26,7 +26,8 @@ template = '''{{
             "{cell_7}", "{cell_8}"
         ],
         "current_score": "{current_score}",
-        "high_score": "{high_score}"
+        "high_score": "{high_score}",
+        "band": "{band}"
     }},
     "cell_texture": "{cell_tex}"
 }}
