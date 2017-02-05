@@ -29,6 +29,7 @@ public class PieceHolder {
 
     // Currently held piece index (picked by the user)
     private int heldPiece;
+    public boolean enabled;
 
     // Needed after a piece is dropped, so it can go back
     private final Rectangle[] originalPositions;
@@ -49,6 +50,7 @@ public class PieceHolder {
     //region Constructor
 
     public PieceHolder(final GameLayout layout, final int pieceCount, final float pickedCellSize) {
+        enabled = true;
         count = pieceCount;
         pieces = new Piece[count];
         originalPositions = new Rectangle[count];
@@ -153,7 +155,8 @@ public class PieceHolder {
     // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
     public int dropPiece(Board board) {
         if (heldPiece > -1) {
-            boolean put = board.putScreenPiece(pieces[heldPiece]);
+            boolean put;
+            put = enabled && board.putScreenPiece(pieces[heldPiece]);
             if (put) {
                 if (Klooni.soundsEnabled()) {
                     // The larger the piece size, the smaller the pitch

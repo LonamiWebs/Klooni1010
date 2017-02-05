@@ -87,6 +87,7 @@ class GameScreen implements Screen, InputProcessor {
     }
 
     private void doGameOver() {
+        holder.enabled = false;
         pauseMenu.show(true);
         if (Klooni.soundsEnabled())
             gameOverSound.play();
