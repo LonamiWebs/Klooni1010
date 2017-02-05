@@ -10,9 +10,13 @@ Art
 ===
 - [Lonami Exo](https://lonamiwebs.github.io/)
 
+Fonts
+=====
+- [Manfred Klein](http://www.dafont.com/geo-sans-light.font)
+
 Sounds
 ======
-- `game_over` by [BerduSmith](http://freesound.org/people/BerduSmith/sounds/335395/`)
+- `game_over` by [BerduSmith](http://freesound.org/people/BerduSmith/sounds/335395/)
 - `piece_drop` by [cabled_mess](http://freesound.org/people/cabled_mess/sounds/350906/)
 - `invalid_drop` by [fins](http://freesound.org/people/fins/sounds/146726/)
 - `strip_clear` by [Kastenfrosch](http://freesound.org/people/Kastenfrosch/sounds/162461/)
