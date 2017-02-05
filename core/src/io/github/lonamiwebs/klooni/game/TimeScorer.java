@@ -11,6 +11,7 @@ public class TimeScorer extends BaseScorer {
     //region Members
 
     private long startTime;
+    private final int highScoreTime;
 
     // Indicates where we would die in time. Score adds to this, so we take
     // longer to die. To get the "score" we simply calculate `deadTime - startTime`
@@ -29,6 +30,7 @@ public class TimeScorer extends BaseScorer {
     // The board size is required when calculating the score
     public TimeScorer(final Klooni game, GameLayout layout) {
         super(game, layout, Klooni.getMaxTimeScore());
+        highScoreTime = Klooni.getMaxTimeScore();
 
         startTime = TimeUtils.nanoTime();
         deadTime = startTime + START_TIME;
@@ -74,13 +76,14 @@ public class TimeScorer extends BaseScorer {
 
     @Override
     public void saveScore() {
-        // TODO Save high time score
+        if (isNewRecord()) {
+            Klooni.setMaxTimeScore(getCurrentScore());
+        }
     }
 
     @Override
     protected boolean isNewRecord() {
-        // TODO Return true if it is a new record
-        return false;
+        return getCurrentScore() > highScoreTime;
     }
 
     @Override

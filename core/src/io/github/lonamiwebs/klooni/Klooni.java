@@ -99,6 +99,10 @@ public class Klooni extends Game {
         prefs.putInteger("maxScore", score).flush();
     }
 
+    public static void setMaxTimeScore(int maxTimeScore) {
+        prefs.putInteger("maxTimeScore", maxTimeScore).flush();
+    }
+
     public static boolean soundsEnabled() {
         return !prefs.getBoolean("muteSound", false);
     }

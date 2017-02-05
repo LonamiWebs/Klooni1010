@@ -15,9 +15,6 @@ public class Scorer extends BaseScorer {
 
     private int currentScore, maxScore;
 
-    // If the currentScore beat the maxScore, then we have a new record
-    private boolean newRecord;
-
     // To interpolate between shown score -> real score
     private float shownScore;
 
@@ -40,7 +37,6 @@ public class Scorer extends BaseScorer {
     @Override
     protected void addScore(int score) {
         currentScore += score;
-        newRecord = currentScore > maxScore;
     }
 
     //endregion
@@ -52,14 +48,14 @@ public class Scorer extends BaseScorer {
     }
 
     public void saveScore() {
-        if (newRecord) {
+        if (isNewRecord()) {
             Klooni.setMaxScore(currentScore);
         }
     }
 
     @Override
     protected boolean isNewRecord() {
-        return newRecord;
+        return currentScore > maxScore;
     }
 
     @Override
