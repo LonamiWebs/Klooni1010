@@ -1,5 +1,6 @@
 package io.github.lonamiwebs.klooni;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -18,12 +19,15 @@ public class Klooni extends Game {
     public static Theme theme;
     public Skin skin;
 
+    public static boolean onDesktop;
+
     //endregion
 
     //region Creation
 
     @Override
     public void create() {
+        onDesktop = Gdx.app.getType().equals(Application.ApplicationType.Desktop);
         prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
 
         // TODO Better way to have this skin somewhere

@@ -186,8 +186,15 @@ public class PieceHolder {
                     Gdx.input.getX(),
                     Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
-            // Center the new piece position
-            mouse.sub(piece.getRectangle().width / 2, piece.getRectangle().height / 2);
+            if (Klooni.onDesktop) {
+                // Center the piece to the mouse
+                mouse.sub(piece.getRectangle().width * 0.5f, piece.getRectangle().height * 0.5f);
+            } else {
+                // Center the new piece position horizontally
+                // and push it up by it's a cell (arbitrary) vertically, thus
+                // avoiding to cover it with the finger (issue on Android devices)
+                mouse.sub(piece.getRectangle().width * 0.5f, -pickedCellSize);
+            }
 
             piece.pos.lerp(mouse, 0.4f);
             piece.cellSize = Interpolation.linear.apply(piece.cellSize, pickedCellSize, 0.4f);
