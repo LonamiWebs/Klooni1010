@@ -10,13 +10,17 @@ public class TimeScorer extends BaseScorer {
 
     //region Members
 
-    private final long startTime;
+    private long startTime;
 
     // Indicates where we would die in time. Score adds to this, so we take
     // longer to die. To get the "score" we simply calculate `deadTime - startTime`
     private long deadTime;
 
     private static final long START_TIME = 20 * 1000000000L;
+
+    // We need to know when the game was paused to "stop" counting
+    private long pauseTime;
+    private int pausedTimeLeft;
 
     //endregion
 
@@ -28,6 +32,8 @@ public class TimeScorer extends BaseScorer {
 
         startTime = TimeUtils.nanoTime();
         deadTime = startTime + START_TIME;
+
+        pausedTimeLeft = -1;
     }
 
     //endregion
@@ -48,9 +54,8 @@ public class TimeScorer extends BaseScorer {
         return (long)((score / 4.0) * 1e+09);
     }
 
-    @Override
-    public boolean isGameOver() {
-        return TimeUtils.nanoTime() > deadTime;
+    private int getTimeLeft() {
+        return Math.max(nanosToSeconds(deadTime - TimeUtils.nanoTime()), 0);
     }
 
     //endregion
@@ -60,6 +65,11 @@ public class TimeScorer extends BaseScorer {
     @Override
     public int getCurrentScore() {
         return nanosToSeconds(deadTime - startTime);
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return TimeUtils.nanoTime() > deadTime;
     }
 
     @Override
@@ -74,8 +84,26 @@ public class TimeScorer extends BaseScorer {
     }
 
     @Override
+    public void pause() {
+        pauseTime = TimeUtils.nanoTime();
+        pausedTimeLeft = getTimeLeft();
+    }
+
+    @Override
+    public void resume() {
+        if (pauseTime != 0L) {
+            long difference = TimeUtils.nanoTime() - pauseTime;
+            startTime += difference;
+            deadTime += difference;
+
+            pauseTime = 0L;
+            pausedTimeLeft = -1;
+        }
+    }
+
+    @Override
     public void draw(SpriteBatch batch) {
-        int timeLeft = Math.max(nanosToSeconds(deadTime - TimeUtils.nanoTime()), 0);
+        int timeLeft = pausedTimeLeft < 0 ? getTimeLeft() : pausedTimeLeft;
         leftLabel.setText(Integer.toString(timeLeft));
 
         super.draw(batch);

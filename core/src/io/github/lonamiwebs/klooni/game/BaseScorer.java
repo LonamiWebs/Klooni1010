@@ -75,13 +75,14 @@ public abstract class BaseScorer {
         addScore(calculateClearScore(stripsCleared, boardSize));
     }
 
+    public void pause() { }
+    public void resume() { }
+
     abstract public boolean isGameOver();
+    abstract protected boolean isNewRecord();
 
     abstract public int getCurrentScore();
-
     abstract public void saveScore();
-
-    abstract protected boolean isNewRecord();
 
     public void draw(SpriteBatch batch) {
         // If we beat a new record, the cup color will linear interpolate to the high score color

@@ -40,7 +40,7 @@ class PauseMenuStage extends Stage {
     //region Constructor
 
     // We need the score to save the maximum score if a new record was beaten
-    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer) {
+    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode) {
         this.scorer = scorer;
 
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
@@ -72,7 +72,7 @@ class PauseMenuStage extends Stage {
         replayButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game, GameScreen.GAME_MODE_SCORE));
+                game.setScreen(new GameScreen(game, gameMode));
                 dispose();
             }
         });
@@ -122,6 +122,7 @@ class PauseMenuStage extends Stage {
                     }
                 }
         ));
+        scorer.resume();
     }
 
     //endregion
@@ -130,6 +131,7 @@ class PauseMenuStage extends Stage {
 
     // Shows the pause menu, indicating whether it's game over or not
     void show(final boolean gameOver) {
+        scorer.pause();
         scorer.saveScore();
 
         // Save the last input processor so then we can return the handle to it

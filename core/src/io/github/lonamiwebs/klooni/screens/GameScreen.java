@@ -22,7 +22,7 @@ class GameScreen implements Screen, InputProcessor {
 
     //region Members
 
-    private final BaseScorer scorerlol;
+    private final BaseScorer scorer;
 
     private final Board board;
     private final PieceHolder holder;
@@ -57,10 +57,10 @@ class GameScreen implements Screen, InputProcessor {
         final GameLayout layout = new GameLayout();
         switch (gameMode) {
             case GAME_MODE_SCORE:
-                scorerlol = new Scorer(game, layout);
+                scorer = new Scorer(game, layout);
                 break;
             case GAME_MODE_TIME:
-                scorerlol = new TimeScorer(game, layout);
+                scorer = new TimeScorer(game, layout);
                 break;
             default:
                 throw new RuntimeException("Unknown game mode given: "+gameMode);
@@ -68,7 +68,7 @@ class GameScreen implements Screen, InputProcessor {
 
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
-        pauseMenu = new PauseMenuStage(layout, game, scorerlol);
+        pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
     }
@@ -109,13 +109,13 @@ class GameScreen implements Screen, InputProcessor {
         Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (scorerlol.isGameOver() && !pauseMenu.isShown()) {
+        if (scorer.isGameOver() && !pauseMenu.isShown()) {
             doGameOver();
         }
 
         batch.begin();
 
-        scorerlol.draw(batch);
+        scorer.draw(batch);
         board.draw(batch);
         holder.update();
         holder.draw(batch);
@@ -158,8 +158,8 @@ class GameScreen implements Screen, InputProcessor {
             return false;
 
         if (action == PieceHolder.ON_BOARD_DROP) {
-            scorerlol.addPieceScore(area);
-            scorerlol.addBoardScore(board.clearComplete(), board.cellCount);
+            scorer.addPieceScore(area);
+            scorer.addBoardScore(board.clearComplete(), board.cellCount);
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
