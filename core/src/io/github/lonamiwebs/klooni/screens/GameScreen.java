@@ -36,6 +36,8 @@ class GameScreen implements Screen, InputProcessor {
     // by implementing different "isGameOver" etc. logic instead using an integer?
     private final int gameMode;
 
+    private boolean gameOverDone;
+
     //endregion
 
     //region Static members
@@ -87,10 +89,14 @@ class GameScreen implements Screen, InputProcessor {
     }
 
     private void doGameOver() {
-        holder.enabled = false;
-        pauseMenu.show(true);
-        if (Klooni.soundsEnabled())
-            gameOverSound.play();
+        if (!gameOverDone) {
+            holder.enabled = false;
+            pauseMenu.show(true);
+            if (Klooni.soundsEnabled())
+                gameOverSound.play();
+
+            gameOverDone = true;
+        }
     }
 
     //endregion
