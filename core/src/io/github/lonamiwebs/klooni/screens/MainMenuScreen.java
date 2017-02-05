@@ -64,9 +64,8 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(starButton).space(16);
 
-        // Stats button (high scores)
-        final SoftButton statsButton = new SoftButton(2, "stats_texture");
-        // TODO For testing purposes, open the time mode
+        // Time mode
+        final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
         statsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
