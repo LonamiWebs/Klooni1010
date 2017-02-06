@@ -55,7 +55,7 @@ public class Theme {
         FileHandle[] handles = Gdx.files.internal("themes").list();
 
         Theme[] result = new Theme[handles.length];
-        for (int i = 0; i < handles.length; i++)
+        for (int i = 0; i < handles.length; ++i)
             result[i] = Theme.fromFile(handles[i]);
 
         return result;
@@ -95,7 +95,7 @@ public class Theme {
 
         JsonValue buttonColors = colors.get("buttons");
         buttons = new Color[buttonColors.size];
-        for (int i = 0; i < buttons.length; i++) {
+        for (int i = 0; i < buttons.length; ++i) {
             buttons[i] = new Color((int)Long.parseLong(buttonColors.getString(i), 16));
             if (buttonStyles[i] == null) {
                 buttonStyles[i] = new ImageButton.ImageButtonStyle();
@@ -114,7 +114,7 @@ public class Theme {
 
         JsonValue cellColors = colors.get("cells");
         cells = new Color[cellColors.size];
-        for (int i = 0; i < cells.length; i++) {
+        for (int i = 0; i < cells.length; ++i) {
             cells[i] = new Color((int)Long.parseLong(cellColors.getString(i), 16));
         }
 

@@ -39,8 +39,8 @@ public class Board {
         // Cell size depends on the layout to be updated first
         layout.update(this);
         cells = new Cell[this.cellCount][this.cellCount];
-        for (int i = 0; i < this.cellCount; i++) {
-            for (int j = 0; j < this.cellCount; j++) {
+        for (int i = 0; i < this.cellCount; ++i) {
+            for (int j = 0; j < this.cellCount; ++j) {
                 cells[i][j] = new Cell(
                         pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
             }
@@ -66,8 +66,8 @@ public class Board {
         if (!inBounds(piece, x, y))
             return false;
 
-        for (int i = 0; i < piece.cellRows; i++)
-            for (int j = 0; j < piece.cellCols; j++)
+        for (int i = 0; i < piece.cellRows; ++i)
+            for (int j = 0; j < piece.cellCols; ++j)
                 if (!cells[y+i][x+j].isEmpty() && piece.filled(i, j))
                     return false;
 
@@ -80,8 +80,8 @@ public class Board {
             return false;
 
         lastPutPiecePos.set(piece.calculateGravityCenter());
-        for (int i = 0; i < piece.cellRows; i++) {
-            for (int j = 0; j < piece.cellCols; j++) {
+        for (int i = 0; i < piece.cellRows; ++i) {
+            for (int j = 0; j < piece.cellCols; ++j) {
                 if (piece.filled(i, j)) {
                     cells[y+i][x+j].set(piece.color);
                 }
@@ -96,14 +96,14 @@ public class Board {
     //region Public methods
 
     public void draw(SpriteBatch batch) {
-        for (int i = 0; i < cellCount; i++)
-            for (int j = 0; j < cellCount; j++)
+        for (int i = 0; i < cellCount; ++i)
+            for (int j = 0; j < cellCount; ++j)
                 cells[i][j].draw(batch);
     }
 
     public boolean canPutPiece(Piece piece) {
-        for (int i = 0; i < cellCount; i++)
-            for (int j = 0; j < cellCount; j++)
+        for (int i = 0; i < cellCount; ++i)
+            for (int j = 0; j < cellCount; ++j)
                 if (canPutPiece(piece, j, i))
                     return true;
 
@@ -137,9 +137,9 @@ public class Board {
         boolean[] clearedCols = new boolean[cellCount];
 
         // Analyze rows and columns that will be cleared
-        for (int i = 0; i < cellCount; i++) {
+        for (int i = 0; i < cellCount; ++i) {
             clearedRows[i] = true;
-            for (int j = 0; j < cellCount; j++) {
+            for (int j = 0; j < cellCount; ++j) {
                 if (cells[i][j].isEmpty()) {
                     clearedRows[i] = false;
                     break;
@@ -148,9 +148,9 @@ public class Board {
             if (clearedRows[i])
                 clearCount++;
         }
-        for (int j = 0; j < cellCount; j++) {
+        for (int j = 0; j < cellCount; ++j) {
             clearedCols[j] = true;
-            for (int i = 0; i < cellCount; i++) {
+            for (int i = 0; i < cellCount; ++i) {
                 if (cells[i][j].isEmpty()) {
                     clearedCols[j] = false;
                     break;
@@ -163,15 +163,15 @@ public class Board {
             float pan = 0;
 
             // Do clear those rows and columns
-            for (int i = 0; i < cellCount; i++)
+            for (int i = 0; i < cellCount; ++i)
                 if (clearedRows[i])
-                    for (int j = 0; j < cellCount; j++)
+                    for (int j = 0; j < cellCount; ++j)
                         cells[i][j].vanish(lastPutPiecePos);
 
-            for (int j = 0; j < cellCount; j++) {
+            for (int j = 0; j < cellCount; ++j) {
                 if (clearedCols[j]) {
                     pan += 2f * (j - cellCount / 2) / (float)cellCount;
-                    for (int i = 0; i < cellCount; i++) {
+                    for (int i = 0; i < cellCount; ++i) {
                         cells[i][j].vanish(lastPutPiecePos);
                     }
                 }

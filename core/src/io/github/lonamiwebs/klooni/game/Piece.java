@@ -40,8 +40,8 @@ public class Piece {
         cellCols = swapSize ? rows : cols;
         cellRows = swapSize ? cols : rows;
         shape = new boolean[cellRows][cellCols];
-        for (int i = 0; i < cellRows; i++) {
-            for (int j = 0; j < cellCols; j++) {
+        for (int i = 0; i < cellRows; ++i) {
+            for (int j = 0; j < cellCols; ++j) {
                 shape[i][j] = true;
             }
         }
@@ -56,27 +56,27 @@ public class Piece {
         shape = new boolean[lSize][lSize];
         switch (rotateCount % 4) {
             case 0: // ┌
-                for (int j = 0; j < lSize; j++)
+                for (int j = 0; j < lSize; ++j)
                     shape[0][j] = true;
-                for (int i = 0; i < lSize; i++)
+                for (int i = 0; i < lSize; ++i)
                     shape[i][0] = true;
                 break;
             case 1: // ┐
-                for (int j = 0; j < lSize; j++)
+                for (int j = 0; j < lSize; ++j)
                     shape[0][j] = true;
-                for (int i = 0; i < lSize; i++)
+                for (int i = 0; i < lSize; ++i)
                     shape[i][lSize-1] = true;
                 break;
             case 2: // ┘
-                for (int j = 0; j < lSize; j++)
+                for (int j = 0; j < lSize; ++j)
                     shape[lSize-1][j] = true;
-                for (int i = 0; i < lSize; i++)
+                for (int i = 0; i < lSize; ++i)
                     shape[i][lSize-1] = true;
                 break;
             case 3: // └
-                for (int j = 0; j < lSize; j++)
+                for (int j = 0; j < lSize; ++j)
                     shape[lSize-1][j] = true;
-                for (int i = 0; i < lSize; i++)
+                for (int i = 0; i < lSize; ++i)
                     shape[i][0] = true;
                 break;
         }
@@ -113,8 +113,8 @@ public class Piece {
     //region Package local methods
 
     void draw(SpriteBatch batch) {
-        for (int i = 0; i < cellRows; i++)
-            for (int j = 0; j < cellCols; j++)
+        for (int i = 0; i < cellRows; ++i)
+            for (int j = 0; j < cellCols; ++j)
                 if (shape[i][j])
                     Cell.draw(color, batch, pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
     }
@@ -132,8 +132,8 @@ public class Piece {
     // Calculates the area occupied by the shape
     int calculateArea() {
         int area = 0;
-        for (int i = 0; i < cellRows; i++) {
-            for (int j = 0; j < cellCols; j++) {
+        for (int i = 0; i < cellRows; ++i) {
+            for (int j = 0; j < cellCols; ++j) {
                 if (shape[i][j]) {
                     area++;
                 }
@@ -146,8 +146,8 @@ public class Piece {
     Vector2 calculateGravityCenter() {
         int filledCount = 0;
         Vector2 result = new Vector2();
-        for (int i = 0; i < cellRows; i++) {
-            for (int j = 0; j < cellCols; j++) {
+        for (int i = 0; i < cellRows; ++i) {
+            for (int j = 0; j < cellCols; ++j) {
                 if (shape[i][j]) {
                     filledCount++;
                     result.add(

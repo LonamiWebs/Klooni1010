@@ -76,7 +76,7 @@ public class PieceHolder {
 
     // Determines whether all the pieces have been put (and the "hand" is finished)
     private boolean handFinished() {
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; ++i)
             if (pieces[i] != null)
                 return false;
 
@@ -86,7 +86,7 @@ public class PieceHolder {
     // Takes a new set of pieces. Should be called when there are no more piece left
     private void takeMore() {
         float perPieceWidth = area.width / count;
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; ++i) {
             pieces[i] = Piece.random();
 
             // Set the absolute position on screen and the cells' cellSize
@@ -126,7 +126,7 @@ public class PieceHolder {
                 Gdx.input.getX(),
                 Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; ++i) {
             if (pieces[i] != null && pieces[i].getRectangle().contains(mouse)) {
                 heldPiece = i;
                 return true;
@@ -139,7 +139,7 @@ public class PieceHolder {
 
     public Array<Piece> getAvailablePieces() {
         Array<Piece> result = new Array<Piece>(count);
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; ++i)
             if (pieces[i] != null)
                 result.add(pieces[i]);
 
@@ -206,7 +206,7 @@ public class PieceHolder {
         // Return the pieces to their original position
         // TODO This seems somewhat expensive, can't it be done any better?
         Rectangle original;
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; ++i) {
             if (i == heldPiece)
                 continue;
 
@@ -221,7 +221,7 @@ public class PieceHolder {
     }
 
     public void draw(SpriteBatch batch) {
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; ++i) {
             if (pieces[i] != null) {
                 pieces[i].draw(batch);
             }
