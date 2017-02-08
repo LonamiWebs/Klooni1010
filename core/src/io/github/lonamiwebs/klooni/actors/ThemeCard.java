@@ -1,7 +1,6 @@
 package io.github.lonamiwebs.klooni.actors;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -41,14 +40,7 @@ public class ThemeCard extends Actor {
 
     public ThemeCard(final Klooni game, final GameLayout layout, final Theme theme) {
         this.theme = theme;
-
-        // A 1x1 pixel map will be enough, the background texture will then be stretched accordingly
-        // TODO We could also use white color and then batch.setColor(theme.background)
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(theme.background);
-        pixmap.fill();
-        background = new Texture(pixmap);
-        pixmap.dispose();
+        background = Theme.getBlankTexture();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font_small");
@@ -75,7 +67,7 @@ public class ThemeCard extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         final float x = getX(), y = getY();
 
-        batch.setColor(Color.WHITE);
+        batch.setColor(theme.background);
         batch.draw(background, x, y, getWidth(), getHeight());
         // Do not draw on the borders (0,0 offset to add some padding), colors used:
         // 0 7 7

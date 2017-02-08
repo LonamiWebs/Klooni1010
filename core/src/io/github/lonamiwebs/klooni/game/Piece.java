@@ -16,7 +16,7 @@ public class Piece {
     //region Members
 
     final Vector2 pos;
-    final Color color;
+    final int colorIndex;
 
     final int cellCols, cellRows;
     private boolean shape[][];
@@ -34,7 +34,7 @@ public class Piece {
     // colorIndex represents a random index that will be used
     // to determine the color of this piece when drawn on the screen.
     private Piece(int cols, int rows, boolean swapSize, int colorIndex) {
-        color = Klooni.theme.getCellColor(colorIndex);
+        this.colorIndex = colorIndex;
 
         pos = new Vector2();
         cellCols = swapSize ? rows : cols;
@@ -49,7 +49,7 @@ public class Piece {
 
     // L-shaped constructor
     private Piece(int lSize, int rotateCount, int colorIndex) {
-        color = Klooni.theme.getCellColor(colorIndex);
+        this.colorIndex = colorIndex;
 
         pos = new Vector2();
         cellCols = cellRows = lSize;
@@ -113,10 +113,11 @@ public class Piece {
     //region Package local methods
 
     void draw(SpriteBatch batch) {
+        final Color c = Klooni.theme.getCellColor(colorIndex);
         for (int i = 0; i < cellRows; ++i)
             for (int j = 0; j < cellCols; ++j)
                 if (shape[i][j])
-                    Cell.draw(color, batch, pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+                    Cell.draw(c, batch, pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
     }
 
     // Calculates the rectangle of the piece with screen coordinates

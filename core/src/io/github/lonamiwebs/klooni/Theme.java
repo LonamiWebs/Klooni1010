@@ -3,6 +3,7 @@ package io.github.lonamiwebs.klooni;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -26,7 +27,7 @@ public class Theme {
 
     public Color currentScore;
     public Color highScore;
-    private Color bandColor;
+    public Color bandColor;
 
     private Color[] cells;
     private Color[] buttons;
@@ -146,11 +147,7 @@ public class Theme {
     }
 
     public Color getCellColor(int colorIndex) {
-        return cells[colorIndex];
-    }
-
-    public Color getBandColor() {
-        return bandColor;
+        return colorIndex < 0 ? emptyCell : cells[colorIndex];
     }
 
     public void glClearBackground() {
@@ -160,6 +157,20 @@ public class Theme {
     public void updateStyle(ImageButton.ImageButtonStyle style, int styleIndex) {
         style.imageUp = buttonStyles[styleIndex].imageUp;
         style.imageDown = buttonStyles[styleIndex].imageDown;
+    }
+
+    //endregion
+
+    //region Styling utilities
+
+    // A 1x1 blank pixel map to be tinted and used in multiple places
+    public static Texture getBlankTexture() {
+        final Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        final Texture result = new Texture(pixmap);
+        pixmap.dispose();
+        return result;
     }
 
     //endregion

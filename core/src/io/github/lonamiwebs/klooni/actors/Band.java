@@ -1,6 +1,5 @@
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.Theme;
 import io.github.lonamiwebs.klooni.game.BaseScorer;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
@@ -33,13 +33,7 @@ public class Band extends Actor {
 
     public Band(final Klooni game, final GameLayout layout, final BaseScorer scorer) {
         this.scorer = scorer;
-
-        // A 1x1 pixel map will be enough since the band texture will then be expanded
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Klooni.theme.getBandColor());
-        pixmap.fill();
-        bandTexture = new Texture(pixmap);
-        pixmap.dispose();
+        bandTexture = Theme.getBlankTexture();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
@@ -66,6 +60,7 @@ public class Band extends Actor {
 
         // TODO For some strange reason, the texture coordinates and label coordinates are different
         Vector2 pos = localToStageCoordinates(new Vector2(x, y));
+        batch.setColor(Klooni.theme.bandColor);
         batch.draw(bandTexture, pos.x, pos.y, getWidth(), getHeight());
 
         scoreLabel.setBounds(x + scoreBounds.x, y + scoreBounds.y, scoreBounds.width, scoreBounds.height);

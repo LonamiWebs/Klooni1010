@@ -36,11 +36,9 @@ public abstract class BaseScorer {
         labelStyle.font = game.skin.getFont("font");
 
         leftLabel = new Label("0", labelStyle);
-        leftLabel.setColor(Klooni.theme.currentScore);
         leftLabel.setAlignment(Align.right);
 
         highScoreLabel = new Label(Integer.toString(highScore), labelStyle);
-        highScoreLabel.setColor(Klooni.theme.highScore);
 
         layout.update(this);
     }
@@ -90,7 +88,10 @@ public abstract class BaseScorer {
         batch.setColor(cupColor);
         batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
 
+        leftLabel.setColor(Klooni.theme.currentScore);
         leftLabel.draw(batch, 1f);
+
+        highScoreLabel.setColor(Klooni.theme.highScore);
         highScoreLabel.draw(batch, 1f);
     }
 

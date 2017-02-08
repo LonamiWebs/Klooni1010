@@ -15,12 +15,14 @@ public class Cell {
 
     //region Members
 
-    private boolean empty;
-    private Color color;
+    // Negative index indicates that the cell is empty
+    private int colorIndex;
 
     private Vector2 pos;
     private float size;
 
+    // No need to store the vanish color as a color index since
+    // this is something quick and shouldn't really affect the UX
     private Color vanishColor;
     private float vanishSize;
     private float vanishElapsed;
@@ -34,7 +36,7 @@ public class Cell {
         pos = new Vector2(x, y);
         size = cellSize;
 
-        empty = true;
+        colorIndex = -1;
         vanishElapsed = Float.POSITIVE_INFINITY;
     }
 
@@ -42,15 +44,14 @@ public class Cell {
 
     //region Package local methods
 
-    // Sets the cell to be non-empty and of the specified color
-    void set(Color c) {
-        empty = false;
-        color = c;
+    // Sets the cell to be non-empty and of the specified color index
+    void set(int ci) {
+        colorIndex = ci;
     }
 
     void draw(SpriteBatch batch) {
         // Always query the color to the theme, because it might have changed
-        draw(empty ? Klooni.theme.emptyCell : color, batch, pos.x, pos.y, size);
+        draw(Klooni.theme.getCellColor(colorIndex), batch, pos.x, pos.y, size);
 
         // Draw the previous vanishing cell
         if (vanishElapsed <= vanishLifetime) {
@@ -71,13 +72,13 @@ public class Cell {
     // in this case, a piece was put. The closer it was put, the faster
     // this piece will vanish. This immediately marks the piece as empty.
     void vanish(Vector2 vanishFrom) {
-        if (empty) // We cannot vanish twice
+        if (isEmpty()) // We cannot vanish twice
             return;
 
-        empty = true;
         vanishSize = size;
-        vanishColor = color.cpy();
+        vanishColor = Klooni.theme.getCellColor(colorIndex).cpy();
         vanishLifetime = 1f;
+        colorIndex = -1;
 
         // The vanish distance is this measure (distance² + size³ * 20% size)
         // because it seems good enough. The more the distance, the more the
@@ -92,7 +93,7 @@ public class Cell {
     }
 
     boolean isEmpty() {
-        return empty;
+        return colorIndex < 0;
     }
 
     //endregion

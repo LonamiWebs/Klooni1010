@@ -80,13 +80,10 @@ public class Board {
             return false;
 
         lastPutPiecePos.set(piece.calculateGravityCenter());
-        for (int i = 0; i < piece.cellRows; ++i) {
-            for (int j = 0; j < piece.cellCols; ++j) {
-                if (piece.filled(i, j)) {
-                    cells[y+i][x+j].set(piece.color);
-                }
-            }
-        }
+        for (int i = 0; i < piece.cellRows; ++i)
+            for (int j = 0; j < piece.cellCols; ++j)
+                if (piece.filled(i, j))
+                    cells[y+i][x+j].set(piece.colorIndex);
 
         return true;
     }
