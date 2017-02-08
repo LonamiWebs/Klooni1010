@@ -90,12 +90,12 @@ public class PieceHolder {
             pieces[i] = Piece.random();
 
             // Set the absolute position on screen and the cells' cellSize
-            // Also clamp the cell size to be the picked * 2 as maximum, or
+            // Also clamp the cell size to be the picked size as maximum, or
             // it would be too big in some cases.
             pieces[i].pos.set(area.x + i * perPieceWidth, area.y);
             pieces[i].cellSize = Math.min(Math.min(
                     perPieceWidth / pieces[i].cellCols,
-                    area.height / pieces[i].cellRows), pickedCellSize * 2f);
+                    area.height / pieces[i].cellRows), pickedCellSize);
 
             // Center the piece on the X and Y axes. For this we see how
             // much up we can go, this is, (area.height - piece.height) / 2
