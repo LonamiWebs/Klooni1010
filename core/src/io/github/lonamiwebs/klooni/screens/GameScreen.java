@@ -278,6 +278,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         if (handle.exists()) {
             try {
                 BinSerializer.deserialize(this, handle.read());
+                // After it's been loaded, delete the save file
+                deleteSave();
                 return true;
             } catch (IOException ignored) { }
         }

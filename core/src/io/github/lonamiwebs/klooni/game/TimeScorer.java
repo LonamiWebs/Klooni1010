@@ -123,17 +123,18 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        // startTime, highScoreTime, deadTime
-        out.writeLong(startTime);
+        // current/dead offset ("how long until we die"), highScoreTime
+        out.writeLong(TimeUtils.nanoTime() - startTime);
         out.writeInt(highScoreTime);
-        out.writeLong(deadTime);
     }
 
     @Override
     public void read(DataInputStream in) throws IOException {
-        startTime = in.readLong();
+        // We need to use the offset, since the start time
+        // is different and we couldn't save absolute values
+        long deadOffset = in.readLong();
+        deadTime = startTime + deadOffset;
         highScoreTime = in.readInt();
-        deadTime = in.readLong();
     }
 
     //endregion
