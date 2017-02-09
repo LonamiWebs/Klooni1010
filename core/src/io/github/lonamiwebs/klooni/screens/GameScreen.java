@@ -5,8 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.BaseScorer;
@@ -16,9 +21,11 @@ import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
 import io.github.lonamiwebs.klooni.game.Scorer;
 import io.github.lonamiwebs.klooni.game.TimeScorer;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
+import io.github.lonamiwebs.klooni.serializer.BinSerializer;
 
 // Main game screen. Here the board, piece holder and score are shown
-class GameScreen implements Screen, InputProcessor {
+class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     //region Members
 
@@ -48,11 +55,18 @@ class GameScreen implements Screen, InputProcessor {
     final static int GAME_MODE_SCORE = 0;
     final static int GAME_MODE_TIME = 1;
 
+    private final static String SAVE_DAT_FILENAME = ".klooni.sav";
+
     //endregion
 
     //region Constructor
 
+    // Load any previously saved file by default
     GameScreen(final Klooni game, final int gameMode) {
+        this(game, gameMode, true);
+    }
+
+    GameScreen(final Klooni game, final int gameMode, final boolean loadSave) {
         batch = new SpriteBatch();
         this.gameMode = gameMode;
 
@@ -73,6 +87,15 @@ class GameScreen implements Screen, InputProcessor {
         pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
+
+        if (loadSave) {
+            // The user might have a previous game. If this is the case, load it
+            tryLoad();
+        }
+        else {
+            // Ensure that there is no old save, we don't want to load it, thus delete it
+            deleteSave();
+        }
     }
 
     //endregion
@@ -90,12 +113,15 @@ class GameScreen implements Screen, InputProcessor {
 
     private void doGameOver() {
         if (!gameOverDone) {
+            gameOverDone = true;
+
             holder.enabled = false;
             pauseMenu.show(true);
             if (Klooni.soundsEnabled())
                 gameOverSound.play();
 
-            gameOverDone = true;
+            // The user should not be able to return to the game if its game over
+            deleteSave();
         }
     }
 
@@ -109,6 +135,11 @@ class GameScreen implements Screen, InputProcessor {
             Gdx.input.setInputProcessor(pauseMenu);
         else
             Gdx.input.setInputProcessor(this);
+    }
+
+    private void showPauseMenu() {
+        pauseMenu.show(false);
+        save(); // Save the state, the user might leave the game
     }
 
     @Override
@@ -147,7 +178,7 @@ class GameScreen implements Screen, InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.P || keycode == Input.Keys.BACK) // Pause
-            pauseMenu.show(false);
+            showPauseMenu();
 
         return false;
     }
@@ -215,6 +246,62 @@ class GameScreen implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    //endregion
+
+    //region Saving and loading
+
+    private void save() {
+        // Only save if the game is not over
+        if (gameOverDone)
+            return;
+
+        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        try {
+            BinSerializer.serialize(this, handle.write(false));
+        } catch (IOException e) {
+            // Should never happen but what else could be done if the game wasn't saved?
+            e.printStackTrace();
+        }
+    }
+
+    static void deleteSave() {
+        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        if (handle.exists())
+            handle.delete();
+    }
+
+    private boolean tryLoad() {
+        // Load will fail if the game modes differ, but that's okay
+        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        if (handle.exists()) {
+            try {
+                BinSerializer.deserialize(this, handle.read());
+                return true;
+            } catch (IOException ignored) { }
+        }
+        return false;
+    }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // gameMode, board, holder, scorer
+        out.writeInt(gameMode);
+        board.write(out);
+        holder.write(out);
+        scorer.write(out);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        int savedGameMode = in.readInt();
+        if (savedGameMode != gameMode)
+            throw new IOException("A different game mode was saved. Cannot load the save data.");
+
+        board.read(in);
+        holder.read(in);
+        scorer.read(in);
     }
 
     //endregion

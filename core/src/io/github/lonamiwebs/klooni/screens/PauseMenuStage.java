@@ -71,7 +71,8 @@ class PauseMenuStage extends Stage {
         replayButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game, gameMode));
+                // false, don't load the saved game state; we do want to replay
+                game.setScreen(new GameScreen(game, gameMode, false));
                 dispose();
             }
         });
