@@ -41,8 +41,10 @@ public class Klooni extends Game {
                 Gdx.files.internal("ui/button_down.png")), 28, 28, 28, 28));
 
         skin.add("play_texture", new Texture(Gdx.files.internal("ui/play.png")));
+        skin.add("play_saved_texture", new Texture(Gdx.files.internal("ui/play_saved.png")));
         skin.add("star_texture", new Texture(Gdx.files.internal("ui/star.png")));
         skin.add("stopwatch_texture", new Texture(Gdx.files.internal("ui/stopwatch.png")));
+        skin.add("stopwatch_saved_texture", new Texture(Gdx.files.internal("ui/stopwatch_saved.png")));
         skin.add("palette_texture", new Texture(Gdx.files.internal("ui/palette.png")));
         skin.add("home_texture", new Texture(Gdx.files.internal("ui/home.png")));
         skin.add("replay_texture", new Texture(Gdx.files.internal("ui/replay.png")));

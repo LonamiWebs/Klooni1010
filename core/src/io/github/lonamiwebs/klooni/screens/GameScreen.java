@@ -272,6 +272,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
             handle.delete();
     }
 
+    static boolean hasSavedData() {
+        return Gdx.files.local(SAVE_DAT_FILENAME).exists();
+    }
+
     private boolean tryLoad() {
         // Load will fail if the game modes differ, but that's okay
         final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
