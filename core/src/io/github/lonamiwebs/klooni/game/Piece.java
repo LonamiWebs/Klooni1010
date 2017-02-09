@@ -6,6 +6,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import io.github.lonamiwebs.klooni.Klooni;
 
 // Represents a piece with an arbitrary shape, which
@@ -88,22 +92,25 @@ public class Piece {
 
     // Generates a random piece with always the same color for the generated shape
     static Piece random() {
-        int color = MathUtils.random(8); // 9 pieces
-        switch (color) {
+        return fromIndex(MathUtils.random(8)); // 9 pieces, [0…8]
+    }
+
+    private static Piece fromIndex(int colorIndex) {
+        switch (colorIndex) {
             // Squares
-            case 0: return new Piece(1, 1, false, color);
-            case 1: return new Piece(2, 2, false, color);
-            case 2: return new Piece(3, 3, false, color);
+            case 0: return new Piece(1, 1, false, colorIndex);
+            case 1: return new Piece(2, 2, false, colorIndex);
+            case 2: return new Piece(3, 3, false, colorIndex);
 
             // Lines
-            case 3: return new Piece(1, 2, MathUtils.randomBoolean(), color);
-            case 4: return new Piece(1, 3, MathUtils.randomBoolean(), color);
-            case 5: return new Piece(1, 4, MathUtils.randomBoolean(), color);
-            case 6: return new Piece(1, 5, MathUtils.randomBoolean(), color);
+            case 3: return new Piece(1, 2, MathUtils.randomBoolean(), colorIndex);
+            case 4: return new Piece(1, 3, MathUtils.randomBoolean(), colorIndex);
+            case 5: return new Piece(1, 4, MathUtils.randomBoolean(), colorIndex);
+            case 6: return new Piece(1, 5, MathUtils.randomBoolean(), colorIndex);
 
             // L's
-            case 7: return new Piece(2, MathUtils.random(3), color);
-            case 8: return new Piece(3, MathUtils.random(3), color);
+            case 7: return new Piece(2, MathUtils.random(3), colorIndex);
+            case 8: return new Piece(3, MathUtils.random(3), colorIndex);
         }
         throw new RuntimeException("Random function is broken.");
     }
@@ -158,6 +165,18 @@ public class Piece {
             }
         }
         return result.scl(1f / filledCount);
+    }
+
+    //endregion
+
+    //region Serialization
+
+    void write(DataOutputStream out) throws IOException {
+        out.writeInt(colorIndex);
+    }
+
+    static Piece read(DataInputStream in) throws IOException {
+        return fromIndex(in.readInt());
     }
 
     //endregion

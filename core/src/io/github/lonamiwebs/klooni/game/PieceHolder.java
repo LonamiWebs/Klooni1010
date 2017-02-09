@@ -9,11 +9,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // A holder of pieces that can be drawn on screen.
 // Pieces can be picked up from it and dropped on a board.
-public class PieceHolder {
+public class PieceHolder implements BinSerializable {
 
     //region Members
 
@@ -226,6 +231,36 @@ public class PieceHolder {
                 pieces[i].draw(batch);
             }
         }
+    }
+
+    //endregion
+
+    //region Serialization
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // Piece count, false if piece == null, true + piece if piece != null
+        out.writeInt(count);
+        for (int i = 0; i < count; ++i) {
+            if (pieces[i] == null) {
+                out.writeBoolean(false);
+            } else {
+                out.writeBoolean(true);
+                pieces[i].write(out);
+            }
+        }
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        // If the saved piece count does not match the current piece count,
+        // then an IOException is thrown since the data saved was invalid
+        final int savedPieceCount = in.readInt();
+        if (savedPieceCount != count)
+            throw new IOException("Invalid piece count saved.");
+
+        for (int i = 0; i < count; i++)
+            pieces[i] = in.readBoolean() ? Piece.read(in) : null;
     }
 
     //endregion

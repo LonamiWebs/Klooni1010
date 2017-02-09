@@ -7,11 +7,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Represents a single cell, with a position, size and color.
 // Instances will use the cell texture provided by the currently used skin.
-public class Cell {
+public class Cell implements BinSerializable {
 
     //region Members
 
@@ -105,6 +110,21 @@ public class Cell {
                             float x, float y, float size) {
         batch.setColor(color);
         Klooni.theme.cellPatch.draw(batch, x, y, size, size);
+    }
+
+    //endregion
+
+    //region Serialization
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // Only the color index is saved
+        out.writeInt(colorIndex);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        colorIndex = in.readInt();
     }
 
     //endregion

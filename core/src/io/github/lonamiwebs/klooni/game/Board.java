@@ -6,11 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Represents the on screen board, with all the put cells
 // and functions to determine when it is game over given a PieceHolder
-public class Board {
+public class Board implements BinSerializable {
 
     //region Members
 
@@ -182,6 +187,32 @@ public class Board {
         }
 
         return clearCount;
+    }
+
+    //endregion
+
+    //region Serialization
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // Cell count, cells in row-major order
+        out.writeInt(cellCount);
+        for (int i = 0; i < cellCount; ++i)
+            for (int j = 0; j < cellCount; ++j)
+                cells[i][j].write(out);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        // If the saved cell count does not match the current cell count,
+        // then an IOException is thrown since the data saved was invalid
+        final int savedCellCount = in.readInt();
+        if (savedCellCount != cellCount)
+            throw new IOException("Invalid cellCount saved.");
+
+        for (int i = 0; i < cellCount; ++i)
+            for (int j = 0; j < cellCount; ++j)
+                cells[i][j].read(in);
     }
 
     //endregion

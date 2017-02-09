@@ -9,8 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
-public abstract class BaseScorer {
+public abstract class BaseScorer implements BinSerializable {
 
     //region Members
 

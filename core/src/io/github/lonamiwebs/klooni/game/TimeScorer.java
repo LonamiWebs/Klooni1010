@@ -4,14 +4,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import io.github.lonamiwebs.klooni.Klooni;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
-public class TimeScorer extends BaseScorer {
+import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
+
+public class TimeScorer extends BaseScorer implements BinSerializable {
 
     //region Members
 
     private long startTime;
-    private final int highScoreTime;
+    private int highScoreTime;
 
     // Indicates where we would die in time. Score adds to this, so we take
     // longer to die. To get the "score" we simply calculate `deadTime - startTime`
@@ -110,6 +115,25 @@ public class TimeScorer extends BaseScorer {
         leftLabel.setText(Integer.toString(timeLeft));
 
         super.draw(batch);
+    }
+
+    //endregion
+
+    //region Serialization
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // startTime, highScoreTime, deadTime
+        out.writeLong(startTime);
+        out.writeInt(highScoreTime);
+        out.writeLong(deadTime);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        startTime = in.readLong();
+        highScoreTime = in.readInt();
+        deadTime = in.readLong();
     }
 
     //endregion

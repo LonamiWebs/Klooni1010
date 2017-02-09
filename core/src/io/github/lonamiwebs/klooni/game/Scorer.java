@@ -4,16 +4,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Used to keep track of the current and maximum
 // score, and to also display it on the screen.
 // The maximum score is NOT saved automatically.
-public class Scorer extends BaseScorer {
+public class Scorer extends BaseScorer implements BinSerializable {
 
     //region Members
 
-    private int currentScore, maxScore;
+    private int currentScore, highScore;
 
     // To interpolate between shown score -> real score
     private float shownScore;
@@ -27,7 +32,7 @@ public class Scorer extends BaseScorer {
         super(game, layout, Klooni.getMaxScore());
 
         currentScore = 0;
-        maxScore = Klooni.getMaxScore();
+        highScore = Klooni.getMaxScore();
     }
 
     //endregion
@@ -55,7 +60,7 @@ public class Scorer extends BaseScorer {
 
     @Override
     protected boolean isNewRecord() {
-        return currentScore > maxScore;
+        return currentScore > highScore;
     }
 
     @Override
@@ -70,6 +75,23 @@ public class Scorer extends BaseScorer {
             leftLabel.setText(Integer.toString(MathUtils.round(shownScore)));
         }
         super.draw(batch);
+    }
+
+    //endregion
+
+    //region Serialization
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        // currentScore, highScore
+        out.writeInt(currentScore);
+        out.writeInt(highScore);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        currentScore = in.readInt();
+        highScore = in.readInt();
     }
 
     //endregion
