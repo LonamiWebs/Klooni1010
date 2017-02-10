@@ -21,6 +21,7 @@ public class Piece {
 
     final Vector2 pos;
     final int colorIndex;
+    final int rotation;
 
     final int cellCols, cellRows;
     private boolean shape[][];
@@ -37,12 +38,14 @@ public class Piece {
     // If swapSize is true, the rows and columns will be swapped.
     // colorIndex represents a random index that will be used
     // to determine the color of this piece when drawn on the screen.
-    private Piece(int cols, int rows, boolean swapSize, int colorIndex) {
+    private Piece(int cols, int rows, int rotateSizeBy, int colorIndex) {
         this.colorIndex = colorIndex;
 
         pos = new Vector2();
-        cellCols = swapSize ? rows : cols;
-        cellRows = swapSize ? cols : rows;
+        rotation = rotateSizeBy % 2;
+        cellCols = rotation == 1 ? rows : cols;
+        cellRows = rotation == 1 ? cols : rows;
+
         shape = new boolean[cellRows][cellCols];
         for (int i = 0; i < cellRows; ++i) {
             for (int j = 0; j < cellCols; ++j) {
@@ -58,7 +61,9 @@ public class Piece {
         pos = new Vector2();
         cellCols = cellRows = lSize;
         shape = new boolean[lSize][lSize];
-        switch (rotateCount % 4) {
+
+        rotation = rotateCount % 4;
+        switch (rotation) {
             case 0: // ┌
                 for (int j = 0; j < lSize; ++j)
                     shape[0][j] = true;
@@ -92,25 +97,26 @@ public class Piece {
 
     // Generates a random piece with always the same color for the generated shape
     static Piece random() {
-        return fromIndex(MathUtils.random(8)); // 9 pieces, [0…8]
+        // 9 pieces [0…8]; 4 possible rotations [0…3]
+        return fromIndex(MathUtils.random(8), MathUtils.random(4));
     }
 
-    private static Piece fromIndex(int colorIndex) {
+    private static Piece fromIndex(int colorIndex, int rotateCount) {
         switch (colorIndex) {
             // Squares
-            case 0: return new Piece(1, 1, false, colorIndex);
-            case 1: return new Piece(2, 2, false, colorIndex);
-            case 2: return new Piece(3, 3, false, colorIndex);
+            case 0: return new Piece(1, 1, 0, colorIndex);
+            case 1: return new Piece(2, 2, 0, colorIndex);
+            case 2: return new Piece(3, 3, 0, colorIndex);
 
             // Lines
-            case 3: return new Piece(1, 2, MathUtils.randomBoolean(), colorIndex);
-            case 4: return new Piece(1, 3, MathUtils.randomBoolean(), colorIndex);
-            case 5: return new Piece(1, 4, MathUtils.randomBoolean(), colorIndex);
-            case 6: return new Piece(1, 5, MathUtils.randomBoolean(), colorIndex);
+            case 3: return new Piece(1, 2, rotateCount, colorIndex);
+            case 4: return new Piece(1, 3, rotateCount, colorIndex);
+            case 5: return new Piece(1, 4, rotateCount, colorIndex);
+            case 6: return new Piece(1, 5, rotateCount, colorIndex);
 
             // L's
-            case 7: return new Piece(2, MathUtils.random(3), colorIndex);
-            case 8: return new Piece(3, MathUtils.random(3), colorIndex);
+            case 7: return new Piece(2, rotateCount, colorIndex);
+            case 8: return new Piece(3, rotateCount, colorIndex);
         }
         throw new RuntimeException("Random function is broken.");
     }
@@ -172,11 +178,13 @@ public class Piece {
     //region Serialization
 
     void write(DataOutputStream out) throws IOException {
+        // colorIndex, rotation
         out.writeInt(colorIndex);
+        out.writeInt(rotation);
     }
 
     static Piece read(DataInputStream in) throws IOException {
-        return fromIndex(in.readInt());
+        return fromIndex(in.readInt(), in.readInt());
     }
 
     //endregion

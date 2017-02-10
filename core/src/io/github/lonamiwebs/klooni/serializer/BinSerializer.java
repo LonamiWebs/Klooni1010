@@ -14,7 +14,7 @@ public class BinSerializer {
 
     // MODIFY THIS VALUE EVERY TIME A BinSerializable IMPLEMENTATION CHANGES
     // Or unwanted results will happen and corrupt the game in an unknown way.
-    private static int VERSION = 1;
+    private static int VERSION = 2;
 
     public static void serialize(final BinSerializable serializable, final OutputStream output)
             throws IOException {
