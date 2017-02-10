@@ -141,10 +141,16 @@ public class PieceHolder implements BinSerializable {
                 Gdx.input.getX(),
                 Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
+        final float perPieceWidth = area.width / count;
         for (int i = 0; i < count; ++i) {
-            if (pieces[i] != null && pieces[i].getRectangle().contains(mouse)) {
-                heldPiece = i;
-                return true;
+            if (pieces[i] != null) {
+                Rectangle maxPieceArea = new Rectangle(
+                        area.x + i * perPieceWidth, area.y, perPieceWidth, area.height);
+
+                if (maxPieceArea.contains(mouse)) {
+                    heldPiece = i;
+                    return true;
+                }
             }
         }
 

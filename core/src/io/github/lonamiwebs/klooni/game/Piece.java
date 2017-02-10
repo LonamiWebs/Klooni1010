@@ -21,7 +21,7 @@ public class Piece {
 
     final Vector2 pos;
     final int colorIndex;
-    final int rotation;
+    private final int rotation;
 
     final int cellCols, cellRows;
     private boolean shape[][];
