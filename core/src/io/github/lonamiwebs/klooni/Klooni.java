@@ -57,6 +57,7 @@ public class Klooni extends Game {
 
         skin.add("font", new BitmapFont(Gdx.files.internal("font/geosans-light.fnt")));
         skin.add("font_small", new BitmapFont(Gdx.files.internal("font/geosans-light32.fnt")));
+        skin.add("font_bonus", new BitmapFont(Gdx.files.internal("font/the-next-font.fnt")));
 
         // Use only one instance for the theme, so anyone using it uses the most up-to-date
         Theme.skin = skin; // Not the best idea

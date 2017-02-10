@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.69999999"
-     inkscape:cx="335.14124"
-     inkscape:cy="488.33979"
+     inkscape:cx="28.553825"
+     inkscape:cy="118.51475"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -197,7 +197,8 @@
          id="tspan4189">&quot;generate_theme.py&quot; to create &quot;out.theme&quot;</tspan></text>
     <g
        id="export_background"
-       style="fill:#e5e5e5;fill-opacity:1">
+       style="fill:#e5e5e5;fill-opacity:1"
+       transform="translate(3.0304577,0)">
       <rect
          y="552.36218"
          x="0"
@@ -279,6 +280,15 @@
          width="400"
          id="rect4174"
          style="opacity:1;fill:#87ceeb;fill-opacity:1;stroke:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="export_bonus"
+       style="fill:#4d4d4d;fill-opacity:1">
+      <path
+         inkscape:connector-curvature="0"
+         id="rect4180"
+         d="m 198.50901,1079.2067 c -6.43568,0 -11.61524,5.1815 -11.61524,11.6172 l 0,11.6172 -11.61718,0 c -6.43569,0 -11.61719,5.1815 -11.61719,11.6172 l 0,10.1015 c 0,6.4357 5.1815,11.6172 11.61719,11.6172 l 11.61718,0 0,11.6152 c 0,6.4357 5.17956,11.6172 11.61524,11.6172 l 10.10156,0 c 6.43568,0 11.61719,-5.1815 11.61719,-11.6172 l 0,-11.6152 11.61719,0 c 6.43568,0 11.61718,-5.1815 11.61718,-11.6172 l 0,-10.1015 c 0,-6.4357 -5.1815,-11.6172 -11.61718,-11.6172 l -11.61719,0 0,-11.6172 c 0,-6.4357 -5.18151,-11.6172 -11.61719,-11.6172 l -10.10156,0 z"
+         style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:7.55499983;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
   </g>
 </svg>

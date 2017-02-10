@@ -27,6 +27,7 @@ template = '''{{
         ],
         "current_score": "{current_score}",
         "high_score": "{high_score}",
+        "bonus": "{bonus}",
         "band": "{band}"
     }},
     "cell_texture": "{cell_tex}"

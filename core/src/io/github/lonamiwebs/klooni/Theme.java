@@ -27,6 +27,7 @@ public class Theme {
 
     public Color currentScore;
     public Color highScore;
+    public Color bonus;
     public Color bandColor;
 
     private Color[] cells;
@@ -109,6 +110,7 @@ public class Theme {
 
         currentScore = new Color((int)Long.parseLong(colors.getString("current_score"), 16));
         highScore = new Color((int)Long.parseLong(colors.getString("high_score"), 16));
+        bonus = new Color((int)Long.parseLong(colors.getString("bonus"), 16));
         bandColor = new Color((int)Long.parseLong(colors.getString("band"), 16));
 
         emptyCell = new Color((int)Long.parseLong(colors.getString("empty_cell"), 16));

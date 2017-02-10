@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -88,10 +87,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.skin.getFont("font");
-        bonusParticleHandler = new BonusParticleHandler(labelStyle);
+        bonusParticleHandler = new BonusParticleHandler(game);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
 

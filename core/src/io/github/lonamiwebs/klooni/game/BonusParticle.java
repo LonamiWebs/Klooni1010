@@ -27,7 +27,7 @@ class BonusParticle {
             lifetime = 1f;
 
         // Render
-        label.setColor(Klooni.theme.highScore);
+        label.setColor(Klooni.theme.bonus);
         label.setFontScale(Interpolation.elasticOut.apply(0f, 1f, lifetime));
         float opacity = Interpolation.linear.apply(1f, 0f, lifetime);
         label.draw(batch, opacity);

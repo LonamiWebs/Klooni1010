@@ -7,13 +7,16 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
 
+import io.github.lonamiwebs.klooni.Klooni;
+
 public class BonusParticleHandler {
 
     private final Array<BonusParticle> particles;
     private final Label.LabelStyle labelStyle;
 
-    public BonusParticleHandler(final Label.LabelStyle style) {
-        labelStyle = style;
+    public BonusParticleHandler(final Klooni game) {
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font_bonus");
         particles = new Array<BonusParticle>();
     }
 
