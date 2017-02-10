@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.io.DataInputStream;
@@ -207,18 +206,15 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        int area = holder.calculateHeldPieceArea();
-        Vector2 pos = holder.calculateHeldPieceCenter();
-
-        int action = holder.dropPiece(board);
-        if (action == PieceHolder.NO_DROP)
+        PieceHolder.DropResult result = holder.dropPiece(board);
+        if (!result.dropped)
             return false;
 
-        if (action == PieceHolder.ON_BOARD_DROP) {
-            scorer.addPieceScore(area);
+        if (result.onBoard) {
+            scorer.addPieceScore(result.area);
             int bonus = scorer.addBoardScore(board.clearComplete(), board.cellCount);
             if (bonus > 0)
-                bonusParticleHandler.addBonus(pos, bonus);
+                bonusParticleHandler.addBonus(result.pieceCenter, bonus);
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {

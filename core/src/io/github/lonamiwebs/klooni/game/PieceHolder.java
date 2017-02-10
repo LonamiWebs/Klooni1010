@@ -178,7 +178,9 @@ public class PieceHolder implements BinSerializable {
 
     // Tries to drop the piece on the given board. As a result, it
     // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
-    public int dropPiece(Board board) {
+    public DropResult dropPiece(Board board) {
+        DropResult result;
+
         if (heldPiece > -1) {
             boolean put;
             put = enabled && board.putScreenPiece(pieces[heldPiece]);
@@ -189,19 +191,23 @@ public class PieceHolder implements BinSerializable {
                     float pitch = 1.104f - pieces[heldPiece].calculateArea() * 0.04f;
                     pieceDropSound.play(1, pitch, 0);
                 }
+
+                result = new DropResult(calculateHeldPieceArea(), calculateHeldPieceCenter());
                 pieces[heldPiece] = null;
             } else {
                 if (Klooni.soundsEnabled())
                     invalidPieceDropSound.play();
+
+                result = new DropResult(true);
             }
 
             heldPiece = -1;
             if (handFinished())
                 takeMore();
-
-            return put ? ON_BOARD_DROP : NORMAL_DROP;
         } else
-            return NO_DROP;
+            result = new DropResult(false);
+
+        return result;
     }
 
     // Updates the state of the piece holder (and the held piece)
@@ -282,6 +288,32 @@ public class PieceHolder implements BinSerializable {
         for (int i = 0; i < count; i++)
             pieces[i] = in.readBoolean() ? Piece.read(in) : null;
         updatePiecesStartLocation();
+    }
+
+    //endregion
+
+    //region Sub-classes
+
+    public class DropResult {
+
+        public final boolean dropped;
+        public final boolean onBoard;
+
+        public final int area;
+        public final Vector2 pieceCenter;
+
+        DropResult(final boolean dropped) {
+            this.dropped = dropped;
+            onBoard = false;
+            area = 0;
+            pieceCenter = null;
+        }
+
+        DropResult(final int area, final Vector2 pieceCenter) {
+            dropped = onBoard = true;
+            this.area = area;
+            this.pieceCenter = pieceCenter;
+        }
     }
 
     //endregion
