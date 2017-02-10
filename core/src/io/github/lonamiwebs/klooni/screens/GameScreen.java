@@ -88,13 +88,14 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
 
-        if (loadSave) {
-            // The user might have a previous game. If this is the case, load it
-            tryLoad();
-        }
-        else {
-            // Ensure that there is no old save, we don't want to load it, thus delete it
-            deleteSave();
+        if (gameMode == GAME_MODE_SCORE) {
+            if (loadSave) {
+                // The user might have a previous game. If this is the case, load it
+                tryLoad();
+            } else {
+                // Ensure that there is no old save, we don't want to load it, thus delete it
+                deleteSave();
+            }
         }
     }
 
@@ -121,7 +122,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
                 gameOverSound.play();
 
             // The user should not be able to return to the game if its game over
-            deleteSave();
+            if (gameMode == GAME_MODE_SCORE)
+                deleteSave();
         }
     }
 
@@ -137,9 +139,15 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
             Gdx.input.setInputProcessor(this);
     }
 
+    // Save the state, the user might leave the game in any of the following 2 methods
     private void showPauseMenu() {
         pauseMenu.show(false);
-        save(); // Save the state, the user might leave the game
+        save();
+    }
+
+    @Override
+    public void pause() {
+        save();
     }
 
     @Override
@@ -215,13 +223,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     public void resize(int width, int height) { }
 
     @Override
-    public void pause() { }
-
-    @Override
     public void resume() { }
 
     @Override
-    public void hide() { }
+    public void hide() { /* Hide can only be called if the menu was shown. Place logic there. */ }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -253,8 +258,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     //region Saving and loading
 
     private void save() {
-        // Only save if the game is not over
-        if (gameOverDone)
+        // Only save if the game is not over and the game mode is not the time mode. It
+        // makes no sense to save the time game mode since it's supposed to be something quick.
+        // Don't save either if the score is 0, which means the player did nothing.
+        if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer.getCurrentScore() == 0)
             return;
 
         final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
@@ -266,7 +273,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         }
     }
 
-    static void deleteSave() {
+    private void deleteSave() {
         final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
         if (handle.exists())
             handle.delete();
@@ -277,7 +284,6 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     private boolean tryLoad() {
-        // Load will fail if the game modes differ, but that's okay
         final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
         if (handle.exists()) {
             try {

@@ -66,9 +66,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         table.add(starButton).space(16);
 
         // Time mode
-        // TODO Would be nice if it actually showed the saved texture iff that's the saved game mode
-        final SoftButton statsButton = new SoftButton(
-                2, GameScreen.hasSavedData() ? "stopwatch_saved_texture" : "stopwatch_texture");
+        final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
         statsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
