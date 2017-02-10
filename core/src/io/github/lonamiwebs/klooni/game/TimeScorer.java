@@ -58,8 +58,10 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     //region Private methods
 
     @Override
-    protected void addScore(int score) {
+    protected int addScore(int score) {
+        int scoreBefore = getCurrentScore();
         deadTime += scoreToNanos(score);
+        return getCurrentScore() - scoreBefore;
     }
 
     private int nanosToSeconds(long nano) {

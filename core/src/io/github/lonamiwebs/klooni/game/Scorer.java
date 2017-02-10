@@ -40,8 +40,9 @@ public class Scorer extends BaseScorer implements BinSerializable {
     //region Private methods
 
     @Override
-    protected void addScore(int score) {
+    protected int addScore(int score) {
         currentScore += score;
+        return score;
     }
 
     //endregion

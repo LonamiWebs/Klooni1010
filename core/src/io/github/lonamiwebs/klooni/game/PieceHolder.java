@@ -172,6 +172,10 @@ public class PieceHolder implements BinSerializable {
         return heldPiece > -1 ? pieces[heldPiece].calculateArea() : 0;
     }
 
+    public Vector2 calculateHeldPieceCenter() {
+        return heldPiece > -1 ? pieces[heldPiece].calculateGravityCenter() : null;
+    }
+
     // Tries to drop the piece on the given board. As a result, it
     // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
     public int dropPiece(Board board) {

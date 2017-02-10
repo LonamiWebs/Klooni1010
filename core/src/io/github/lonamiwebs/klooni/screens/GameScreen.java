@@ -8,6 +8,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.game.BaseScorer;
 import io.github.lonamiwebs.klooni.game.Board;
+import io.github.lonamiwebs.klooni.game.BonusParticleHandler;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
 import io.github.lonamiwebs.klooni.game.PieceHolder;
@@ -30,6 +33,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     //region Members
 
     private final BaseScorer scorer;
+    private final BonusParticleHandler bonusParticleHandler;
 
     private final Board board;
     private final PieceHolder holder;
@@ -85,6 +89,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
+        bonusParticleHandler = new BonusParticleHandler(labelStyle);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
 
@@ -165,6 +173,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         board.draw(batch);
         holder.update();
         holder.draw(batch);
+        bonusParticleHandler.run(batch);
 
         batch.end();
 
@@ -199,13 +208,17 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int area = holder.calculateHeldPieceArea();
+        Vector2 pos = holder.calculateHeldPieceCenter();
+
         int action = holder.dropPiece(board);
         if (action == PieceHolder.NO_DROP)
             return false;
 
         if (action == PieceHolder.ON_BOARD_DROP) {
             scorer.addPieceScore(area);
-            scorer.addBoardScore(board.clearComplete(), board.cellCount);
+            int bonus = scorer.addBoardScore(board.clearComplete(), board.cellCount);
+            if (bonus > 0)
+                bonusParticleHandler.addBonus(pos, bonus);
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {

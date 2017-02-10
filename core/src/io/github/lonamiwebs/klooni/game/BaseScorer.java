@@ -48,7 +48,7 @@ public abstract class BaseScorer implements BinSerializable {
 
     //region Private methods
 
-    protected abstract void addScore(int score);
+    protected abstract int addScore(int score);
 
     // The original game seems to work as follows:
     // If < 1 were cleared, score = 0
@@ -65,13 +65,13 @@ public abstract class BaseScorer implements BinSerializable {
     //region Public methods
 
     // Adds the score a given piece would give
-    public final void addPieceScore(int areaPut) {
-        addScore(areaPut);
+    public final int addPieceScore(int areaPut) {
+        return addScore(areaPut);
     }
 
     // Adds the score given by the board, this is, the count of cleared strips
-    public final void addBoardScore(int stripsCleared, int boardSize) {
-        addScore(calculateClearScore(stripsCleared, boardSize));
+    public final int addBoardScore(int stripsCleared, int boardSize) {
+        return addScore(calculateClearScore(stripsCleared, boardSize));
     }
 
     public void pause() { }

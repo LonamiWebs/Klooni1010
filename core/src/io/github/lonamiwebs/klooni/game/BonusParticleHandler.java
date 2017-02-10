@@ -7,21 +7,21 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
 
-class BonusParticleHandler {
+public class BonusParticleHandler {
 
     private final Array<BonusParticle> particles;
     private final Label.LabelStyle labelStyle;
 
-    BonusParticleHandler(final Label.LabelStyle style) {
+    public BonusParticleHandler(final Label.LabelStyle style) {
         labelStyle = style;
         particles = new Array<BonusParticle>();
     }
 
-    void addBonus(final Vector2 pos, final int score) {
+    public void addBonus(final Vector2 pos, final int score) {
         particles.add(new BonusParticle(pos, score, labelStyle));
     }
 
-    void run(final Batch batch) {
+    public void run(final Batch batch) {
         BonusParticle particle;
         Iterator<BonusParticle> iterator = particles.iterator();
         while (iterator.hasNext()) {
