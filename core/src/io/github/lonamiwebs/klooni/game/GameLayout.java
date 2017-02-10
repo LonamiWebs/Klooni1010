@@ -3,6 +3,7 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import io.github.lonamiwebs.klooni.actors.Band;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
@@ -16,7 +17,7 @@ public class GameLayout {
     //region Members
 
     private float screenWidth, marginWidth, availableWidth;
-    private float scoreHeight, boardHeight, pieceHolderHeight, themeCardHeight;
+    private float screenHeight, logoHeight, scoreHeight, boardHeight, pieceHolderHeight, themeCardHeight;
 
     //endregion
 
@@ -32,14 +33,14 @@ public class GameLayout {
 
     private void calculate() {
         screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
+        screenHeight = Gdx.graphics.getHeight();
 
         // Widths
         marginWidth = screenWidth * 0.05f;
         availableWidth = screenWidth - marginWidth * 2f;
 
         // Heights
-        // logoHeight = screenHeight * 0.10f; // Unused
+        logoHeight = screenHeight * 0.10f;
         scoreHeight = screenHeight * 0.15f;
         boardHeight = screenHeight * 0.50f;
         pieceHolderHeight = screenHeight * 0.25f;
@@ -66,13 +67,18 @@ public class GameLayout {
                 area.x + area.width * 0.5f - cupSize * 0.5f, area.y,
                 cupSize, cupSize);
 
-        scorer.leftLabel.setBounds(
+        scorer.currentScoreLabel.setBounds(
                 area.x, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
 
         scorer.highScoreLabel.setBounds(
                 area.x + area.width * 0.5f + cupSize * 0.5f, area.y,
                 area.width * 0.5f - cupSize * 0.5f, area.height);
+    }
+
+    // Special case, we want to position the label on top of the cup
+    void updateTimeLeftLabel(Label timeLeftLabel) {
+        timeLeftLabel.setBounds(0, screenHeight - logoHeight, screenWidth, logoHeight);
     }
 
     void update(Board board) {

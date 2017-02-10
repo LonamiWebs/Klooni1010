@@ -72,7 +72,7 @@ public class Scorer extends BaseScorer implements BinSerializable {
         int roundShown = MathUtils.round(shownScore);
         if (roundShown != currentScore) {
             shownScore = Interpolation.linear.apply(shownScore, currentScore, 0.1f);
-            leftLabel.setText(Integer.toString(MathUtils.round(shownScore)));
+            currentScoreLabel.setText(Integer.toString(MathUtils.round(shownScore)));
         }
         super.draw(batch);
     }

@@ -15,7 +15,7 @@ public abstract class BaseScorer implements BinSerializable {
 
     //region Members
 
-    final Label leftLabel;
+    final Label currentScoreLabel;
     final Label highScoreLabel;
 
     final Texture cupTexture;
@@ -36,8 +36,8 @@ public abstract class BaseScorer implements BinSerializable {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
 
-        leftLabel = new Label("0", labelStyle);
-        leftLabel.setAlignment(Align.right);
+        currentScoreLabel = new Label("0", labelStyle);
+        currentScoreLabel.setAlignment(Align.right);
 
         highScoreLabel = new Label(Integer.toString(highScore), labelStyle);
 
@@ -89,8 +89,8 @@ public abstract class BaseScorer implements BinSerializable {
         batch.setColor(cupColor);
         batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
 
-        leftLabel.setColor(Klooni.theme.currentScore);
-        leftLabel.draw(batch, 1f);
+        currentScoreLabel.setColor(Klooni.theme.currentScore);
+        currentScoreLabel.draw(batch, 1f);
 
         highScoreLabel.setColor(Klooni.theme.highScore);
         highScoreLabel.draw(batch, 1f);

@@ -2,6 +2,8 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.io.DataInputStream;
@@ -14,6 +16,8 @@ import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 public class TimeScorer extends BaseScorer implements BinSerializable {
 
     //region Members
+
+    private final Label timeLeftLabel;
 
     private long startTime;
     private int highScoreTime;
@@ -36,6 +40,12 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     public TimeScorer(final Klooni game, GameLayout layout) {
         super(game, layout, Klooni.getMaxTimeScore());
         highScoreTime = Klooni.getMaxTimeScore();
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
+        timeLeftLabel = new Label("", labelStyle);
+        timeLeftLabel.setAlignment(Align.center);
+        layout.updateTimeLeftLabel(timeLeftLabel);
 
         startTime = TimeUtils.nanoTime();
         deadTime = startTime + START_TIME;
@@ -111,10 +121,13 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     @Override
     public void draw(SpriteBatch batch) {
-        int timeLeft = pausedTimeLeft < 0 ? getTimeLeft() : pausedTimeLeft;
-        leftLabel.setText(Integer.toString(timeLeft));
-
+        currentScoreLabel.setText(Integer.toString(getCurrentScore()));
         super.draw(batch);
+
+        int timeLeft = pausedTimeLeft < 0 ? getTimeLeft() : pausedTimeLeft;
+        timeLeftLabel.setText(Integer.toString(timeLeft));
+        timeLeftLabel.setColor(Klooni.theme.currentScore);
+        timeLeftLabel.draw(batch, 1f);
     }
 
     //endregion
