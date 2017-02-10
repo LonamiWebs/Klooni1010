@@ -90,34 +90,44 @@ public class PieceHolder implements BinSerializable {
 
     // Takes a new set of pieces. Should be called when there are no more piece left
     private void takeMore() {
-        float perPieceWidth = area.width / count;
-        for (int i = 0; i < count; ++i) {
+        for (int i = 0; i < count; ++i)
             pieces[i] = Piece.random();
+        updatePiecesStartLocation();
+
+        if (Klooni.soundsEnabled()) {
+            // Random pitch so it's not always the same sound
+            takePiecesSound.play(1, MathUtils.random(0.8f, 1.2f), 0);
+        }
+    }
+
+    private void updatePiecesStartLocation() {
+        float perPieceWidth = area.width / count;
+        Piece piece;
+        for (int i = 0; i < count; ++i) {
+            piece = pieces[i];
+            if (piece == null)
+                continue;
 
             // Set the absolute position on screen and the cells' cellSize
             // Also clamp the cell size to be the picked size as maximum, or
             // it would be too big in some cases.
-            pieces[i].pos.set(area.x + i * perPieceWidth, area.y);
-            pieces[i].cellSize = Math.min(Math.min(
-                    perPieceWidth / pieces[i].cellCols,
-                    area.height / pieces[i].cellRows), pickedCellSize);
+            piece.pos.set(area.x + i * perPieceWidth, area.y);
+            piece.cellSize = Math.min(Math.min(
+                    perPieceWidth / piece.cellCols,
+                    area.height / piece.cellRows), pickedCellSize);
 
             // Center the piece on the X and Y axes. For this we see how
             // much up we can go, this is, (area.height - piece.height) / 2
-            Rectangle rectangle = pieces[i].getRectangle();
-            pieces[i].pos.y += (area.height - rectangle.height) * 0.5f;
-            pieces[i].pos.x += (perPieceWidth - rectangle.width) * 0.5f;
+            Rectangle rectangle = piece.getRectangle();
+            piece.pos.y += (area.height - rectangle.height) * 0.5f;
+            piece.pos.x += (perPieceWidth - rectangle.width) * 0.5f;
 
             originalPositions[i] = new Rectangle(
-                    pieces[i].pos.x, pieces[i].pos.y,
-                    pieces[i].cellSize, pieces[i].cellSize);
+                    piece.pos.x, piece.pos.y,
+                    piece.cellSize, piece.cellSize);
 
             // Now that we have the original positions, reset the size so it animates and grows
-            pieces[i].cellSize = 0f;
-        }
-        if (Klooni.soundsEnabled()) {
-            // Random pitch so it's not always the same sound
-            takePiecesSound.play(1, MathUtils.random(0.8f, 1.2f), 0);
+            piece.cellSize = 0f;
         }
     }
 
@@ -261,6 +271,7 @@ public class PieceHolder implements BinSerializable {
 
         for (int i = 0; i < count; i++)
             pieces[i] = in.readBoolean() ? Piece.read(in) : null;
+        updatePiecesStartLocation();
     }
 
     //endregion
