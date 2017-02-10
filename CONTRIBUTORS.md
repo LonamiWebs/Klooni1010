@@ -12,7 +12,8 @@ Art
 
 Fonts
 =====
-- [Manfred Klein](http://www.dafont.com/geo-sans-light.font)
+- `geosans-light` by [Manfred Klein](http://www.dafont.com/geo-sans-light.font)
+- `the-next-font` by [Pindarots](http://www.dafont.com/the_next_font.font)
 
 Sounds
 ======
