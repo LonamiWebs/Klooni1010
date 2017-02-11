@@ -37,17 +37,20 @@ public class Scorer extends BaseScorer implements BinSerializable {
 
     //endregion
 
-    //region Private methods
+    //region Public methods
 
     @Override
-    protected int addScore(int score) {
+    public int addPieceScore(int areaPut) {
+        currentScore += areaPut;
+        return areaPut;
+    }
+
+    @Override
+    public int addBoardScore(int stripsCleared, int boardSize) {
+        int score = calculateClearScore(stripsCleared, boardSize);
         currentScore += score;
         return score;
     }
-
-    //endregion
-
-    //region Public methods
 
     public int getCurrentScore() {
         return currentScore;

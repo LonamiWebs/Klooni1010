@@ -57,8 +57,7 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     //region Private methods
 
-    @Override
-    protected int addScore(int score) {
+    private int addScore(int score) {
         int scoreBefore = getCurrentScore();
         deadTime += scoreToNanos(score);
         return getCurrentScore() - scoreBefore;
@@ -80,6 +79,16 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     //endregion
 
     //region Public methods
+
+    @Override
+    public int addPieceScore(int areaPut) {
+        return addScore(areaPut);
+    }
+
+    @Override
+    public int addBoardScore(int stripsCleared, int boardSize) {
+        return addScore(calculateClearScore(stripsCleared, boardSize));
+    }
 
     @Override
     public int getCurrentScore() {
