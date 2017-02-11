@@ -61,7 +61,11 @@ public class Klooni extends Game {
 
         // Use only one instance for the theme, so anyone using it uses the most up-to-date
         Theme.skin = skin; // Not the best idea
-        theme = Theme.getTheme(prefs.getString("themeName", "default"));
+        final String themeName = prefs.getString("themeName", "default");
+        if (Theme.exists(themeName))
+            theme = Theme.getTheme(themeName);
+        else
+            theme = Theme.getTheme("default");
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));

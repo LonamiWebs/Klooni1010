@@ -52,6 +52,10 @@ public class Theme {
 
     //region Static methods
 
+    public static boolean exists(final String name) {
+        return Gdx.files.internal("themes/"+name+".theme").exists();
+    }
+
     // Gets all the available themes on the available on the internal game storage
     public static Theme[] getThemes() {
         FileHandle[] handles = Gdx.files.internal("themes").list();
