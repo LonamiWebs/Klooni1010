@@ -2,14 +2,14 @@
     "name": "Default",
     "price": 0,
     "colors": {
-        "background": "e6e6e6ff",
+        "background": "ffffffff",
         "buttons": [
             "00ff33ff",
             "ffd700ff",
             "2389fcff",
             "d94848ff"
         ],
-        "empty_cell": "ffffffff",
+        "empty_cell": "e6e6e6ff",
         "cells": [
             "7988bfff", "98dc53ff", "4cd4aeff",
             "fec63dff", "ec9548ff", "e66a82ff", "da6554ff",
