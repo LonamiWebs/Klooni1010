@@ -46,9 +46,7 @@ public class PieceHolder implements BinSerializable {
 
     //region Static members
 
-    public static final int NO_DROP = 0;
-    public static final int NORMAL_DROP = 1;
-    public static final int ON_BOARD_DROP = 2;
+    public static final float DRAG_SPEED = 0.5f; // Interpolation value ((pos -> new) / frame)
 
     //endregion
 
@@ -230,8 +228,8 @@ public class PieceHolder implements BinSerializable {
                 mouse.sub(piece.getRectangle().width * 0.5f, -pickedCellSize);
             }
 
-            piece.pos.lerp(mouse, 0.4f);
-            piece.cellSize = Interpolation.linear.apply(piece.cellSize, pickedCellSize, 0.4f);
+            piece.pos.lerp(mouse, DRAG_SPEED);
+            piece.cellSize = Interpolation.linear.apply(piece.cellSize, pickedCellSize, DRAG_SPEED);
         }
 
         // Return the pieces to their original position
