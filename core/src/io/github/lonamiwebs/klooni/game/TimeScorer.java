@@ -20,7 +20,7 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     private final Label timeLeftLabel;
 
     private long startTime;
-    private int highScoreTime;
+    private int highScore;
 
     // Indicates where we would die in time. Score adds to this, so we take
     // longer to die. To get the "score" we simply calculate `deadTime - startTime`
@@ -47,7 +47,7 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     // The board size is required when calculating the score
     public TimeScorer(final Klooni game, GameLayout layout) {
         super(game, layout, Klooni.getMaxTimeScore());
-        highScoreTime = Klooni.getMaxTimeScore();
+        highScore = Klooni.getMaxTimeScore();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
@@ -82,18 +82,10 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     //region Public methods
 
     @Override
-    public int addPieceScore(int areaPut) { return 0; /* Nope, no score for single pieces */ }
-
-    @Override
     public int addBoardScore(int stripsCleared, int boardSize) {
-        int scoreBefore = getCurrentScore();
+        // Only clearing strips adds extra time
         deadTime += scoreToNanos(calculateClearScore(stripsCleared, boardSize));
-        return getCurrentScore() - scoreBefore;
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return nanosToSeconds(deadTime - startTime);
+        return super.addBoardScore(stripsCleared, boardSize);
     }
 
     @Override
@@ -110,7 +102,7 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     @Override
     protected boolean isNewRecord() {
-        return getCurrentScore() > highScoreTime;
+        return getCurrentScore() > highScore;
     }
 
     @Override
@@ -133,7 +125,6 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     @Override
     public void draw(SpriteBatch batch) {
-        currentScoreLabel.setText(Integer.toString(getCurrentScore()));
         super.draw(batch);
 
         int timeLeft = pausedTimeLeft < 0 ? getTimeLeft() : pausedTimeLeft;
@@ -148,9 +139,9 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        // current/dead offset ("how long until we die"), highScoreTime
+        // current/dead offset ("how long until we die"), highScore
         out.writeLong(TimeUtils.nanoTime() - startTime);
-        out.writeInt(highScoreTime);
+        out.writeInt(highScore);
     }
 
     @Override
@@ -159,7 +150,7 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
         // is different and we couldn't save absolute values
         long deadOffset = in.readLong();
         deadTime = startTime + deadOffset;
-        highScoreTime = in.readInt();
+        highScore = in.readInt();
     }
 
     //endregion

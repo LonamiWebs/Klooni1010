@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -15,6 +17,8 @@ public abstract class BaseScorer implements BinSerializable {
 
     //region Members
 
+    protected int currentScore;
+
     final Label currentScoreLabel;
     final Label highScoreLabel;
 
@@ -22,6 +26,9 @@ public abstract class BaseScorer implements BinSerializable {
     final Rectangle cupArea;
 
     private final Color cupColor;
+
+    // To interpolate between shown score -> real score
+    private float shownScore;
 
     //endregion
 
@@ -52,7 +59,7 @@ public abstract class BaseScorer implements BinSerializable {
     // If < 1 were cleared, score = 0
     // If = 1  was cleared, score = cells cleared
     // If > 1 were cleared, score = cells cleared + score(cleared - 1)
-    protected final int calculateClearScore(int stripsCleared, int boardSize) {
+    final int calculateClearScore(int stripsCleared, int boardSize) {
         if (stripsCleared < 1) return 0;
         if (stripsCleared == 1) return boardSize;
         else return boardSize * stripsCleared + calculateClearScore(stripsCleared - 1, boardSize);
@@ -63,10 +70,21 @@ public abstract class BaseScorer implements BinSerializable {
     //region Public methods
 
     // Adds the score a given piece would give
-    public abstract int addPieceScore(int areaPut);
+    public int addPieceScore(int areaPut) {
+        currentScore += areaPut;
+        return areaPut;
+    }
 
     // Adds the score given by the board, this is, the count of cleared strips
-    public abstract int addBoardScore(int stripsCleared, int boardSize);
+    public int addBoardScore(int stripsCleared, int boardSize) {
+        int score = calculateClearScore(stripsCleared, boardSize);
+        currentScore += score;
+        return score;
+    }
+
+    public int getCurrentScore() {
+        return currentScore;
+    }
 
     public void pause() { }
     public void resume() { }
@@ -74,7 +92,6 @@ public abstract class BaseScorer implements BinSerializable {
     abstract public boolean isGameOver();
     abstract protected boolean isNewRecord();
 
-    abstract public int getCurrentScore();
     abstract public void saveScore();
 
     public void draw(SpriteBatch batch) {
@@ -82,6 +99,12 @@ public abstract class BaseScorer implements BinSerializable {
         cupColor.lerp(isNewRecord() ? Klooni.theme.highScore : Klooni.theme.currentScore, 0.05f);
         batch.setColor(cupColor);
         batch.draw(cupTexture, cupArea.x, cupArea.y, cupArea.width, cupArea.height);
+
+        int roundShown = MathUtils.round(shownScore);
+        if (roundShown != currentScore) {
+            shownScore = Interpolation.linear.apply(shownScore, currentScore, 0.1f);
+            currentScoreLabel.setText(Integer.toString(MathUtils.round(shownScore)));
+        }
 
         currentScoreLabel.setColor(Klooni.theme.currentScore);
         currentScoreLabel.draw(batch, 1f);
