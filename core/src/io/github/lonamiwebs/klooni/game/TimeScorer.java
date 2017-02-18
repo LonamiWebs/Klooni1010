@@ -26,11 +26,19 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     // longer to die. To get the "score" we simply calculate `deadTime - startTime`
     private long deadTime;
 
-    private static final long START_TIME = 20 * 1000000000L;
-
     // We need to know when the game was paused to "stop" counting
     private long pauseTime;
     private int pausedTimeLeft;
+
+    //endregion
+
+    //region Static variables
+
+    private static final long START_TIME = 30 * 1000000000L;
+
+    // 2 seconds every 10 points: (2/10)*10^9 to get the nanoseconds
+    private static final double SCORE_TO_NANOS = 0.2e+09d;
+    private static final double NANOS_TO_SECONDS = 1e-09d;
 
     //endregion
 
@@ -57,19 +65,12 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
 
     //region Private methods
 
-    private int addScore(int score) {
-        int scoreBefore = getCurrentScore();
-        deadTime += scoreToNanos(score);
-        return getCurrentScore() - scoreBefore;
-    }
-
     private int nanosToSeconds(long nano) {
-        return MathUtils.ceil((float)(nano * 1e-09));
+        return MathUtils.ceil((float)(nano * NANOS_TO_SECONDS));
     }
 
     private long scoreToNanos(int score) {
-        // 1s/4p seems fair enough
-        return (long)((score / 4.0) * 1e+09);
+        return (long)(score * SCORE_TO_NANOS);
     }
 
     private int getTimeLeft() {
@@ -81,13 +82,13 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     //region Public methods
 
     @Override
-    public int addPieceScore(int areaPut) {
-        return addScore(areaPut);
-    }
+    public int addPieceScore(int areaPut) { return 0; /* Nope, no score for single pieces */ }
 
     @Override
     public int addBoardScore(int stripsCleared, int boardSize) {
-        return addScore(calculateClearScore(stripsCleared, boardSize));
+        int scoreBefore = getCurrentScore();
+        deadTime += scoreToNanos(calculateClearScore(stripsCleared, boardSize));
+        return getCurrentScore() - scoreBefore;
     }
 
     @Override
