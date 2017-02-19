@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -52,17 +53,25 @@ public class Theme {
 
     //region Static methods
 
-    public static boolean exists(final String name) {
+    static boolean exists(final String name) {
         return Gdx.files.internal("themes/"+name+".theme").exists();
     }
 
     // Gets all the available themes on the available on the internal game storage
-    public static Theme[] getThemes() {
-        FileHandle[] handles = Gdx.files.internal("themes").list();
+    public static Array<Theme> getThemes() {
+        String[] themes = Gdx.files.internal("themes/theme.list").readString().split("\n");
 
-        Theme[] result = new Theme[handles.length];
-        for (int i = 0; i < handles.length; ++i)
-            result[i] = Theme.fromFile(handles[i]);
+        Array<Theme> result = new Array<Theme>(themes.length);
+        for (int i = 0; i < themes.length; ++i) {
+            FileHandle file = Gdx.files.internal("themes/" + themes[i] + ".theme");
+            if (file.exists())
+                result.add(Theme.fromFile(file));
+            else {
+                Gdx.app.log(
+                        "Theme/Info", "Non-existing theme '" + themes[i] +
+                        "' found on theme.list (line " + (i + 1) + ")");
+            }
+        }
 
         return result;
     }
