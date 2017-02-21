@@ -121,6 +121,21 @@ public class Board implements BinSerializable {
         return putPiece(piece, x, y);
     }
 
+    Vector2 snapToGrid(final Piece piece, final Vector2 position) {
+        // Snaps the given position (e.g. mouse) to the grid,
+        // assuming piece wants to be put at the specified position.
+        // If the piece was not on the grid, the original position is returned
+        //
+        // Logic to determine the x and y is a copy-paste from putScreenPiece
+        final Vector2 local = position.cpy().sub(pos);
+        int x = MathUtils.round(local.x / piece.cellSize);
+        int y = MathUtils.round(local.y / piece.cellSize);
+        if (canPutPiece(piece, x, y))
+            return new Vector2(pos.x + x * piece.cellSize, pos.y + y * piece.cellSize);
+        else
+            return position;
+    }
+
     // This will clear both complete rows and columns, all at once.
     // The reason why we can't check first rows and then columns
     // (or vice versa) is because the following case (* filled, _ empty):

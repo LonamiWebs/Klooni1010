@@ -80,6 +80,20 @@ class CustomizeScreen implements Screen {
         });
         optionsGroup.addActor(soundButton);
 
+        // Snap to grid on/off
+        final SoftButton snapButton = new SoftButton(
+                2, Klooni.shouldSnapToGrid() ? "snap_on_texture" : "snap_off_texture");
+
+        snapButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Klooni.toggleSnapToGrid();
+                snapButton.image = CustomizeScreen.this.game.skin.getDrawable(
+                        Klooni.shouldSnapToGrid() ? "snap_on_texture" : "snap_off_texture");
+            }
+        });
+        optionsGroup.addActor(snapButton);
+
         // Issues
         final SoftButton issuesButton = new SoftButton(3, "issues_texture");
         issuesButton.addListener(new ChangeListener() {

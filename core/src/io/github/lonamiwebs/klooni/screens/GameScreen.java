@@ -166,7 +166,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
         scorer.draw(batch);
         board.draw(batch);
-        holder.update();
+        holder.update(board);
         holder.draw(batch);
         bonusParticleHandler.run(batch);
 

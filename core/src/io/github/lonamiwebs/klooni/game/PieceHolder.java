@@ -209,7 +209,8 @@ public class PieceHolder implements BinSerializable {
     }
 
     // Updates the state of the piece holder (and the held piece)
-    public void update() {
+    // TODO Passing the board seems expensive… Should it rather be an attribute?
+    public void update(Board board) {
         Piece piece;
         if (heldPiece > -1) {
             piece = pieces[heldPiece];
@@ -227,6 +228,8 @@ public class PieceHolder implements BinSerializable {
                 // avoiding to cover it with the finger (issue on Android devices)
                 mouse.sub(piece.getRectangle().width * 0.5f, -pickedCellSize);
             }
+            if (Klooni.shouldSnapToGrid())
+                mouse.set(board.snapToGrid(piece, mouse));
 
             piece.pos.lerp(mouse, DRAG_SPEED);
             piece.cellSize = Interpolation.linear.apply(piece.cellSize, pickedCellSize, DRAG_SPEED);

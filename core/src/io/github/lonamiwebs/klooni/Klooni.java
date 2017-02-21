@@ -50,6 +50,8 @@ public class Klooni extends Game {
         skin.add("share_texture", new Texture(Gdx.files.internal("ui/share.png")));
         skin.add("sound_on_texture", new Texture(Gdx.files.internal("ui/sound_on.png")));
         skin.add("sound_off_texture", new Texture(Gdx.files.internal("ui/sound_off.png")));
+        skin.add("snap_on_texture", new Texture(Gdx.files.internal("ui/snap_on.png")));
+        skin.add("snap_off_texture", new Texture(Gdx.files.internal("ui/snap_off.png")));
         skin.add("issues_texture", new Texture(Gdx.files.internal("ui/issues.png")));
         skin.add("credits_texture", new Texture(Gdx.files.internal("ui/credits.png")));
         skin.add("web_texture", new Texture(Gdx.files.internal("ui/web.png")));
@@ -119,6 +121,14 @@ public class Klooni extends Game {
 
     public static void toggleSound() {
         prefs.putBoolean("muteSound", soundsEnabled()).flush();
+    }
+
+    public static boolean shouldSnapToGrid() {
+        return prefs.getBoolean("snapToGrid", false);
+    }
+
+    public static void toggleSnapToGrid() {
+        prefs.putBoolean("snapToGrid", !shouldSnapToGrid()).flush();
     }
 
     public static boolean isThemeBought(Theme theme) {
