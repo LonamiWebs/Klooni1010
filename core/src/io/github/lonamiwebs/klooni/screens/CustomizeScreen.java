@@ -73,9 +73,9 @@ class CustomizeScreen implements Screen {
         soundButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Klooni.toggleSound();
+                final boolean enabled = Klooni.toggleSound();
                 soundButton.image = CustomizeScreen.this.game.skin.getDrawable(
-                        Klooni.soundsEnabled() ? "sound_on_texture" : "sound_off_texture");
+                        enabled ? "sound_on_texture" : "sound_off_texture");
             }
         });
         optionsGroup.addActor(soundButton);
@@ -87,9 +87,9 @@ class CustomizeScreen implements Screen {
         snapButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Klooni.toggleSnapToGrid();
+                final boolean shouldSnap = Klooni.toggleSnapToGrid();
                 snapButton.image = CustomizeScreen.this.game.skin.getDrawable(
-                        Klooni.shouldSnapToGrid() ? "snap_on_texture" : "snap_off_texture");
+                        shouldSnap ? "snap_on_texture" : "snap_off_texture");
             }
         });
         optionsGroup.addActor(snapButton);

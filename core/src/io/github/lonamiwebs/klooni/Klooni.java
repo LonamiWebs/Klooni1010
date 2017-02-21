@@ -119,16 +119,20 @@ public class Klooni extends Game {
         return !prefs.getBoolean("muteSound", false);
     }
 
-    public static void toggleSound() {
-        prefs.putBoolean("muteSound", soundsEnabled()).flush();
+    public static boolean toggleSound() {
+        final boolean result = soundsEnabled();
+        prefs.putBoolean("muteSound", result).flush();
+        return !result;
     }
 
     public static boolean shouldSnapToGrid() {
         return prefs.getBoolean("snapToGrid", false);
     }
 
-    public static void toggleSnapToGrid() {
-        prefs.putBoolean("snapToGrid", !shouldSnapToGrid()).flush();
+    public static boolean toggleSnapToGrid() {
+        final boolean result = !shouldSnapToGrid();
+        prefs.putBoolean("snapToGrid", result).flush();
+        return result;
     }
 
     public static boolean isThemeBought(Theme theme) {
