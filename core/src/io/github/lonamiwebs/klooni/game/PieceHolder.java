@@ -42,6 +42,9 @@ public class PieceHolder implements BinSerializable {
     // The size the cells will adopt once picked
     private final float pickedCellSize;
 
+    // Every piece holder belongs to a specific board
+    private final Board board;
+
     //endregion
 
     //region Static members
@@ -52,7 +55,9 @@ public class PieceHolder implements BinSerializable {
 
     //region Constructor
 
-    public PieceHolder(final GameLayout layout, final int pieceCount, final float pickedCellSize) {
+    public PieceHolder(final GameLayout layout, final Board board,
+                       final int pieceCount, final float pickedCellSize) {
+        this.board = board;
         enabled = true;
         count = pieceCount;
         pieces = new Piece[count];
@@ -176,7 +181,7 @@ public class PieceHolder implements BinSerializable {
 
     // Tries to drop the piece on the given board. As a result, it
     // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
-    public DropResult dropPiece(Board board) {
+    public DropResult dropPiece() {
         DropResult result;
 
         if (heldPiece > -1) {
@@ -209,8 +214,7 @@ public class PieceHolder implements BinSerializable {
     }
 
     // Updates the state of the piece holder (and the held piece)
-    // TODO Passing the board seems expensive… Should it rather be an attribute?
-    public void update(Board board) {
+    public void update() {
         Piece piece;
         if (heldPiece > -1) {
             piece = pieces[heldPiece];

@@ -85,7 +85,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         }
 
         board = new Board(layout, BOARD_SIZE);
-        holder = new PieceHolder(layout, HOLDER_PIECE_COUNT, board.cellSize);
+        holder = new PieceHolder(layout, board, HOLDER_PIECE_COUNT, board.cellSize);
         pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
         bonusParticleHandler = new BonusParticleHandler(game);
 
@@ -166,7 +166,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
         scorer.draw(batch);
         board.draw(batch);
-        holder.update(board);
+        holder.update();
         holder.draw(batch);
         bonusParticleHandler.run(batch);
 
@@ -202,7 +202,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        PieceHolder.DropResult result = holder.dropPiece(board);
+        PieceHolder.DropResult result = holder.dropPiece();
         if (!result.dropped)
             return false;
 
