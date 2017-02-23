@@ -46,9 +46,8 @@ public class MainMenuScreen extends InputListener implements Screen {
                 0, GameScreen.hasSavedData() ? "play_saved_texture" : "play_texture");
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                MainMenuScreen.this.game.setScreen(
+                MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
-                dispose();
             }
         });
         table.add(playButton).colspan(3).fill().space(16);
@@ -70,9 +69,8 @@ public class MainMenuScreen extends InputListener implements Screen {
         statsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                MainMenuScreen.this.game.setScreen(
+                MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
-                dispose();
             }
         });
         table.add(statsButton).space(16);
@@ -81,8 +79,9 @@ public class MainMenuScreen extends InputListener implements Screen {
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                MainMenuScreen.this.game.setScreen(new CustomizeScreen(MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()));
                 // Don't dispose because then it needs to take us to the previous screen
+                MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
+                        MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
             }
         });
         table.add(paletteButton).space(16);

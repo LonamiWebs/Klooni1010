@@ -59,8 +59,7 @@ class PauseMenuStage extends Stage {
 
         homeButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(game));
-                dispose();
+                game.transitionTo(new MainMenuScreen(game));
             }
         });
 
@@ -72,8 +71,7 @@ class PauseMenuStage extends Stage {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // false, don't load the saved game state; we do want to replay
-                game.setScreen(new GameScreen(game, gameMode, false));
-                dispose();
+                game.transitionTo(new GameScreen(game, gameMode, false));
             }
         });
 
@@ -86,8 +84,8 @@ class PauseMenuStage extends Stage {
         paletteButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new CustomizeScreen(game, game.getScreen()));
                 // Don't dispose because then it needs to take us to the previous screen
+                game.transitionTo(new CustomizeScreen(game, game.getScreen()), false);
             }
         });
 

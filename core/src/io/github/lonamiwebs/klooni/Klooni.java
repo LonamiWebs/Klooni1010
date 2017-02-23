@@ -4,12 +4,14 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
+import io.github.lonamiwebs.klooni.screens.TransitionScreen;
 
 public class Klooni extends Game {
 
@@ -80,6 +82,15 @@ public class Klooni extends Game {
     @Override
     public void render() {
         super.render();
+    }
+
+    // TransitionScreen will also dispose by default the previous screen
+    public void transitionTo(Screen screen) {
+        transitionTo(screen, true);
+    }
+
+    public void transitionTo(Screen screen, boolean disposeAfter) {
+        setScreen(new TransitionScreen(this, getScreen(), screen, disposeAfter));
     }
 
     //endregion

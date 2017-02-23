@@ -145,8 +145,7 @@ class CustomizeScreen implements Screen {
     //region Private methods
 
     private void goBack() {
-        CustomizeScreen.this.game.setScreen(lastScreen);
-        dispose();
+        CustomizeScreen.this.game.transitionTo(lastScreen);
     }
 
     //endregion
