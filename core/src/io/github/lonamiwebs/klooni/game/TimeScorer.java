@@ -84,8 +84,11 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     @Override
     public int addBoardScore(int stripsCleared, int boardSize) {
         // Only clearing strips adds extra time
-        deadTime += scoreToNanos(calculateClearScore(stripsCleared, boardSize));
-        return super.addBoardScore(stripsCleared, boardSize);
+        long extraTime = scoreToNanos(calculateClearScore(stripsCleared, boardSize));
+        deadTime += extraTime;
+        super.addBoardScore(stripsCleared, boardSize);
+
+        return nanosToSeconds(extraTime);
     }
 
     @Override
