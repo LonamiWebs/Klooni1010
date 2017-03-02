@@ -58,6 +58,8 @@ public class Klooni extends Game {
         skin.add("credits_texture", new Texture(Gdx.files.internal("ui/credits.png")));
         skin.add("web_texture", new Texture(Gdx.files.internal("ui/web.png")));
         skin.add("back_texture", new Texture(Gdx.files.internal("ui/back.png")));
+        skin.add("ok_texture", new Texture(Gdx.files.internal("ui/ok.png")));
+        skin.add("cancel_texture", new Texture(Gdx.files.internal("ui/cancel.png")));
 
         skin.add("font", new BitmapFont(Gdx.files.internal("font/geosans-light.fnt")));
         skin.add("font_small", new BitmapFont(Gdx.files.internal("font/geosans-light32.fnt")));

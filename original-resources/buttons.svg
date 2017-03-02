@@ -102,9 +102,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="95.169026"
-     inkscape:cy="193.1638"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="294.37885"
+     inkscape:cy="209.17116"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1226,6 +1226,23 @@
          y="651.69049"
          ry="3.7367623"
          transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
+    </g>
+    <g
+       id="ok">
+      <path
+         sodipodi:nodetypes="scccccccccccs"
+         inkscape:connector-curvature="0"
+         id="rect4339"
+         d="m 306.42275,810.38996 c -0.94631,0.0732 -1.83806,0.60109 -2.34375,1.49219 l -10.96875,19.32617 -5.96875,-6.69727 c -0.97729,-1.09677 -2.64737,-1.19408 -3.74414,-0.21679 l -2.50782,2.23437 c -1.09677,0.97729 -1.19213,2.64737 -0.21484,3.74414 l 9.99609,11.21875 c 2.56611,2.34609 6.58805,-0.58413 7.98243,-2.5 l 12.95898,-22.83398 c 0.8091,-1.42576 0.31248,-3.2241 -1.11328,-4.03321 l -2.38672,-1.35546 c -0.53466,-0.30342 -1.12167,-0.42284 -1.68945,-0.37891 z"
+         style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="cancel">
+      <path
+         inkscape:connector-curvature="0"
+         id="rect4356"
+         d="m 320.52609,778.38092 c -0.57668,0.0508 -1.14636,0.20524 -1.67578,0.47266 l -1.69336,0.85547 c -2.11769,1.06969 -2.76965,3.52564 -1.46289,5.50586 l 5.56836,8.43945 -7.875,6.89063 c -1.84803,1.61683 -1.84803,4.21909 0,5.83593 l 0.95312,0.83399 c 1.84803,1.61684 4.82189,1.61684 6.66992,0 l 5.83399,-5.10352 4.125,6.25196 c 1.30675,1.98021 4.06395,2.71227 6.18164,1.64257 l 1.69336,-0.85547 c 2.11769,-1.06969 2.76965,-3.52564 1.46289,-5.50586 l -5.56836,-8.43945 7.875,-6.89062 c 1.84803,-1.61684 1.84803,-4.2191 0,-5.83594 l -0.95312,-0.83399 c -1.84804,-1.61683 -4.82385,-1.61683 -6.67188,0 l -5.83203,5.10352 -4.125,-6.25195 c -0.98007,-1.48516 -2.77584,-2.26753 -4.50586,-2.11524 z"
+         style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
   </g>
 </svg>
