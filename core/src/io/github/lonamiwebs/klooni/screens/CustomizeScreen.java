@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
+import io.github.lonamiwebs.klooni.actors.MoneyBuyBand;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 import io.github.lonamiwebs.klooni.game.GameLayout;
@@ -117,6 +118,8 @@ class CustomizeScreen implements Screen {
         table.add(new ScrollPane(optionsGroup)).pad(20, 4, 12, 4);
 
         // Load all the available themes
+        final MoneyBuyBand buyBand = new MoneyBuyBand(game);
+
         table.row();
         final VerticalGroup themesGroup = new VerticalGroup();
         for (Theme theme : Theme.getThemes()) {
@@ -124,7 +127,10 @@ class CustomizeScreen implements Screen {
             card.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    Klooni.updateTheme(card.theme);
+                    if (Klooni.isThemeBought(card.theme))
+                        Klooni.updateTheme(card.theme);
+                    else
+                        buyBand.askBuy(card.theme);
 
                     for (Actor a : themesGroup.getChildren()) {
                         ThemeCard c = (ThemeCard)a;
@@ -138,6 +144,10 @@ class CustomizeScreen implements Screen {
 
         themesGroup.space(8);
         table.add(new ScrollPane(themesGroup)).expand().fill();
+
+        // Show the current money row
+        table.row();
+        table.add(buyBand).expandX().fillX();
     }
 
     //endregion
