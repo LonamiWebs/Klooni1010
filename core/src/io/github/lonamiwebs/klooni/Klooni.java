@@ -23,6 +23,8 @@ public class Klooni extends Game {
 
     public static boolean onDesktop;
 
+    private final static float SCORE_TO_MONEY = 1f / 100f;
+
     //endregion
 
     //region Creation
@@ -112,6 +114,7 @@ public class Klooni extends Game {
 
     private static Preferences prefs;
 
+    // Score related
     public static int getMaxScore() {
         return prefs.getInteger("maxScore", 0);
     }
@@ -128,6 +131,7 @@ public class Klooni extends Game {
         prefs.putInteger("maxTimeScore", maxTimeScore).flush();
     }
 
+    // Settings related
     public static boolean soundsEnabled() {
         return !prefs.getBoolean("muteSound", false);
     }
@@ -148,6 +152,7 @@ public class Klooni extends Game {
         return result;
     }
 
+    // Themes related
     public static boolean isThemeBought(Theme theme) {
         if (theme.getPrice() == 0)
             return true;
@@ -163,6 +168,23 @@ public class Klooni extends Game {
     public static void updateTheme(Theme newTheme) {
         prefs.putString("themeName", newTheme.getName()).flush();
         theme.update(newTheme.getName());
+    }
+
+    // Money related
+    public static void addMoney(int score) {
+        setMoney(getRealMoney() + score * SCORE_TO_MONEY);
+    }
+
+    private static void setMoney(float money) {
+        prefs.putFloat("money", money).flush();
+    }
+
+    public static int getMoney() {
+        return (int)getRealMoney();
+    }
+
+    private static float getRealMoney() {
+        return prefs.getFloat("money");
     }
 
     //endregion

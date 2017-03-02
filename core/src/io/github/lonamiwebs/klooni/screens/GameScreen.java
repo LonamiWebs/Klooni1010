@@ -47,6 +47,12 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     private boolean gameOverDone;
 
+    // The last score that was saved when adding the money.
+    // We use this so we don't add the same old score to the money twice,
+    // but rather subtract it from the current score and then update it
+    // with the current score to get the "increase" of money score.
+    private int savedMoneyScore;
+
     //endregion
 
     //region Static members
@@ -144,6 +150,13 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     // Save the state, the user might leave the game in any of the following 2 methods
     private void showPauseMenu() {
+        // Calculate new money since the previous saving
+        int nowScore = scorer.getCurrentScore();
+        int newMoney = nowScore - savedMoneyScore;
+        savedMoneyScore = nowScore;
+        Klooni.addMoney(newMoney);
+
+        // Show the pause menu
         pauseMenu.show(false);
         save();
     }
@@ -293,6 +306,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         if (handle.exists()) {
             try {
                 BinSerializer.deserialize(this, handle.read());
+                // No cheating! We need to load the previous money
+                // or it would seem like we earned it on this game
+                savedMoneyScore = scorer.getCurrentScore();
+
                 // After it's been loaded, delete the save file
                 deleteSave();
                 return true;

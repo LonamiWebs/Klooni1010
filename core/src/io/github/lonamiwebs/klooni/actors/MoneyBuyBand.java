@@ -76,7 +76,7 @@ public class MoneyBuyBand extends Table {
     //region Private methods
 
     private void showCurrentMoney() {
-        setText("money: 0");
+        setText("money: " + Klooni.getMoney());
     }
 
     // Set the text to which the shown text will interpolate.
@@ -138,8 +138,7 @@ public class MoneyBuyBand extends Table {
     // Asks the user to buy the given theme, or shows
     // that they don't have enough money to buy it
     public void askBuy(final Theme toBuy) {
-        int moneyIHaz = 10; // TODO use a real value
-        if (toBuy.getPrice() > moneyIHaz) {
+        if (toBuy.getPrice() > Klooni.getMoney()) {
             setTempText("cannot buy!");
             confirmButton.setVisible(false);
             cancelButton.setVisible(false);
