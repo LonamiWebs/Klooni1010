@@ -23,6 +23,11 @@ public class MoneyBuyBand extends Table {
     private String infoText;
     private boolean showingTemp;
 
+    // The theme card that is going to be bought next. We can't
+    // only save the Theme because we need to tell the ThemeCard
+    // that it was bought so it can reflect the new theme status.
+    private ThemeCard toBuy;
+
     // Used to interpolate between strings
     private StringBuilder shownText;
 
@@ -52,6 +57,15 @@ public class MoneyBuyBand extends Table {
         add(infoLabel).expandX().left().padLeft(20);
 
         confirmButton = new SoftButton(0, "ok_texture");
+        confirmButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (toBuy != null)
+                    toBuy.performBuy();
+                showCurrentMoney();
+                hideBuyButtons();
+            }
+        });
         add(confirmButton).pad(8, 0, 8, 4);
         confirmButton.setVisible(false);
 
@@ -60,8 +74,7 @@ public class MoneyBuyBand extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 showCurrentMoney();
-                confirmButton.setVisible(false);
-                cancelButton.setVisible(false);
+                hideBuyButtons();
             }
         });
         add(cancelButton).pad(8, 4, 8, 8);
@@ -77,6 +90,12 @@ public class MoneyBuyBand extends Table {
 
     private void showCurrentMoney() {
         setText("money: " + Klooni.getMoney());
+    }
+
+    private void hideBuyButtons() {
+        confirmButton.setVisible(false);
+        cancelButton.setVisible(false);
+        toBuy = null;
     }
 
     // Set the text to which the shown text will interpolate.
@@ -137,13 +156,14 @@ public class MoneyBuyBand extends Table {
 
     // Asks the user to buy the given theme, or shows
     // that they don't have enough money to buy it
-    public void askBuy(final Theme toBuy) {
-        if (toBuy.getPrice() > Klooni.getMoney()) {
+    public void askBuy(final ThemeCard toBuy) {
+        if (toBuy.theme.getPrice() > Klooni.getMoney()) {
             setTempText("cannot buy!");
             confirmButton.setVisible(false);
             cancelButton.setVisible(false);
         }
         else {
+            this.toBuy = toBuy;
             setText("confirm?");
             confirmButton.setVisible(true);
             cancelButton.setVisible(true);

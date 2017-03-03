@@ -128,9 +128,9 @@ class CustomizeScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     if (Klooni.isThemeBought(card.theme))
-                        Klooni.updateTheme(card.theme);
+                        card.use();
                     else
-                        buyBand.askBuy(card.theme);
+                        buyBand.askBuy(card);
 
                     for (Actor a : themesGroup.getChildren()) {
                         ThemeCard c = (ThemeCard)a;

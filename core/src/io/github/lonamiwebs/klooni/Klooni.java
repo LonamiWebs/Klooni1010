@@ -165,13 +165,31 @@ public class Klooni extends Game {
         return false;
     }
 
+    public static boolean buyTheme(Theme theme) {
+        final float money = getRealMoney();
+        if (theme.getPrice() > money)
+            return false;
+
+        setMoney(money - theme.getPrice());
+
+        String bought = prefs.getString("boughtThemes", "");
+        if (bought.equals(""))
+            bought = theme.getName();
+        else
+            bought += ":" + theme.getName();
+
+        prefs.putString("boughtThemes", bought);
+
+        return true;
+    }
+
     public static void updateTheme(Theme newTheme) {
         prefs.putString("themeName", newTheme.getName()).flush();
         theme.update(newTheme.getName());
     }
 
     // Money related
-    public static void addMoney(int score) {
+    public static void addMoneyFromScore(int score) {
         setMoney(getRealMoney() + score * SCORE_TO_MONEY);
     }
 

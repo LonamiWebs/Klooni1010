@@ -101,6 +101,20 @@ public class ThemeCard extends Actor {
             priceLabel.setText("buy for "+theme.getPrice());
     }
 
+    public void use() {
+        Klooni.updateTheme(theme);
+        usedThemeUpdated();
+    }
+
+    void performBuy() {
+        Klooni.buyTheme(theme);
+        use();
+    }
+
+    //endregion
+
+    //region Private methods
+
     // Used to determine the best foreground color (black or white) given a background color
     // Formula took from http://alienryderflex.com/hsp.html
     private static boolean shouldUseWhite(Color color) {

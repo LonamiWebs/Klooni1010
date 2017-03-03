@@ -152,9 +152,9 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     private void showPauseMenu() {
         // Calculate new money since the previous saving
         int nowScore = scorer.getCurrentScore();
-        int newMoney = nowScore - savedMoneyScore;
+        int newMoneyScore = nowScore - savedMoneyScore;
         savedMoneyScore = nowScore;
-        Klooni.addMoney(newMoney);
+        Klooni.addMoneyFromScore(newMoneyScore);
 
         // Show the pause menu
         pauseMenu.show(false);
