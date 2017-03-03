@@ -1,0 +1,19 @@
+There are currently two ways to create a new theme for Klooni:
+
+
+The easy way
+============
+1. Copy the ``template.svg`` and paste it under this directory.
+2. Name the copied file the way you wish to call the theme (e.g. `mytheme.svg`).
+3. Modify the file with a .svg editor, preferrably Inkscape.
+4. When you're done, run ``python3 generate_theme.py`` and follow the wizard.
+5. Done!
+
+
+The "hard" way
+==============
+1. Go into ``Klooni/android/assets/themes``.
+2. Copy any theme file.
+3. Modify the hexadecimal values of the colors with a text editor.
+4. Remember to add your new theme filename to the ``theme.list`` file.
+5. Done!

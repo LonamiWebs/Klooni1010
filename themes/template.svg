@@ -11,23 +11,23 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="800"
    height="700"
-   viewBox="0 0 283.46457 0"
+   viewBox="0 0 800.00001 700.00001"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="theme.svg">
+   sodipodi:docname="template.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#141414"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="238.62298"
-     inkscape:cy="60.48849"
+     inkscape:cx="327.2357"
+     inkscape:cy="279.98635"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -36,8 +36,7 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     units="px"
-     showguides="false" />
+     units="px" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -46,23 +45,17 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-552.3622)">
-    <rect
-       style="opacity:1;fill:#292929;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4212"
-       width="1066.7211"
-       height="1224.2557"
-       x="-133.34013"
-       y="163.12041" />
+     transform="translate(0,-352.36216)">
     <g
+       transform="translate(0,-199.99998)"
        id="export_empty_cell"
        style="fill:#e3e3e3;fill-opacity:1">
       <rect
@@ -74,6 +67,7 @@
          y="552.36218" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_0"
        style="fill:#7988bf;fill-opacity:1">
       <rect
@@ -85,6 +79,7 @@
          y="570.0614" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_1"
        style="fill:#98dc53;fill-opacity:1">
       <rect
@@ -96,6 +91,7 @@
          style="opacity:1;fill:#98dc53;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_2"
        style="fill:#4cd4ae;fill-opacity:1">
       <rect
@@ -107,6 +103,7 @@
          y="587.41681" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_7"
        style="fill:#57cb84;fill-opacity:1">
       <path
@@ -116,6 +113,7 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_8"
        style="fill:#5abee2;fill-opacity:1">
       <path
@@ -125,6 +123,7 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_3"
        style="fill:#fec63d;fill-opacity:1">
       <rect
@@ -136,6 +135,7 @@
          y="937.41663" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_4"
        style="fill:#ec9548;fill-opacity:1">
       <rect
@@ -147,6 +147,7 @@
          y="1027.0861" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_5"
        style="fill:#e66a82;fill-opacity:1">
       <rect
@@ -158,6 +159,7 @@
          y="917.16876" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_cell_6"
        style="fill:#da6554;fill-opacity:1">
       <rect
@@ -168,37 +170,10 @@
          x="500.6897"
          y="833.28448" />
     </g>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-10.304577"
-       y="289.07431"
-       id="text4167"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="-10.304577"
-         y="289.07431"
-         id="tspan4175">To easily create a custom theme, copy</tspan><tspan
-         sodipodi:role="line"
-         x="-10.304577"
-         y="339.07431"
-         id="tspan4183">this file and rename it as &quot;in.svg&quot;. Place</tspan><tspan
-         sodipodi:role="line"
-         x="-10.304577"
-         y="389.07431"
-         id="tspan4185">it under the same folder, and make your</tspan><tspan
-         sodipodi:role="line"
-         x="-10.304577"
-         y="439.07431"
-         id="tspan4187">changes on the new file. Then simply run</tspan><tspan
-         sodipodi:role="line"
-         x="-10.304577"
-         y="489.07431"
-         id="tspan4189">&quot;generate_theme.py&quot; to create &quot;out.theme&quot;</tspan></text>
     <g
        id="export_background"
        style="fill:#ffffff;fill-opacity:1"
-       transform="translate(3.0304577,0)">
+       transform="translate(3.030458,-199.99998)">
       <rect
          y="552.36218"
          x="0"
@@ -208,6 +183,7 @@
          style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:7.78836012;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_button_0"
        style="fill:#00f230;fill-opacity:1">
       <rect
@@ -219,6 +195,7 @@
          y="798.76837" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_button_1"
        style="fill:#f2cc00;fill-opacity:1">
       <rect
@@ -230,6 +207,7 @@
          style="opacity:1;fill:#f2cc00;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_button_2"
        style="fill:#2182ef;fill-opacity:1">
       <rect
@@ -241,6 +219,7 @@
          y="921.62555" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_button_3"
        style="fill:#ce4444;fill-opacity:1">
       <rect
@@ -252,6 +231,7 @@
          style="opacity:1;fill:#ce4444;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_current_score"
        style="fill:#ffcc00;fill-opacity:1">
       <path
@@ -261,6 +241,7 @@
          style="opacity:1;fill:#ffcc00;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_high_score"
        style="fill:#65d681;fill-opacity:1">
       <path
@@ -270,6 +251,7 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_band"
        style="fill:#87ceeb;fill-opacity:1">
       <rect
@@ -282,6 +264,7 @@
          style="opacity:1;fill:#87ceeb;fill-opacity:1;stroke:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
+       transform="translate(0,-199.99998)"
        id="export_bonus"
        style="fill:#4d4d4d;fill-opacity:1">
       <path
