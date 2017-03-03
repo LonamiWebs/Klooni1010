@@ -34,6 +34,10 @@ template = '''{{
 }}
 '''
 
+out_dir = '../android/assets/themes/'
+theme_list = os.path.join(out_dir, 'theme.list')
+
+
 def price_ok(price):
     try:
         price = int(price)
@@ -42,44 +46,73 @@ def price_ok(price):
     except:
         print('Invalid price detected. Using 0.')
         return False
-    
+
     return True
 
 
 def main():
-    if not os.path.isfile('in.svg'):
-        print('Error: No "in.svg" found. Aborting.')
+    # Look for all the files which are not called 'template.svg'
+    files = [f for f in os.listdir()
+                if f.endswith('.svg') and f != 'template.svg']
+
+    if not files:
+        print('No .svg files were found. '
+              'Please see CREATING-THEMES.txt for more information')
         return
 
-    print('Reading "in.svg"…')
-    with open('in.svg', 'r', encoding='utf-8') as f:
+    # Work on all the files to generate the corresponding themes
+    for filename in files:
+        work(filename)
+
+    print('Updating theme.list…')
+    themes = []
+    with open(theme_list, 'r', encoding='utf-8') as f:
+        themes = [line.strip() for line in f]
+
+    added_names = [os.path.splitext(f)[0] for f in files]
+    added_count = 0
+    for name in added_names:
+        if name not in themes:
+            themes.append(name)
+            added_count += 1
+
+    with open(theme_list, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(themes))
+        f.write('\n')
+
+    print('Added {} new theme(s), updated {}.'.format(
+            added_count, len(files) - added_count))
+
+
+def work(filename):
+    name = os.path.splitext(filename)[0]
+    with open(filename, 'r', encoding='utf-8') as f:
         xml = f.read().replace('\n', '')
-    
-    print('Finding used colors…')
+
     replacements = {}
-    
     for m in color_re.finditer(xml):
         # Append 'ff' because the themes require the alpha to be set
         replacements[m.group(1)] = m.group(2)+'ff'
-    
-    print('Almost done, we only need some more information.')
-    replacements['name'] = input('Enter theme name: ')
+
+    replacements['name'] = input('Enter theme name for "{}": '.format(name))
     replacements['price'] = input('Enter theme price: ')
     replacements['cell_tex'] = \
         input('Enter cell texture (default "basic.png"): ')
-    
+
     if not replacements['price'] or not price_ok(replacements['price']):
         print('Invalid price detected. Using 0.')
         replacements['price'] = 0
-    
+
     if not replacements['cell_tex']:
         print('No texture specified. Using default "basic.png" texture.')
         replacements['cell_tex'] = 'basic.png'
-    
-    print('Generating theme…')
-    with open('out.theme', 'w', encoding='utf-8') as f:
+
+    output = os.path.join(out_dir, name+'.theme')
+
+    print('Saving theme to {}…'.format(output))
+    with open(output, 'w', encoding='utf-8') as f:
         f.write(template.format_map(replacements))
-    
+
     print('Done!')
 
 
