@@ -72,8 +72,9 @@ public class Band extends Actor {
     }
 
     // Once game over is set on the menu, it cannot be reverted
-    public void setGameOver() {
-        infoLabel.setText("no moves left");
+    public void setMessage(final String message) {
+        if (!message.equals(""))
+            infoLabel.setText(message);
     }
 
     //endregion

@@ -128,7 +128,7 @@ class PauseMenuStage extends Stage {
     //region Package local methods
 
     // Shows the pause menu, indicating whether it's game over or not
-    void show(final boolean gameOver) {
+    void show() {
         scorer.pause();
         scorer.saveScore();
 
@@ -138,11 +138,13 @@ class PauseMenuStage extends Stage {
         shown = true;
         hiding = false;
 
-        if (gameOver)
-            band.setGameOver();
-
         addAction(Actions.moveTo(0, Gdx.graphics.getHeight()));
         addAction(Actions.moveTo(0, 0, 0.75f, Interpolation.swingOut));
+    }
+
+    void showGameOver(final String gameOverReason) {
+        band.setMessage(gameOverReason);
+        show();
     }
 
     boolean isShown() {

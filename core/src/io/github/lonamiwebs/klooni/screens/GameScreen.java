@@ -121,12 +121,12 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         return true;
     }
 
-    private void doGameOver() {
+    private void doGameOver(String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
 
             holder.enabled = false;
-            pauseMenu.show(true);
+            pauseMenu.showGameOver(gameOverReason);
             if (Klooni.soundsEnabled())
                 gameOverSound.play();
 
@@ -157,7 +157,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         Klooni.addMoneyFromScore(newMoneyScore);
 
         // Show the pause menu
-        pauseMenu.show(false);
+        pauseMenu.show();
         save();
     }
 
@@ -172,7 +172,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (scorer.isGameOver() && !pauseMenu.isShown()) {
-            doGameOver();
+            doGameOver(scorer.gameOverReason());
         }
 
         batch.begin();
@@ -227,7 +227,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
-                doGameOver();
+                doGameOver("no moves left");
             }
         }
         return true;

@@ -97,6 +97,9 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     }
 
     @Override
+    public String gameOverReason() { return "time is up"; }
+
+    @Override
     public void saveScore() {
         if (isNewRecord()) {
             Klooni.setMaxTimeScore(getCurrentScore());

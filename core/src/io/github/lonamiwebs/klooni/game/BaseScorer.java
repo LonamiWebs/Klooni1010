@@ -92,6 +92,8 @@ public abstract class BaseScorer implements BinSerializable {
     abstract public boolean isGameOver();
     abstract protected boolean isNewRecord();
 
+    public String gameOverReason() { return ""; }
+
     abstract public void saveScore();
 
     public void draw(SpriteBatch batch) {
