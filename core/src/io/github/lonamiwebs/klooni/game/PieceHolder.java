@@ -223,7 +223,7 @@ public class PieceHolder implements BinSerializable {
                     Gdx.input.getX(),
                     Gdx.graphics.getHeight() - Gdx.input.getY()); // Y axis is inverted
 
-            if (Klooni.onDesktop) {
+            if (Klooni.onDesktop) { //FIXME(oliver): This is a bad assumption to make. There are desktops with touch input and non-desktops with mouse input.
                 // Center the piece to the mouse
                 mouse.sub(piece.getRectangle().width * 0.5f, piece.getRectangle().height * 0.5f);
             } else {

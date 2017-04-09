@@ -41,7 +41,7 @@ public class Klooni extends Game {
         skin.add("button_up", new NinePatch(new Texture(
                 Gdx.files.internal("ui/button_up.png")), 28, 28, 28, 28));
 
-        skin.add("button_down", new NinePatch(new Texture(
+        skin.add("button_dscalableown", new NinePatch(new Texture(
                 Gdx.files.internal("ui/button_down.png")), 28, 28, 28, 28));
 
         skin.add("play_texture", new Texture(Gdx.files.internal("ui/play.png")));
@@ -82,12 +82,7 @@ public class Klooni extends Game {
     //endregion
 
     //region Screen
-
-    @Override
-    public void render() {
-        super.render();
-    }
-
+    
     // TransitionScreen will also dispose by default the previous screen
     public void transitionTo(Screen screen) {
         transitionTo(screen, true);
