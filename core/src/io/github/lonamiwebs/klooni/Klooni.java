@@ -25,6 +25,9 @@ public class Klooni extends Game {
 
     private final static float SCORE_TO_MONEY = 1f / 100f;
 
+    public static final int GAME_HEIGHT = 680;
+    public static final int GAME_WIDTH = 408;
+
     //endregion
 
     //region Creation
@@ -34,38 +37,8 @@ public class Klooni extends Game {
         onDesktop = Gdx.app.getType().equals(Application.ApplicationType.Desktop);
         prefs = Gdx.app.getPreferences("io.github.lonamiwebs.klooni.game");
 
-        // TODO Better way to have this skin somewhere
-        // Gotta create that darn .json…!
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
-        skin.add("button_up", new NinePatch(new Texture(
-                Gdx.files.internal("ui/button_up.png")), 28, 28, 28, 28));
-
-        skin.add("button_dscalableown", new NinePatch(new Texture(
-                Gdx.files.internal("ui/button_down.png")), 28, 28, 28, 28));
-
-        skin.add("play_texture", new Texture(Gdx.files.internal("ui/play.png")));
-        skin.add("play_saved_texture", new Texture(Gdx.files.internal("ui/play_saved.png")));
-        skin.add("star_texture", new Texture(Gdx.files.internal("ui/star.png")));
-        skin.add("stopwatch_texture", new Texture(Gdx.files.internal("ui/stopwatch.png")));
-        skin.add("palette_texture", new Texture(Gdx.files.internal("ui/palette.png")));
-        skin.add("home_texture", new Texture(Gdx.files.internal("ui/home.png")));
-        skin.add("replay_texture", new Texture(Gdx.files.internal("ui/replay.png")));
-        skin.add("share_texture", new Texture(Gdx.files.internal("ui/share.png")));
-        skin.add("sound_on_texture", new Texture(Gdx.files.internal("ui/sound_on.png")));
-        skin.add("sound_off_texture", new Texture(Gdx.files.internal("ui/sound_off.png")));
-        skin.add("snap_on_texture", new Texture(Gdx.files.internal("ui/snap_on.png")));
-        skin.add("snap_off_texture", new Texture(Gdx.files.internal("ui/snap_off.png")));
-        skin.add("issues_texture", new Texture(Gdx.files.internal("ui/issues.png")));
-        skin.add("credits_texture", new Texture(Gdx.files.internal("ui/credits.png")));
-        skin.add("web_texture", new Texture(Gdx.files.internal("ui/web.png")));
-        skin.add("back_texture", new Texture(Gdx.files.internal("ui/back.png")));
-        skin.add("ok_texture", new Texture(Gdx.files.internal("ui/ok.png")));
-        skin.add("cancel_texture", new Texture(Gdx.files.internal("ui/cancel.png")));
-
-        skin.add("font", new BitmapFont(Gdx.files.internal("font/geosans-light.fnt")));
-        skin.add("font_small", new BitmapFont(Gdx.files.internal("font/geosans-light32.fnt")));
-        skin.add("font_bonus", new BitmapFont(Gdx.files.internal("font/the-next-font.fnt")));
+        // Load the best match for the skin (depending on the device screen dimensions)
+        skin = SkinLoader.loadSkin();
 
         // Use only one instance for the theme, so anyone using it uses the most up-to-date
         Theme.skin = skin; // Not the best idea

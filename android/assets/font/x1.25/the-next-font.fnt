@@ -1,0 +1,18 @@
+info face="TheNextFont" size=80 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=1,1,1,1 spacing=-2,-2
+common lineHeight=82 base=61 scaleW=256 scaleH=128 pages=1 packed=0
+page id=0 file="the-next-font.png"
+chars count=13
+char id=0       x=0    y=0    width=0    height=0    xoffset=-1   yoffset=59   xadvance=15   page=0    chnl=0 
+char id=32      x=0    y=0    width=0    height=0    xoffset=-1   yoffset=59   xadvance=15   page=0    chnl=0 
+char id=43      x=215  y=0    width=36   height=36   xoffset=2    yoffset=13   xadvance=40   page=0    chnl=0 
+char id=48      x=44   y=0    width=61   height=61   xoffset=2    yoffset=0    xadvance=65   page=0    chnl=0 
+char id=49      x=105  y=0    width=25   height=61   xoffset=2    yoffset=0    xadvance=28   page=0    chnl=0 
+char id=50      x=130  y=0    width=42   height=61   xoffset=2    yoffset=0    xadvance=46   page=0    chnl=0 
+char id=51      x=172  y=0    width=43   height=61   xoffset=2    yoffset=0    xadvance=46   page=0    chnl=0 
+char id=52      x=0    y=62   width=42   height=61   xoffset=2    yoffset=0    xadvance=45   page=0    chnl=0 
+char id=53      x=42   y=62   width=44   height=61   xoffset=2    yoffset=0    xadvance=47   page=0    chnl=0 
+char id=54      x=86   y=62   width=44   height=61   xoffset=2    yoffset=0    xadvance=47   page=0    chnl=0 
+char id=55      x=130  y=62   width=41   height=61   xoffset=2    yoffset=0    xadvance=45   page=0    chnl=0 
+char id=56      x=0    y=0    width=44   height=62   xoffset=2    yoffset=-1   xadvance=47   page=0    chnl=0 
+char id=57      x=171  y=62   width=44   height=61   xoffset=2    yoffset=0    xadvance=47   page=0    chnl=0 
+kernings count=0
