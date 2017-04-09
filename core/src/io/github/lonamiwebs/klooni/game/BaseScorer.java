@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.SkinLoader;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 public abstract class BaseScorer implements BinSerializable {
@@ -36,7 +37,7 @@ public abstract class BaseScorer implements BinSerializable {
 
     // The board size is required when calculating the score
     BaseScorer(final Klooni game, GameLayout layout, int highScore) {
-        cupTexture = new Texture(Gdx.files.internal("ui/cup.png"));
+        cupTexture = SkinLoader.loadPng("cup");
         cupColor = Klooni.theme.currentScore.cpy();
         cupArea = new Rectangle();
 

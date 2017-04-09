@@ -9,7 +9,7 @@ public class HtmlLauncher extends GwtApplication {
 
     @Override
     public GwtApplicationConfiguration getConfig () {
-        return new GwtApplicationConfiguration(408, 680);
+        return new GwtApplicationConfiguration(Klooni.GAME_WIDTH, Klooni.GAME_HEIGHT);
     }
 
     @Override
