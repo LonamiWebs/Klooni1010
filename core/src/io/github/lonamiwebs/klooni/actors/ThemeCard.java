@@ -29,6 +29,12 @@ public class ThemeCard extends Actor {
 
     public float cellSize;
 
+    private final static int colorsUsed[][] = {
+            {0, 7, 7},
+            {8, 7, 3},
+            {8, 8, 3}
+    };
+
     //endregion
 
     //region Constructor
@@ -64,21 +70,14 @@ public class ThemeCard extends Actor {
 
         batch.setColor(theme.background);
         batch.draw(background, x, y, getWidth(), getHeight());
-        // Do not draw on the borders (0,0 offset to add some padding), colors used:
-        // 0 7 7
-        // 8 7 3
-        // 8 8 3
-        Cell.draw(theme.getCellColor(0), batch, x + cellSize, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 3, y + cellSize, cellSize);
 
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 3, y + cellSize * 2, cellSize);
-
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 2, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(3), batch, x + cellSize * 3, y + cellSize * 3, cellSize);
+        // Avoid drawing on the borders by adding +1 cell padding
+        for (int i = 0; i < colorsUsed.length; ++i) {
+            for (int j = 0; j < colorsUsed[i].length; ++j) {
+                Cell.draw(theme.cellTexture, theme.getCellColor(colorsUsed[i][j]), batch,
+                        x + cellSize * (j + 1), y + cellSize * (i + 1), cellSize);
+            }
+        }
 
         nameLabel.setBounds(x + nameBounds.x, y + nameBounds.y, nameBounds.width, nameBounds.height);
         nameLabel.draw(batch, parentAlpha);

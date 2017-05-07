@@ -2,6 +2,7 @@ package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -105,11 +106,18 @@ public class Cell implements BinSerializable {
 
     //region Static methods
 
-    // TODO Use skin atlas
-    public static void draw(Color color, Batch batch,
-                            float x, float y, float size) {
+    // Default texture (don't call overloaded version to avoid overhead)
+    public static void draw(final Color color, final Batch batch,
+                            final float x, final float y, final float size) {
         batch.setColor(color);
-        Klooni.theme.cellPatch.draw(batch, x, y, size, size);
+        batch.draw(Klooni.theme.cellTexture, x, y, size, size);
+    }
+
+    // Custom texture
+    public static void draw(final Texture texture, final Color color, final Batch batch,
+                            final float x, final float y, final float size) {
+        batch.setColor(color);
+        batch.draw(texture, x, y, size, size);
     }
 
     //endregion

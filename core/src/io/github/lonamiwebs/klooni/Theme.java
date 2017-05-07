@@ -38,7 +38,7 @@ public class Theme {
 
     public static Skin skin;
 
-    public NinePatch cellPatch;
+    public Texture cellTexture;
 
     // Save the button styles so the changes here get reflected
     private ImageButton.ImageButtonStyle[] buttonStyles;
@@ -153,8 +153,7 @@ public class Theme {
         }
 
         String cellTextureFile = json.getString("cell_texture");
-        cellPatch = new NinePatch(new Texture(
-                Gdx.files.internal("ui/cells/"+cellTextureFile)), 4, 4, 4, 4);
+        cellTexture = new Texture(Gdx.files.internal("ui/cells/"+cellTextureFile));
 
         return this;
     }
