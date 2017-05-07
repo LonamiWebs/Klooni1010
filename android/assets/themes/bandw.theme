@@ -3,6 +3,7 @@
     "price": 20,
     "colors": {
         "background": "0a0a0aff",
+        "foreground": "f0f0f0ff",
         "buttons": [
             "4d4d4dff",
             "4d4d4dff",
@@ -18,7 +19,8 @@
         "current_score": "b3b3b3ff",
         "high_score": "f9f9f9ff",
         "bonus": "f9f9f9ff",
-        "band": "4d4d4dff"
+        "band": "4d4d4dff",
+        "text": "f0f0f0ff"
     },
     "cell_texture": "basic.png"
 }

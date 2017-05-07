@@ -16,6 +16,7 @@ template = '''{{
     "price": {price},
     "colors": {{
         "background": "{background}",
+        "foreground": "{foreground}",
         "buttons": [
             "{button_0}",
             "{button_1}",
@@ -31,7 +32,8 @@ template = '''{{
         "current_score": "{current_score}",
         "high_score": "{high_score}",
         "bonus": "{bonus}",
-        "band": "{band}"
+        "band": "{band}",
+        "text": "{text}"
     }},
     "cell_texture": "{cell_tex}"
 }}

@@ -30,12 +30,6 @@ public class ThemeCard extends Actor {
 
     //endregion
 
-    //region Static members
-
-    private final static double BRIGHTNESS_CUTOFF = 0.5;
-
-    //endregion
-
     //region Constructor
 
     public ThemeCard(final Klooni game, final GameLayout layout, final Theme theme) {
@@ -48,9 +42,8 @@ public class ThemeCard extends Actor {
         priceLabel = new Label("", labelStyle);
         nameLabel = new Label(theme.getDisplay(), labelStyle);
 
-        Color labelColor = shouldUseWhite(theme.background) ? Color.WHITE : Color.BLACK;
-        priceLabel.setColor(labelColor);
-        nameLabel.setColor(labelColor);
+        priceLabel.setColor(theme.textColor);
+        nameLabel.setColor(theme.textColor);
 
         priceBounds = new Rectangle();
         nameBounds = new Rectangle();
@@ -109,21 +102,6 @@ public class ThemeCard extends Actor {
     void performBuy() {
         Klooni.buyTheme(theme);
         use();
-    }
-
-    //endregion
-
-    //region Private methods
-
-    // Used to determine the best foreground color (black or white) given a background color
-    // Formula took from http://alienryderflex.com/hsp.html
-    private static boolean shouldUseWhite(Color color) {
-        double brightness = Math.sqrt(
-                color.r * color.r * .299 +
-                        color.g * color.g * .587 +
-                        color.b * color.b * .114);
-
-        return brightness < BRIGHTNESS_CUTOFF;
     }
 
     //endregion

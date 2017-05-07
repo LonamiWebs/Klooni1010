@@ -182,6 +182,7 @@ public class MoneyBuyBand extends Table {
             }
         }
         setColor(Klooni.theme.bandColor);
+        infoLabel.setColor(Klooni.theme.textColor);
         super.draw(batch, parentAlpha);
     }
 

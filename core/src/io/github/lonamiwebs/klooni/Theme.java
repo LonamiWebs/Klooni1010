@@ -24,12 +24,14 @@ public class Theme {
     private int price;
 
     public Color background;
+    public Color foreground;
     public Color emptyCell;
 
     public Color currentScore;
     public Color highScore;
     public Color bonus;
     public Color bandColor;
+    public Color textColor;
 
     private Color[] cells;
     private Color[] buttons;
@@ -84,6 +86,20 @@ public class Theme {
         return new Theme().update(handle);
     }
 
+    // Used to determine the best foreground color (black or white) given a background color
+    // Formula took from http://alienryderflex.com/hsp.html
+    // Not used yet, but may be useful
+    private final static double BRIGHTNESS_CUTOFF = 0.5;
+
+    public static boolean shouldUseWhite(Color color) {
+        double brightness = Math.sqrt(
+                color.r * color.r * .299 +
+                        color.g * color.g * .587 +
+                        color.b * color.b * .114);
+
+        return brightness < BRIGHTNESS_CUTOFF;
+    }
+
     //endregion
 
     //region Theme updating
@@ -105,8 +121,9 @@ public class Theme {
         price = json.getInt("price");
 
         JsonValue colors = json.get("colors");
-        background = new Color( // Java won't allow unsigned integers, we need to use Long
-                (int)Long.parseLong(colors.getString("background"), 16));
+        // Java won't allow unsigned integers, we need to use Long
+        background = new Color((int)Long.parseLong(colors.getString("background"), 16));
+        foreground = new Color((int)Long.parseLong(colors.getString("foreground"), 16));
 
         JsonValue buttonColors = colors.get("buttons");
         buttons = new Color[buttonColors.size];
@@ -125,6 +142,7 @@ public class Theme {
         highScore = new Color((int)Long.parseLong(colors.getString("high_score"), 16));
         bonus = new Color((int)Long.parseLong(colors.getString("bonus"), 16));
         bandColor = new Color((int)Long.parseLong(colors.getString("band"), 16));
+        textColor = new Color((int)Long.parseLong(colors.getString("text"), 16));
 
         emptyCell = new Color((int)Long.parseLong(colors.getString("empty_cell"), 16));
 
