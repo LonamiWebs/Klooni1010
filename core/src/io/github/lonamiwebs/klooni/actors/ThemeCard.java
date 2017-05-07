@@ -1,5 +1,6 @@
 package io.github.lonamiwebs.klooni.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -42,8 +43,9 @@ public class ThemeCard extends Actor {
         priceLabel = new Label("", labelStyle);
         nameLabel = new Label(theme.getDisplay(), labelStyle);
 
-        priceLabel.setColor(theme.textColor);
-        nameLabel.setColor(theme.textColor);
+        Color labelColor = Theme.shouldUseWhite(theme.background) ? Color.WHITE : Color.BLACK;
+        priceLabel.setColor(labelColor);
+        nameLabel.setColor(labelColor);
 
         priceBounds = new Rectangle();
         nameBounds = new Rectangle();
