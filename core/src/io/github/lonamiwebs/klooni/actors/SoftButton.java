@@ -19,16 +19,20 @@ public class SoftButton extends ImageButton {
 
     //region Constructor
 
-    public SoftButton(int styleIndex, String imageName) {
+    public SoftButton(final int styleIndex, final String imageName) {
         super(Klooni.theme.getStyle(styleIndex));
 
         this.styleIndex = styleIndex;
-        image = Theme.skin.getDrawable(imageName);
+        updateImage(imageName);
     }
 
     //endregion
 
     //region Public methods
+
+    public void updateImage(final String imageName) {
+        image = Theme.skin.getDrawable(imageName);
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

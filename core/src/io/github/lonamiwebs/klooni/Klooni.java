@@ -21,6 +21,8 @@ public class Klooni extends Game {
     public static Theme theme;
     public Skin skin;
 
+    public ShareChallenge shareChallenge;
+
     public static boolean onDesktop;
 
     private final static float SCORE_TO_MONEY = 1f / 100f;
@@ -31,6 +33,12 @@ public class Klooni extends Game {
     //endregion
 
     //region Creation
+
+    // TODO Possibly implement a 'ShareChallenge'
+    //      for other platforms instead passing null
+    public Klooni(final ShareChallenge shareChallenge) {
+        this.shareChallenge = shareChallenge;
+    }
 
     @Override
     public void create() {
