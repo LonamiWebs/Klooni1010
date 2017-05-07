@@ -153,7 +153,7 @@ public class Theme {
         }
 
         String cellTextureFile = json.getString("cell_texture");
-        cellTexture = new Texture(Gdx.files.internal("ui/cells/"+cellTextureFile));
+        cellTexture = SkinLoader.loadPng("cells/"+cellTextureFile);
 
         return this;
     }

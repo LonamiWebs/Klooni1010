@@ -37,7 +37,7 @@ public abstract class BaseScorer implements BinSerializable {
 
     // The board size is required when calculating the score
     BaseScorer(final Klooni game, GameLayout layout, int highScore) {
-        cupTexture = SkinLoader.loadPng("cup");
+        cupTexture = SkinLoader.loadPng("cup.png");
         cupColor = Klooni.theme.currentScore.cpy();
         cupArea = new Rectangle();
 

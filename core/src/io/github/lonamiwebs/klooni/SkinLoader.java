@@ -59,7 +59,7 @@ public class SkinLoader {
     }
 
     public static Texture loadPng(String name) {
-        final String filename = "ui/x" + bestMultiplier + "/" + name + ".png";
+        final String filename = "ui/x" + bestMultiplier + "/" + name;
         return new Texture(Gdx.files.internal(filename));
     }
 }
