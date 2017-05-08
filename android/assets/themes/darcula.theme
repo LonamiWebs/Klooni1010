@@ -1,0 +1,26 @@
+{
+    "name": "Darcula",
+    "price": 0,
+    "colors": {
+        "background": "282a36ff",
+        "foreground": "f8f8f2ff",
+        "buttons": [
+            "8be9fdff",
+            "ff5555ff",
+            "ff79c6ff",
+            "ffb86cf"
+        ],
+        "empty_cell": "44475aff",
+        "cells": [
+            "f8f8f2ff", "6272a4ff", "8be9fdff",
+            "50fa7bff", "ffb86cff", "ff79c6ff", "bd93f9ff",
+            "ff5555ff", "f1fa8cff"
+        ],
+        "current_score": "8be9fdff",
+        "high_score": "50fa7bff",
+        "bonus": "bd93f9ff",
+        "band": "6272a4ff",
+        "text": "f8f8f2ff"
+    },
+    "cell_texture": "basic.png"
+}
