@@ -36,6 +36,11 @@ ids = [
     'web'
 ]
 
+cells = [
+    'basic',
+    'bubble'
+]
+
 inkscape_default_dpi = 90
 svg = 'buttons.svg'
 root = '../android/assets/ui'
@@ -55,4 +60,10 @@ for multiplier in multipliers:
         # -d to specify the DPI
         run(f'inkscape -z -i{objectid} -j -e{filename} -d{dpi} {svg}',
             shell=True, stdout=DEVNULL)
-
+    
+    folder = os.path.join(folder, 'cells')
+    os.makedirs(folder, exist_ok=True)
+    for cellid in cells:
+        filename = os.path.join(folder, cellid + '.png')
+        run(f'inkscape -z -i{cellid} -j -e{filename} -d{dpi} {svg}',
+            shell=True, stdout=DEVNULL)

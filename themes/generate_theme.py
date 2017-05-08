@@ -5,14 +5,18 @@ import re
 import os
 import subprocess
 
-color_re = \
-    re.compile('<g\s+id="export_(\w+)"\s+style=".*?fill:#([0-9a-f]+)[\S\s]*?')
+group_id_re = \
+    re.compile('<g[\S\s]+?id="export_(\w+)"[\S\s]+?>')
+
+fill_re = \
+    re.compile('fill:#([0-9a-f]+)')
 
 template = '''{{
     "name": "{name}",
     "price": {price},
     "colors": {{
         "background": "{background}",
+        "foreground": "{foreground}",
         "buttons": [
             "{button_0}",
             "{button_1}",
@@ -28,7 +32,8 @@ template = '''{{
         "current_score": "{current_score}",
         "high_score": "{high_score}",
         "bonus": "{bonus}",
-        "band": "{band}"
+        "band": "{band}",
+        "text": "{text}"
     }},
     "cell_texture": "{cell_tex}"
 }}
@@ -90,9 +95,14 @@ def work(filename):
         xml = f.read().replace('\n', '')
 
     replacements = {}
-    for m in color_re.finditer(xml):
+    for m in group_id_re.finditer(xml):
+        f = fill_re.search(m.group(0))
+        if not f:
+            raise ValueError(
+                'Error: The object %s missing the fill attribute' % m.group(1))
+
         # Append 'ff' because the themes require the alpha to be set
-        replacements[m.group(1)] = m.group(2)+'ff'
+        replacements[m.group(1)] = f.group(1) + 'ff'
 
     replacements['name'] = input('Enter theme name for "{}": '.format(name))
     replacements['price'] = input('Enter theme price: ')

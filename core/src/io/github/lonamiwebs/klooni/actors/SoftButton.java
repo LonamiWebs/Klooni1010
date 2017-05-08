@@ -1,5 +1,6 @@
 package io.github.lonamiwebs.klooni.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -19,16 +20,20 @@ public class SoftButton extends ImageButton {
 
     //region Constructor
 
-    public SoftButton(int styleIndex, String imageName) {
+    public SoftButton(final int styleIndex, final String imageName) {
         super(Klooni.theme.getStyle(styleIndex));
 
         this.styleIndex = styleIndex;
-        image = Theme.skin.getDrawable(imageName);
+        updateImage(imageName);
     }
 
     //endregion
 
     //region Public methods
+
+    public void updateImage(final String imageName) {
+        image = Theme.skin.getDrawable(imageName);
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -40,6 +45,7 @@ public class SoftButton extends ImageButton {
         Klooni.theme.updateStyle(style, styleIndex);
         style.imageUp = image;
 
+        getImage().setColor(Klooni.theme.foreground);
         super.draw(batch, parentAlpha);
     }
 

@@ -65,9 +65,11 @@ public class Band extends Actor {
 
         scoreLabel.setBounds(x + scoreBounds.x, y + scoreBounds.y, scoreBounds.width, scoreBounds.height);
         scoreLabel.setText(Integer.toString(scorer.getCurrentScore()));
+        scoreLabel.setColor(Klooni.theme.textColor);
         scoreLabel.draw(batch, parentAlpha);
 
         infoLabel.setBounds(x + infoBounds.x, y + infoBounds.y, infoBounds.width, infoBounds.height);
+        infoLabel.setColor(Klooni.theme.textColor);
         infoLabel.draw(batch, parentAlpha);
     }
 

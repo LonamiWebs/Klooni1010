@@ -1,5 +1,6 @@
 package io.github.lonamiwebs.klooni.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -28,11 +29,11 @@ public class ThemeCard extends Actor {
 
     public float cellSize;
 
-    //endregion
-
-    //region Static members
-
-    private final static double BRIGHTNESS_CUTOFF = 0.5;
+    private final static int colorsUsed[][] = {
+            {0, 7, 7},
+            {8, 7, 3},
+            {8, 8, 3}
+    };
 
     //endregion
 
@@ -48,7 +49,7 @@ public class ThemeCard extends Actor {
         priceLabel = new Label("", labelStyle);
         nameLabel = new Label(theme.getDisplay(), labelStyle);
 
-        Color labelColor = shouldUseWhite(theme.background) ? Color.WHITE : Color.BLACK;
+        Color labelColor = Theme.shouldUseWhite(theme.background) ? Color.WHITE : Color.BLACK;
         priceLabel.setColor(labelColor);
         nameLabel.setColor(labelColor);
 
@@ -69,21 +70,14 @@ public class ThemeCard extends Actor {
 
         batch.setColor(theme.background);
         batch.draw(background, x, y, getWidth(), getHeight());
-        // Do not draw on the borders (0,0 offset to add some padding), colors used:
-        // 0 7 7
-        // 8 7 3
-        // 8 8 3
-        Cell.draw(theme.getCellColor(0), batch, x + cellSize, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 3, y + cellSize, cellSize);
 
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(7), batch, x + cellSize * 2, y + cellSize * 2, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 3, y + cellSize * 2, cellSize);
-
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(8), batch, x + cellSize * 2, y + cellSize * 3, cellSize);
-        Cell.draw(theme.getCellColor(3), batch, x + cellSize * 3, y + cellSize * 3, cellSize);
+        // Avoid drawing on the borders by adding +1 cell padding
+        for (int i = 0; i < colorsUsed.length; ++i) {
+            for (int j = 0; j < colorsUsed[i].length; ++j) {
+                Cell.draw(theme.cellTexture, theme.getCellColor(colorsUsed[i][j]), batch,
+                        x + cellSize * (j + 1), y + cellSize * (i + 1), cellSize);
+            }
+        }
 
         nameLabel.setBounds(x + nameBounds.x, y + nameBounds.y, nameBounds.width, nameBounds.height);
         nameLabel.draw(batch, parentAlpha);
@@ -109,21 +103,6 @@ public class ThemeCard extends Actor {
     void performBuy() {
         Klooni.buyTheme(theme);
         use();
-    }
-
-    //endregion
-
-    //region Private methods
-
-    // Used to determine the best foreground color (black or white) given a background color
-    // Formula took from http://alienryderflex.com/hsp.html
-    private static boolean shouldUseWhite(Color color) {
-        double brightness = Math.sqrt(
-                color.r * color.r * .299 +
-                        color.g * color.g * .587 +
-                        color.b * color.b * .114);
-
-        return brightness < BRIGHTNESS_CUTOFF;
     }
 
     //endregion

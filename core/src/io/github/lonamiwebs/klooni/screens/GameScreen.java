@@ -125,6 +125,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         if (!gameOverDone) {
             gameOverDone = true;
 
+            saveMoney();
             holder.enabled = false;
             pauseMenu.showGameOver(gameOverReason);
             if (Klooni.soundsEnabled())
@@ -150,13 +151,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     // Save the state, the user might leave the game in any of the following 2 methods
     private void showPauseMenu() {
-        // Calculate new money since the previous saving
-        int nowScore = scorer.getCurrentScore();
-        int newMoneyScore = nowScore - savedMoneyScore;
-        savedMoneyScore = nowScore;
-        Klooni.addMoneyFromScore(newMoneyScore);
-
-        // Show the pause menu
+        saveMoney();
         pauseMenu.show();
         save();
     }
@@ -274,6 +269,14 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     //endregion
 
     //region Saving and loading
+
+    private void saveMoney() {
+        // Calculate new money since the previous saving
+        int nowScore = scorer.getCurrentScore();
+        int newMoneyScore = nowScore - savedMoneyScore;
+        savedMoneyScore = nowScore;
+        Klooni.addMoneyFromScore(newMoneyScore);
+    }
 
     private void save() {
         // Only save if the game is not over and the game mode is not the time mode. It

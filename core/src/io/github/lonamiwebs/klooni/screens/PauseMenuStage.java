@@ -1,8 +1,11 @@
 package io.github.lonamiwebs.klooni.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
@@ -13,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import java.io.File;
+
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.ShareChallenge;
 import io.github.lonamiwebs.klooni.actors.Band;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.game.BaseScorer;
@@ -31,8 +37,10 @@ class PauseMenuStage extends Stage {
 
     private final ShapeRenderer shapeRenderer;
 
+    private final Klooni game;
     private final Band band;
     private final BaseScorer scorer;
+    private final SoftButton playButton;
 
     //endregion
 
@@ -40,6 +48,7 @@ class PauseMenuStage extends Stage {
 
     // We need the score to save the maximum score if a new record was beaten
     PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode) {
+        this.game = game;
         this.scorer = scorer;
 
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
@@ -90,8 +99,7 @@ class PauseMenuStage extends Stage {
         });
 
         // Continue playing OR share (if game over) button
-        // TODO Enable both actions for this button? Or leave play?
-        final SoftButton playButton = new SoftButton(2, "play_texture");
+        playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
 
         playButton.addListener(new ChangeListener() {
@@ -143,6 +151,16 @@ class PauseMenuStage extends Stage {
     }
 
     void showGameOver(final String gameOverReason) {
+        if (game.shareChallenge != null) {
+            playButton.updateImage("share_texture");
+            playButton.addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.shareChallenge.shareScreenshot(
+                            game.shareChallenge.saveChallengeImage(scorer.getCurrentScore()));
+                }
+            });
+        }
+
         band.setMessage(gameOverReason);
         show();
     }
@@ -166,7 +184,9 @@ class PauseMenuStage extends Stage {
             // This is the only place where ShapeRenderer is OK because the batch hasn't started
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(1f, 1f, 1f, 0.3f);
+            Color color = new Color(Klooni.theme.bandColor);
+            color.a = 0.1f;
+            shapeRenderer.setColor(color);
             shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             shapeRenderer.end();
         }

@@ -1,0 +1,26 @@
+{
+    "name": "Underwater",
+    "price": 50,
+    "colors": {
+        "background": "0044aaff",
+        "foreground": "d7f4e3ff",
+        "buttons": [
+            "37c871ff",
+            "2a7fffff",
+            "00ccffff",
+            "5f5fd3ff"
+        ],
+        "empty_cell": "0066ffff",
+        "cells": [
+            "37c871ff", "2ad4ffff", "0000d4ff",
+            "00ffccff", "5599ffff", "87cddeff", "80b3ffff",
+            "00ff66ff", "00d4aaff"
+        ],
+        "current_score": "aaccffff",
+        "high_score": "2aff80ff",
+        "bonus": "aaeeffff",
+        "band": "3771c8ff",
+        "text": "002255ff"
+    },
+    "cell_texture": "bubble.png"
+}

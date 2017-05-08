@@ -1,0 +1,26 @@
+{
+    "name": "Black et White",
+    "price": 20,
+    "colors": {
+        "background": "0a0a0aff",
+        "foreground": "202020ff",
+        "buttons": [
+            "f0f0f0ff",
+            "f0f0f0ff",
+            "f0f0f0ff",
+            "f0f0f0ff"
+        ],
+        "empty_cell": "000000ff",
+        "cells": [
+            "f2f2f2ff", "f2f2f2ff", "f2f2f2ff",
+            "f2f2f2ff", "f2f2f2ff", "f2f2f2ff", "f2f2f2ff",
+            "f2f2f2ff", "f2f2f2ff"
+        ],
+        "current_score": "b3b3b3ff",
+        "high_score": "f9f9f9ff",
+        "bonus": "f9f9f9ff",
+        "band": "f0f0f0ff",
+        "text": "0a0a0aff"
+    },
+    "cell_texture": "basic.png"
+}
