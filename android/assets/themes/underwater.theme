@@ -12,7 +12,7 @@
         ],
         "empty_cell": "0066ffff",
         "cells": [
-            "37c871ff", "2ad4ffff", "0000d4ff",
+            "37c871ff", "2ad4ffff", "00ffeeff",
             "00ffccff", "5599ffff", "87cddeff", "80b3ffff",
             "00ff66ff", "00d4aaff"
         ],
