@@ -2,7 +2,7 @@
     "name": "Black et White",
     "price": 20,
     "colors": {
-        "background": "0a0a0aff",
+        "background": "000000ff",
         "foreground": "202020ff",
         "buttons": [
             "f0f0f0ff",
@@ -10,7 +10,7 @@
             "f0f0f0ff",
             "f0f0f0ff"
         ],
-        "empty_cell": "000000ff",
+        "empty_cell": "202020ff",
         "cells": [
             "f2f2f2ff", "f2f2f2ff", "f2f2f2ff",
             "f2f2f2ff", "f2f2f2ff", "f2f2f2ff", "f2f2f2ff",
