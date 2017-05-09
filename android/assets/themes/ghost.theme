@@ -1,0 +1,26 @@
+{
+  "name": "Ghost",
+  "price": 0,
+  "colors": {
+    "background": "001000ff",
+    "foreground": "bbffbbcc",
+    "buttons": [
+      "448844d0",
+      "448844d0",
+      "448844d0",
+      "448844d0"
+    ],
+    "empty_cell": "323232ff",
+    "cells": [
+      "d656caf0", "ca5db3f0", "742990f0",
+      "c35da7f0", "ff5b8cf0", "d33896f0", "de39faf0",
+      "7e4cfff0", "9e51edf0"
+    ],
+    "current_score": "e8425bff",
+    "high_score": "b337b3ff",
+    "bonus": "bbffbbd0",
+    "band": "448844e0",
+    "text": "bbffbbd0"
+  },
+  "cell_texture": "ghost.png"
+}
