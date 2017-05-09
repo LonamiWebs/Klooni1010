@@ -1,6 +1,6 @@
 {
     "name": "Black et White",
-    "price": 20,
+    "price": 100,
     "colors": {
         "background": "000000ff",
         "foreground": "202020ff",
