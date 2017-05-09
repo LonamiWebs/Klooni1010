@@ -100,6 +100,10 @@ public class ThemeCard extends Actor {
         usedThemeUpdated();
     }
 
+    public boolean isUsed() {
+        return Klooni.theme.getName().equals(theme.getName());
+    }
+
     void performBuy() {
         Klooni.buyTheme(theme);
         use();

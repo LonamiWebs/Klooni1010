@@ -144,11 +144,25 @@ class CustomizeScreen implements Screen {
             themesGroup.addActor(card);
         }
 
-        table.add(new ScrollPane(themesGroup)).expand().fill();
+        final ScrollPane themesScroll = new ScrollPane(themesGroup);
+        table.add(themesScroll).expand().fill();
 
         // Show the current money row
         table.row();
         table.add(buyBand).expandX().fillX();
+
+        // Scroll to the currently selected theme
+        table.layout();
+        for (Actor a : themesGroup.getChildren()) {
+            ThemeCard c = (ThemeCard)a;
+            if (c.isUsed()) {
+                themesScroll.scrollTo(
+                        c.getX(), c.getY() + c.getHeight(),
+                        c.getWidth(), c.getHeight());
+                break;
+            }
+            c.usedThemeUpdated();
+        }
     }
 
     //endregion
