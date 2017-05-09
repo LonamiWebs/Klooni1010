@@ -1,0 +1,26 @@
+{
+    "name": "Solarized Light",
+    "price": 0,
+    "colors": {
+        "background": "fdf6e3ff",
+        "foreground": "eee8d5ff",
+        "buttons": [
+            "859900ff",
+            "268bd2ff",
+            "d33682ff",
+            "cb4b16ff"
+        ],
+        "empty_cell": "eee8d5ff",
+        "cells": [
+            "657b83ff", "b58900ff", "cb4b16ff",
+            "dc322fff", "d33682ff", "6c71c4ff", "268bd2ff",
+            "2aa198ff", "859900ff"
+        ],
+        "current_score": "586e75ff",
+        "high_score": "657b83ff",
+        "bonus": "586e75ff",
+        "band": "b58900ff",
+        "text": "fdf6e3ff"
+    },
+    "cell_texture": "circle.png"
+}

@@ -63,12 +63,7 @@ public class Klooni extends Game {
     //endregion
 
     //region Screen
-
-    @Override
-    public void render() {
-        super.render();
-    }
-
+    
     // TransitionScreen will also dispose by default the previous screen
     public void transitionTo(Screen screen) {
         transitionTo(screen, true);

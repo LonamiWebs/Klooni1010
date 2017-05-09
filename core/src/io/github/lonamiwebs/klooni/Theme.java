@@ -25,7 +25,7 @@ public class Theme {
 
     public Color background;
     public Color foreground;
-    public Color emptyCell;
+    private Color emptyCell;
 
     public Color currentScore;
     public Color highScore;
@@ -34,7 +34,6 @@ public class Theme {
     public Color textColor;
 
     private Color[] cells;
-    private Color[] buttons;
 
     public static Skin skin;
 
@@ -126,7 +125,7 @@ public class Theme {
         foreground = new Color((int)Long.parseLong(colors.getString("foreground"), 16));
 
         JsonValue buttonColors = colors.get("buttons");
-        buttons = new Color[buttonColors.size];
+        Color[] buttons = new Color[buttonColors.size];
         for (int i = 0; i < buttons.length; ++i) {
             buttons[i] = new Color((int)Long.parseLong(buttonColors.getString(i), 16));
             if (buttonStyles[i] == null) {

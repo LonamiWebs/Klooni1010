@@ -18,7 +18,7 @@ public abstract class BaseScorer implements BinSerializable {
 
     //region Members
 
-    protected int currentScore;
+    int currentScore;
 
     final Label currentScoreLabel;
     final Label highScoreLabel;
