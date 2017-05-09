@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    color: #fff;
+    background-color: #070707;
+}
+
+#mainDiv {
+    width: 1000px;
+    padding: 10px;
+    margin: 20px auto;
+    border-radius: 4px;
+    background-color: #171717;
+}
+
+canvas {
+  border: 2px solid #077;
+  border-radius: 2px;
+  margin: 10px;
+}
+
+td {
+    vertical-align: top;
+}
+
+code {
+  color: #ffccaa;
+}
+</style>
+</head>
+<body>
+<div id="mainDiv">
+<table>
+<tr>
+<td>
+  <h1>Game elements</h1>
+  <p><i>Touch any element to modify its color using the color property.</i></p>
+  <canvas id="screenCanvas" width="400" height="400"></canvas>
+  <h2>More information</h2>
+  <p>Once you're done with the theme, if you really think it should be
+  included, feel free to make a pull request. I will check it out, and
+  if I like it enough, it will be included in the game :)</p>
+</td>
+<td style="width:100%;">
+  <h1>Theme properties</h1>
+  <p><i>Change the theme name, price, shape and elements' color.</i></p>
+  <label for="themeName" autocomplete="off">Theme name:</label>
+  <input id="themeName" type="text" placeholder="Name..."
+         onchange="updateJson()">
+  <br />
+  <label for="themePrice">Theme name:</label>
+  <input id="themePrice" type="number" min="0" max="1000"
+         placeholder="Price..." onchange="updateJson()">
+  <br />
+  <label for="cellTexture">Cell texture:</label>
+  <select id="cellTexture" onchange="updateJson()">
+    <option value="default.png">Default</option>
+    <option value="circle.png">Circle</option>
+    <option value="bubble.png">Bubble</option>
+  </select>
+  <br />
+  <label for="pieceColor">Piece color:</label>
+  <input id="pieceColor" type="color" onchange="updateColor()">
+
+  <input id="autotriggerColor" type="checkbox">
+  <label for="autotriggerColor">Auto-trigger color selection</label>
+  <p><b>Generated JSON</b></p>
+  <button id="copyJson" type="submit" formaction="#">Copy JSON</button>
+  <br />
+  <textarea id="generatedJson" rows="26" cols="56" readonly></textarea>
+</td>
+</tr>
+</table>
+<p>Once you're done, copy the generated JSON, and with your file explorer
+go to <code>../android/assets/themes</code>. There, create a new
+<code>*.theme</code> file and paste the copied JSON in it. Add the name of the
+new file (without the extension) to the <code>theme.list</code>, and all done!
+<br />
+You can also do this manually without using this interactive site. Just copy
+any existing type and modify it at your will.</p>
+</div>
+
+<script>
+// Enhancing prototypes
+CanvasRenderingContext2D.prototype.clear = function() {
+  // http://stackoverflow.com/a/9722502/4759433
+  this.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  this.beginPath(); // Clear strokes
+};
+
+String.prototype.format = function() {
+  // http://stackoverflow.com/a/4673436/4759433
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number) {
+    return typeof args[number] != 'undefined' ? args[number] : match;
+  });
+};
+
+// Retrieving HTML elements
+canvas = document.getElementById('screenCanvas');
+c = canvas.getContext('2d');
+
+themeName = document.getElementById('themeName');
+themePrice = document.getElementById('themePrice');
+cellTexture = document.getElementById('cellTexture');
+pieceColor = document.getElementById('pieceColor');
+autotriggerColor = document.getElementById('autotriggerColor');
+generatedJson = document.getElementById('generatedJson');
+copyJson = document.getElementById('copyJson');
+
+
+// Declare a prototype (box) to render the selectable elements
+function Box(x, y, w, h, color, text) {
+  this.x = x; this.y = y;
+  this.w = w; this.h = h;
+  this.text = text;
+  this.selected = false;
+
+  this.updateColor = function(color) {
+    this.color = color;
+    this.jsonColor = color.substring(1) + 'ff';
+  }
+
+  this.updateColor(color);
+
+  this.draw = function() {
+    c.fillStyle = this.color;
+    if (this.text) {
+      c.font = "20px Georgia";
+      // Arbitrary but nice
+      var x = this.x + this.w * 0.5 - text.length * 5;
+      var y = this.y + this.h * 0.5 + 6;
+
+      c.fillText(this.text, x, y);
+    } else {
+      c.fillRect(this.x, this.y, this.w, this.h);
+    }
+
+    if (this.selected) {
+      c.rect(this.x, this.y, this.w, this.h);
+      c.stroke();
+    }
+  }
+  this.inBounds = function(x, y) {
+    return x >  this.x       && y > this.y &&
+         x < (this.x + this.w) && y < (this.y + this.h);
+  }
+}
+
+var background = new Box(0, 0, 400, 400, '#ffffff');
+var band = new Box(0, 20, 200, 40, '#87ceeb');
+var text = new Box(20, 25, 160, 30, '#111111', 'text');
+var playButton = new Box(20, 140, 160, 50, '#00ff33');
+var starButton = new Box(20, 200, 50, 50, '#ffd700');
+var timerButton = new Box(75, 200, 50, 50, '#2389fc');
+var paletteButton = new Box(130, 200, 50, 50, '#d94848');
+
+var foreground = new Box(40, 145, 120, 40, '#ffffff', 'play');
+var emptyCell = new Box(200, 100, 200, 200, '#e6e6e6');
+
+var piece3x3 = new Box(200, 100, 60, 60, '#4cd4ae');
+var piece2x2 = new Box(260, 100, 40, 40, '#98dc53');
+
+var piece5x1 = new Box(200, 280, 100, 20, '#da6554');
+var piece4x1 = new Box(200, 260, 80, 20, '#e66a82');
+var piece3x1 = new Box(200, 240, 60, 20, '#ec9548');
+var piece2x1 = new Box(200, 220, 40, 20, '#fec63d');
+
+var pieceLL = new Box(340, 240, 60, 60, '#57cb84');
+var pieceL = new Box(340, 240, 40, 40, '#5abee2');
+var piece1x1 = new Box(340, 240, 20, 20, '#7988bf');
+
+var bonus = new Box(300, 200, 60, 30, '#4d4d4d', '+30');
+var currentScore = new Box(220, 20, 80, 30, '#ffcc00', 'current');
+var highScore = new Box(310, 20, 80, 30, '#65d681', 'high');
+
+// They're ordered so those appearing last receive the touch first
+var screenElements = [
+  background, band, text,
+  playButton, starButton, timerButton, paletteButton,
+  foreground, emptyCell,
+  piece3x3, piece2x2,
+  piece5x1, piece4x1, piece3x1, piece2x1,
+  pieceLL, pieceL, piece1x1,
+  bonus, currentScore, highScore];
+
+// Rendering
+function renderElements() {
+  c.clear();
+
+  for (var i = 0; i != screenElements.length; ++i) {
+    screenElements[i].draw();
+    if (canvas.mouseDown) {
+      screenElements[i].selected = false;
+    }
+  }
+
+  // Selection works backwards
+  anySelected = false;
+  if (canvas.mouseDown) {
+    for (var i = screenElements.length; i--; ) {
+      screenElements[i].selected =
+        screenElements[i].inBounds(canvas.mouseX, canvas.mouseY);
+
+      if (screenElements[i].selected) {
+        pieceColor.value = screenElements[i].color;
+        anySelected = true;
+        break;
+      }
+    }
+  }
+
+  canvas.style.cursor = anySelected ? "crosshair" : "default";
+}
+
+// Once always
+renderElements();
+
+// Render loop (on mouse move), mouse down selects
+canvas.addEventListener('mousedown', function(e) {
+  canvas.mouseDown = true;
+  renderElements();
+}, false);
+canvas.addEventListener('mouseup', function(e) {
+  renderElements();
+  canvas.mouseDown = false;
+  if (autotriggerColor.checked)
+    pieceColor.click();
+}, false);
+
+canvas.addEventListener('mousemove', function(e) {
+  var rect = canvas.getBoundingClientRect();
+  canvas.mouseX = e.clientX - rect.left;
+  canvas.mouseY = e.clientY - rect.top;
+
+  renderElements();
+}, false);
+
+// Event for changing the selected element's color
+function updateColor() {
+  for (var i = screenElements.length; i--; ) {
+    if (screenElements[i].selected) {
+      screenElements[i].updateColor(pieceColor.value);
+      renderElements();
+      break;
+    }
+  }
+  updateJson();
+}
+
+// JSON related (generating and copying the result)
+function updateJson() {
+  var base = `{
+  "name": "{0}",
+  "price": {1},
+  "colors": {
+    "background": "{2}",
+    "foreground": "{3}",
+    "buttons": [
+      "{4}",
+      "{5}",
+      "{6}",
+      "{7}"
+    ],
+    "empty_cell": "{8}",
+    "cells": [
+      "{9}", "{10}", "{11}",
+      "{12}", "{13}", "{14}", "{15}",
+      "{16}", "{17}"
+    ],
+    "current_score": "{18}",
+    "high_score": "{19}",
+    "bonus": "{20}",
+    "band": "{21}",
+    "text": "{22}"
+  },
+  "cell_texture": "{23}"
+}`;
+
+  var cell_texture = cellTexture.options[cellTexture.selectedIndex].value;
+
+  generatedJson.innerHTML = base.format(
+    themeName.value,
+    themePrice.value,
+
+    background.jsonColor,
+    foreground.jsonColor,
+
+      playButton.jsonColor,
+      starButton.jsonColor,
+      timerButton.jsonColor,
+      paletteButton.jsonColor,
+
+    emptyCell.jsonColor,
+
+    piece1x1.jsonColor, piece2x2.jsonColor, piece3x3.jsonColor,
+    piece2x1.jsonColor, piece3x1.jsonColor, piece4x1.jsonColor, piece5x1.jsonColor,
+    pieceL.jsonColor, pieceLL.jsonColor,
+
+    currentScore.jsonColor,
+    highScore.jsonColor,
+    bonus.jsonColor,
+    band.jsonColor,
+    text.jsonColor,
+    cell_texture
+  );
+}
+
+// Once always
+updateJson();
+
+copyJson.addEventListener('click', function(e) {
+   generatedJson.select();
+
+   try {
+     var successful = document.execCommand('copy');
+
+     if (successful) copyJson.innerHTML = 'Copied!';
+     else copyJson.innerHTML = 'Copy failed';
+   } catch (err) {
+     answer.innerHTML = 'Unsupported browser';
+   }
+
+   setTimeout(function() {
+    copyJson.innerHTML = 'Copy JSON';
+   }, 2000);
+});
+</script>
+</body>
+</html>
