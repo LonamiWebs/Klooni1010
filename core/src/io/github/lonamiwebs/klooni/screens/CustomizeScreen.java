@@ -32,12 +32,15 @@ class CustomizeScreen implements Screen {
 
     private final Screen lastScreen;
 
+    private float themeDragStartX, themeDragStartY;
+
     //endregion
 
     //region Static members
 
     // As the examples show on the LibGdx wiki
-    private static final float minDelta = 1/30f;
+    private static final float MIN_DELTA = 1/30f;
+    private static final float DRAG_LIMIT_SQ = 5*5;
 
     //endregion
 
@@ -129,16 +132,32 @@ class CustomizeScreen implements Screen {
             card.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    if (Klooni.isThemeBought(card.theme))
-                        card.use();
-                    else
-                        buyBand.askBuy(card);
-
-                    for (Actor a : themesGroup.getChildren()) {
-                        ThemeCard c = (ThemeCard)a;
-                        c.usedThemeUpdated();
-                    }
+                    themeDragStartX = x;
+                    themeDragStartY = y;
                     return true;
+                }
+
+                // We could actually rely on touchDragged not being called,
+                // but perhaps it would be hard for some people not to move
+                // their fingers even the slightest bit, so we use a custom
+                // drag limit
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    x -= themeDragStartX;
+                    y -= themeDragStartY;
+                    float distSq = x * x + y * y;
+                    if (distSq < DRAG_LIMIT_SQ) {
+                        if (Klooni.isThemeBought(card.theme))
+                            card.use();
+                        else
+                            buyBand.askBuy(card);
+
+                        for (Actor a : themesGroup.getChildren()) {
+                            ThemeCard c = (ThemeCard)a;
+                            c.usedThemeUpdated();
+                        }
+                    }
                 }
             });
             themesGroup.addActor(card);
@@ -186,7 +205,7 @@ class CustomizeScreen implements Screen {
     public void render(float delta) {
         Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), minDelta));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), MIN_DELTA));
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
