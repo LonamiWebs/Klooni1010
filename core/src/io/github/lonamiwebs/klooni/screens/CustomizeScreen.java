@@ -115,7 +115,9 @@ class CustomizeScreen implements Screen {
         });
         optionsGroup.addActor(webButton);
 
-        table.add(new ScrollPane(optionsGroup)).pad(20, 4, 12, 4);
+        // Use the same height as the buttons (for instance, the back button)
+        table.add(new ScrollPane(optionsGroup))
+                .pad(20, 4, 12, 4).height(backButton.getHeight());
 
         // Load all the available themes
         final MoneyBuyBand buyBand = new MoneyBuyBand(game);
@@ -142,7 +144,6 @@ class CustomizeScreen implements Screen {
             themesGroup.addActor(card);
         }
 
-        themesGroup.space(8);
         table.add(new ScrollPane(themesGroup)).expand().fill();
 
         // Show the current money row
