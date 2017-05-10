@@ -1,6 +1,6 @@
 {
   "name": "Ghost",
-  "price": 0,
+  "price": 50,
   "colors": {
     "background": "001000ff",
     "foreground": "bbffbbcc",
