@@ -1,10 +1,8 @@
 package io.github.lonamiwebs.klooni.screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import java.io.File;
-
 import io.github.lonamiwebs.klooni.Klooni;
-import io.github.lonamiwebs.klooni.ShareChallenge;
 import io.github.lonamiwebs.klooni.actors.Band;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.game.BaseScorer;
@@ -102,11 +97,7 @@ class PauseMenuStage extends Stage {
         playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
 
-        playButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                hide();
-            }
-        });
+        playButton.addListener(playChangeListener);
     }
 
     //endregion
@@ -131,6 +122,13 @@ class PauseMenuStage extends Stage {
         scorer.resume();
     }
 
+    private final ChangeListener playChangeListener = new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            hide();
+        }
+    };
+
     //endregion
 
     //region Package local methods
@@ -152,11 +150,13 @@ class PauseMenuStage extends Stage {
 
     void showGameOver(final String gameOverReason) {
         if (game.shareChallenge != null) {
+            playButton.removeListener(playChangeListener);
             playButton.updateImage("share_texture");
             playButton.addListener(new ChangeListener() {
                 public void changed(ChangeEvent event, Actor actor) {
-                    game.shareChallenge.shareScreenshot(
-                            game.shareChallenge.saveChallengeImage(scorer.getCurrentScore()));
+                    // Don't dispose because then it needs to take us to the previous screen
+                    game.transitionTo(new ShareScoreScreen(
+                            game, game.getScreen(), scorer.getCurrentScore()), false);
                 }
             });
         }
