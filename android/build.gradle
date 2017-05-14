@@ -22,8 +22,8 @@ android {
         minSdkVersion 8
         targetSdkVersion 25
 
-        versionCode 500
-        versionName "0.5"
+        versionCode 600
+        versionName "0.6"
     }
 }
 
