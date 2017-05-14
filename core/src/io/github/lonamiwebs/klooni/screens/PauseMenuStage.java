@@ -148,15 +148,16 @@ class PauseMenuStage extends Stage {
         addAction(Actions.moveTo(0, 0, 0.75f, Interpolation.swingOut));
     }
 
-    void showGameOver(final String gameOverReason) {
+    void showGameOver(final String gameOverReason, final boolean timeMode) {
         if (game.shareChallenge != null) {
             playButton.removeListener(playChangeListener);
             playButton.updateImage("share_texture");
             playButton.addListener(new ChangeListener() {
                 public void changed(ChangeEvent event, Actor actor) {
                     // Don't dispose because then it needs to take us to the previous screen
+
                     game.transitionTo(new ShareScoreScreen(
-                            game, game.getScreen(), scorer.getCurrentScore()), false);
+                            game, game.getScreen(), scorer.getCurrentScore(), timeMode), false);
                 }
             });
         }

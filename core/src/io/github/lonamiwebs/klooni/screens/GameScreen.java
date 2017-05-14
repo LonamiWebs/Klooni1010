@@ -121,13 +121,13 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         return true;
     }
 
-    private void doGameOver(String gameOverReason) {
+    private void doGameOver(final String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
 
             saveMoney();
             holder.enabled = false;
-            pauseMenu.showGameOver(gameOverReason);
+            pauseMenu.showGameOver(gameOverReason, scorer instanceof TimeScorer);
             if (Klooni.soundsEnabled())
                 gameOverSound.play();
 
@@ -167,6 +167,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (scorer.isGameOver() && !pauseMenu.isShown()) {
+            // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
+            // Perhaps have a better mode to pass the required texture to overlay
             doGameOver(scorer.gameOverReason());
         }
 

@@ -36,17 +36,22 @@ class ShareScoreScreen implements Screen {
     private final Label infoLabel;
     private final SpriteBatch spriteBatch;
 
-    private final Screen lastScreen;
     private final int score;
+    private final boolean timeMode;
+
+    private final Screen lastScreen;
 
     //endregion
 
     //region Constructor
 
-    ShareScoreScreen(final Klooni game, final Screen lastScreen, final int score) {
+    ShareScoreScreen(final Klooni game, final Screen lastScreen,
+                     final int score, final boolean timeMode) {
         this.game = game;
         this.lastScreen = lastScreen;
+
         this.score = score;
+        this.timeMode = timeMode;
 
         final Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font_small");
@@ -76,7 +81,7 @@ class ShareScoreScreen implements Screen {
 
     @Override
     public void show() {
-        final boolean ok = game.shareChallenge.saveChallengeImage(score);
+        final boolean ok = game.shareChallenge.saveChallengeImage(score, timeMode);
         game.shareChallenge.shareScreenshot(ok);
         goBack();
     }

@@ -27,7 +27,7 @@ public abstract class ShareChallenge {
     public abstract void shareScreenshot(final boolean saveResult);
 
     // Saves the "Challenge me" shareable image to getShareImageFilePath()
-    public boolean saveChallengeImage(final int score) {
+    public boolean saveChallengeImage(final int score, final boolean timeMode) {
         final File saveAt = getShareImageFilePath();
         if (!saveAt.getParentFile().isDirectory())
             if (!saveAt.mkdirs())
@@ -65,6 +65,12 @@ public abstract class ShareChallenge {
         label.setText("try to beat me if you can");
         label.setPosition(40, 40);
         label.draw(batch, 1);
+
+        if (timeMode) {
+            Texture timeModeTexture = new Texture("ui/x1.5/stopwatch.png");
+            batch.setColor(Color.BLACK);
+            batch.draw(timeModeTexture, 200, 340);
+        }
 
         batch.end();
 
