@@ -40,7 +40,7 @@ class CustomizeScreen implements Screen {
 
     // As the examples show on the LibGdx wiki
     private static final float MIN_DELTA = 1/30f;
-    private static final float DRAG_LIMIT_SQ = 5*5;
+    private static final float DRAG_LIMIT_SQ = 20*20;
 
     //endregion
 
