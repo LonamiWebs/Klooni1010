@@ -4,7 +4,7 @@ Play 1010! for free! Add your own themes! Contribute! Make the game yours!
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/io.github.lonamiwebs.klooni)
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under [GPLv3+](LICENSE).
 
 **Table of contents**:
 
