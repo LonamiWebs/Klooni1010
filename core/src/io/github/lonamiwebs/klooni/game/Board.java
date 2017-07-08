@@ -22,12 +22,15 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.effects.IEffect;
+import io.github.lonamiwebs.klooni.effects.VanishEffect;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Represents the on screen board, with all the put cells
@@ -39,6 +42,7 @@ public class Board implements BinSerializable {
     public final int cellCount;
     public float cellSize;
     private Cell[][] cells;
+    private final Array<IEffect> effects; // Particle effects once they vanish
 
     final Vector2 pos;
     private final Sound stripClearSound;
@@ -57,6 +61,7 @@ public class Board implements BinSerializable {
 
         lastPutPiecePos = new Vector2();
         pos = new Vector2();
+        effects = new Array<IEffect>(32); // 32 capacity for 3 rows (most common)
 
         // Cell size depends on the layout to be updated first
         layout.update(this);
@@ -118,6 +123,12 @@ public class Board implements BinSerializable {
         for (int i = 0; i < cellCount; ++i)
             for (int j = 0; j < cellCount; ++j)
                 cells[i][j].draw(batch);
+
+        for (int i = effects.size; i-- != 0;) {
+            effects.get(i).draw(batch);
+            if (effects.get(i).isDone())
+                effects.removeIndex(i);
+        }
     }
 
     public boolean canPutPiece(Piece piece) {
@@ -197,16 +208,26 @@ public class Board implements BinSerializable {
             float pan = 0;
 
             // Do clear those rows and columns
-            for (int i = 0; i < cellCount; ++i)
-                if (clearedRows[i])
-                    for (int j = 0; j < cellCount; ++j)
-                        cells[i][j].vanish(lastPutPiecePos);
+            // TODO Don't always use "vanish effect"
+            for (int i = 0; i < cellCount; ++i) {
+                if (clearedRows[i]) {
+                    for (int j = 0; j < cellCount; ++j) {
+                        VanishEffect effect = new VanishEffect();
+                        effect.setInfo(cells[i][j], lastPutPiecePos);
+                        effects.add(effect);
+                        cells[i][j].set(-1);
+                    }
+                }
+            }
 
             for (int j = 0; j < cellCount; ++j) {
                 if (clearedCols[j]) {
                     pan += 2f * (j - cellCount / 2) / (float)cellCount;
                     for (int i = 0; i < cellCount; ++i) {
-                        cells[i][j].vanish(lastPutPiecePos);
+                        VanishEffect effect = new VanishEffect();
+                        effect.setInfo(cells[i][j], lastPutPiecePos);
+                        effects.add(effect);
+                        cells[i][j].set(-1);
                     }
                 }
             }
