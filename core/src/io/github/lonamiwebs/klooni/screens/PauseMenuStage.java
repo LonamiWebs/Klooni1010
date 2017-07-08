@@ -53,6 +53,7 @@ class PauseMenuStage extends Stage {
     private final Band band;
     private final BaseScorer scorer;
     private final SoftButton playButton;
+    private final SoftButton customButton; // Customize & "Shut down"
 
     //endregion
 
@@ -98,22 +99,14 @@ class PauseMenuStage extends Stage {
 
         table.row();
 
-        // Palette button (buy colors)
-        final SoftButton paletteButton = new SoftButton(1, "palette_texture");
-        table.add(paletteButton).space(16);
-
-        paletteButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Don't dispose because then it needs to take us to the previous screen
-                game.transitionTo(new CustomizeScreen(game, game.getScreen()), false);
-            }
-        });
+        // Palette button OR shutdown game (if game over)
+        customButton = new SoftButton(1, "palette_texture");
+        table.add(customButton).space(16);
+        customButton.addListener(customChangeListener);
 
         // Continue playing OR share (if game over) button
         playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
-
         playButton.addListener(playChangeListener);
     }
 
@@ -138,6 +131,14 @@ class PauseMenuStage extends Stage {
         ));
         scorer.resume();
     }
+
+    private final ChangeListener customChangeListener = new ChangeListener() {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            // Don't dispose because then it needs to take us to the previous screen
+            game.transitionTo(new CustomizeScreen(game, game.getScreen()), false);
+        }
+    };
 
     private final ChangeListener playChangeListener = new ChangeListener() {
         @Override
@@ -166,13 +167,22 @@ class PauseMenuStage extends Stage {
     }
 
     void showGameOver(final String gameOverReason, final boolean timeMode) {
+        // Allow the players to exit the game (issue #23)
+        customButton.removeListener(customChangeListener);
+        customButton.updateImage("power_off_texture");
+        customButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+
         if (game.shareChallenge != null) {
             playButton.removeListener(playChangeListener);
             playButton.updateImage("share_texture");
             playButton.addListener(new ChangeListener() {
                 public void changed(ChangeEvent event, Actor actor) {
                     // Don't dispose because then it needs to take us to the previous screen
-
                     game.transitionTo(new ShareScoreScreen(
                             game, game.getScreen(), scorer.getCurrentScore(), timeMode), false);
                 }

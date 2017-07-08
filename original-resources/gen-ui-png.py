@@ -25,6 +25,7 @@ ids = [
     'palette',
     'play',
     'play_saved',
+    'power_off',
     'replay',
     'share',
     'snap_off',
