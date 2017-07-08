@@ -29,6 +29,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import io.github.lonamiwebs.klooni.Klooni;
+import io.github.lonamiwebs.klooni.effects.EvaporateEffect;
 import io.github.lonamiwebs.klooni.effects.IEffect;
 import io.github.lonamiwebs.klooni.effects.VanishEffect;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
@@ -212,7 +213,7 @@ public class Board implements BinSerializable {
             for (int i = 0; i < cellCount; ++i) {
                 if (clearedRows[i]) {
                     for (int j = 0; j < cellCount; ++j) {
-                        VanishEffect effect = new VanishEffect();
+                        IEffect effect = new EvaporateEffect();
                         effect.setInfo(cells[i][j], lastPutPiecePos);
                         effects.add(effect);
                         cells[i][j].set(-1);
@@ -224,7 +225,7 @@ public class Board implements BinSerializable {
                 if (clearedCols[j]) {
                     pan += 2f * (j - cellCount / 2) / (float)cellCount;
                     for (int i = 0; i < cellCount; ++i) {
-                        VanishEffect effect = new VanishEffect();
+                        IEffect effect = new EvaporateEffect();
                         effect.setInfo(cells[i][j], lastPutPiecePos);
                         effects.add(effect);
                         cells[i][j].set(-1);
