@@ -43,23 +43,20 @@ public class VanishEffect implements IEffect {
 
     @Override
     public void draw(SpriteBatch batch) {
-        // Draw the previous vanishing cell
-        if (vanishElapsed <= vanishLifetime) {
-            vanishElapsed += Gdx.graphics.getDeltaTime();
+        vanishElapsed += Gdx.graphics.getDeltaTime();
 
-            // vanishElapsed might be < 0 (delay), so clamp to 0
-            float progress = Math.min(1f,
-                    Math.max(vanishElapsed, 0f) / vanishLifetime);
+        // vanishElapsed might be < 0 (delay), so clamp to 0
+        float progress = Math.min(1f,
+                Math.max(vanishElapsed, 0f) / vanishLifetime);
 
-            vanishSize = Interpolation.elasticIn.apply(cell.size, 0, progress);
+        vanishSize = Interpolation.elasticIn.apply(cell.size, 0, progress);
 
-            float centerOffset = cell.size * 0.5f - vanishSize * 0.5f;
-            Cell.draw(vanishColor, batch, cell.pos.x + centerOffset, cell.pos.y + centerOffset, vanishSize);
-        }
+        float centerOffset = cell.size * 0.5f - vanishSize * 0.5f;
+        Cell.draw(vanishColor, batch, cell.pos.x + centerOffset, cell.pos.y + centerOffset, vanishSize);
     }
 
     @Override
     public boolean isDone() {
-        return false;
+        return vanishElapsed > vanishElapsed;
     }
 }
