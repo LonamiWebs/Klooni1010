@@ -21,4 +21,5 @@ Sounds
 - `piece_drop` by [cabled_mess](http://freesound.org/people/cabled_mess/sounds/350906/)
 - `invalid_drop` by [fins](http://freesound.org/people/fins/sounds/146726/)
 - `strip_clear` by [Kastenfrosch](http://freesound.org/people/Kastenfrosch/sounds/162461/)
-- `take_pieces` by [LloydEvans09](http://freesound.org/people/LloydEvans09/sounds/321806/)
+- `effect_vanish` by [LloydEvans09](http://freesound.org/people/LloydEvans09/sounds/321806/)
+- `effect_evaporate` by [DissingCreeps](http://freesound.org/people/DissingCreeps/sounds/359153/)
