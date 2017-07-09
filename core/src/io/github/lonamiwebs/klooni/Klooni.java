@@ -22,11 +22,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import io.github.lonamiwebs.klooni.effects.EvaporateEffect;
+import io.github.lonamiwebs.klooni.effects.IEffect;
+import io.github.lonamiwebs.klooni.effects.VanishEffect;
+import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 import io.github.lonamiwebs.klooni.screens.TransitionScreen;
 
@@ -46,6 +50,9 @@ public class Klooni extends Game {
 
     public static final int GAME_HEIGHT = 680;
     public static final int GAME_WIDTH = 408;
+
+    private static int usedEffect;
+    private Sound effectSound;
 
     //endregion
 
@@ -75,6 +82,9 @@ public class Klooni extends Game {
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
+
+        usedEffect = effectNameToInt(getUsedEffect());
+        setUsedEffect(null); // Update the effect sound
     }
 
     //endregion
@@ -99,6 +109,32 @@ public class Klooni extends Game {
         super.dispose();
         skin.dispose();
         theme.dispose();
+        if (effectSound != null)
+            effectSound.dispose();
+    }
+
+    //endregion
+
+    //region Effects
+
+    // Effects used when clearing a row
+    public static IEffect createEffect(final Cell deadCell, final Vector2 culprit) {
+        final IEffect effect;
+        switch (usedEffect) {
+            default:
+            case 0:
+                effect = new VanishEffect();
+                break;
+            case 1:
+                effect = new EvaporateEffect();
+                break;
+        }
+        effect.setInfo(deadCell, culprit);
+        return effect;
+    }
+
+    public void playEffectSound() {
+        effectSound.play(MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), 0);
     }
 
     //endregion
@@ -179,6 +215,38 @@ public class Klooni extends Game {
     public static void updateTheme(Theme newTheme) {
         prefs.putString("themeName", newTheme.getName()).flush();
         theme.update(newTheme.getName());
+    }
+
+    // Effects related
+    public static String getUsedEffect() {
+        return prefs.getString("effectName");
+    }
+
+    public void setUsedEffect(final String name) {
+        if (name != null)
+            prefs.putString("effectName", name).flush();
+
+        if (effectSound != null)
+            effectSound.dispose();
+
+        switch (effectNameToInt(getUsedEffect())) {
+            default:
+            case 0:
+                effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_vanish.mp3"));
+                break;
+            case 1:
+                effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_evaporate.mp3"));
+                break;
+        }
+    }
+
+    private static int effectNameToInt(final String name) {
+        // String comparision is more expensive compared to a single integer one,
+        // and when creating instances of a lot of effects it's better if we can
+        // save some processor cycles.
+        if (name.equals("vanish")) return 0;
+        if (name.equals("evaporate")) return 1;
+        return -1;
     }
 
     // Money related

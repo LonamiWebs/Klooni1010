@@ -46,7 +46,6 @@ public class Board implements BinSerializable {
     private final Array<IEffect> effects; // Particle effects once they vanish
 
     final Vector2 pos;
-    private final Sound stripClearSound;
 
     // Used to animate cleared cells vanishing
     private final Vector2 lastPutPiecePos;
@@ -57,8 +56,6 @@ public class Board implements BinSerializable {
 
     public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
-
-        stripClearSound = Gdx.audio.newSound(Gdx.files.internal("sound/strip_clear.mp3"));
 
         lastPutPiecePos = new Vector2();
         pos = new Vector2();
@@ -206,16 +203,11 @@ public class Board implements BinSerializable {
                 clearCount++;
         }
         if (clearCount > 0) {
-            float pan = 0;
-
             // Do clear those rows and columns
-            // TODO Don't always use "vanish effect"
             for (int i = 0; i < cellCount; ++i) {
                 if (clearedRows[i]) {
                     for (int j = 0; j < cellCount; ++j) {
-                        IEffect effect = new EvaporateEffect();
-                        effect.setInfo(cells[i][j], lastPutPiecePos);
-                        effects.add(effect);
+                        effects.add(Klooni.createEffect(cells[i][j], lastPutPiecePos));
                         cells[i][j].set(-1);
                     }
                 }
@@ -223,20 +215,11 @@ public class Board implements BinSerializable {
 
             for (int j = 0; j < cellCount; ++j) {
                 if (clearedCols[j]) {
-                    pan += 2f * (j - cellCount / 2) / (float)cellCount;
                     for (int i = 0; i < cellCount; ++i) {
-                        IEffect effect = new EvaporateEffect();
-                        effect.setInfo(cells[i][j], lastPutPiecePos);
-                        effects.add(effect);
+                        effects.add(Klooni.createEffect(cells[i][j], lastPutPiecePos));
                         cells[i][j].set(-1);
                     }
                 }
-            }
-
-            if (Klooni.soundsEnabled()) {
-                pan = MathUtils.clamp(pan, -1, 1);
-                stripClearSound.play(
-                        MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), pan);
             }
         }
 

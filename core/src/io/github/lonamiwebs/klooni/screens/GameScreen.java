@@ -25,6 +25,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -47,6 +48,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     //region Members
 
+    private final Klooni game;
     private final BaseScorer scorer;
     private final BonusParticleHandler bonusParticleHandler;
 
@@ -93,6 +95,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     GameScreen(final Klooni game, final int gameMode, final boolean loadSave) {
         batch = new SpriteBatch();
+        this.game = game;
         this.gameMode = gameMode;
 
         final GameLayout layout = new GameLayout();
@@ -236,8 +239,12 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         if (result.onBoard) {
             scorer.addPieceScore(result.area);
             int bonus = scorer.addBoardScore(board.clearComplete(), board.cellCount);
-            if (bonus > 0)
+            if (bonus > 0) {
                 bonusParticleHandler.addBonus(result.pieceCenter, bonus);
+                if (Klooni.soundsEnabled()) {
+                    game.playEffectSound();
+                }
+            }
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
