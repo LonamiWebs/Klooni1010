@@ -41,7 +41,8 @@ ids = [
 cells = [
     'basic',
     'bubble',
-    'ghost'
+    'ghost',
+    'drop'
 ]
 
 inkscape_default_dpi = 90

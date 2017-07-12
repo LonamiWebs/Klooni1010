@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.lonamiwebs.klooni.effects.EvaporateEffect;
 import io.github.lonamiwebs.klooni.effects.IEffect;
 import io.github.lonamiwebs.klooni.effects.VanishEffect;
+import io.github.lonamiwebs.klooni.effects.WaterdropEffect;
 import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 import io.github.lonamiwebs.klooni.screens.TransitionScreen;
@@ -119,6 +120,8 @@ public class Klooni extends Game {
 
     // Effects used when clearing a row
     public static IEffect createEffect(final Cell deadCell, final Vector2 culprit) {
+        // TODO Every effect should probably return a string corresponding to their sound
+        // so there's only one switch around
         final IEffect effect;
         switch (usedEffect) {
             default:
@@ -126,6 +129,9 @@ public class Klooni extends Game {
                 effect = new VanishEffect();
                 break;
             case 1:
+                effect = new WaterdropEffect();
+                break;
+            case 2:
                 effect = new EvaporateEffect();
                 break;
         }
@@ -235,6 +241,9 @@ public class Klooni extends Game {
                 effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_vanish.mp3"));
                 break;
             case 1:
+                effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_waterdrop.mp3"));
+                break;
+            case 2:
                 effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_evaporate.mp3"));
                 break;
         }
@@ -245,7 +254,8 @@ public class Klooni extends Game {
         // and when creating instances of a lot of effects it's better if we can
         // save some processor cycles.
         if (name.equals("vanish")) return 0;
-        if (name.equals("evaporate")) return 1;
+        if (name.equals("waterdrop")) return 1;
+        if (name.equals("evaporate")) return 2;
         return -1;
     }
 
