@@ -19,6 +19,7 @@ ids = [
     'cancel',
     'credits',
     'cup',
+    'effects',
     'home',
     'issues',
     'ok',

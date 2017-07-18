@@ -49,6 +49,14 @@ class CustomizeScreen implements Screen {
 
     private final Screen lastScreen;
 
+    private final Table table;
+    private final SoftButton toggleShopButton;
+    private final VerticalGroup shopGroup; // Showing available themes or effects
+    private final ScrollPane shopScroll;
+    final MoneyBuyBand buyBand;
+
+    private boolean showingEffectsShop;
+
     private float themeDragStartX, themeDragStartY;
 
     //endregion
@@ -64,13 +72,11 @@ class CustomizeScreen implements Screen {
     //region Constructor
 
     CustomizeScreen(Klooni game, final Screen lastScreen) {
-        final GameLayout layout = new GameLayout();
-
         this.game = game;
         this.lastScreen = lastScreen;
         stage = new Stage();
 
-        Table table = new Table();
+        table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -100,6 +106,22 @@ class CustomizeScreen implements Screen {
             }
         });
         optionsGroup.addActor(soundButton);
+
+        // Toggle the current shop (themes or effects)
+        toggleShopButton = new SoftButton(2, "effects_texture");
+        toggleShopButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showingEffectsShop = !showingEffectsShop;
+                if (showingEffectsShop) {
+                    toggleShopButton.updateImage("palette_texture");
+                } else {
+                    toggleShopButton.updateImage("effects_texture");
+                }
+                loadShop();
+            }
+        });
+        optionsGroup.addActor(toggleShopButton);
 
         // Snap to grid on/off
         final SoftButton snapButton = new SoftButton(
@@ -139,66 +161,18 @@ class CustomizeScreen implements Screen {
         table.add(new ScrollPane(optionsGroup))
                 .pad(20, 4, 12, 4).height(backButton.getHeight());
 
-        // Load all the available themes
-        final MoneyBuyBand buyBand = new MoneyBuyBand(game);
-
+        buyBand = new MoneyBuyBand(game);
         table.row();
-        final VerticalGroup themesGroup = new VerticalGroup();
-        for (Theme theme : Theme.getThemes()) {
-            final ThemeCard card = new ThemeCard(game, layout, theme);
-            card.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    themeDragStartX = x;
-                    themeDragStartY = y;
-                    return true;
-                }
 
-                // We could actually rely on touchDragged not being called,
-                // but perhaps it would be hard for some people not to move
-                // their fingers even the slightest bit, so we use a custom
-                // drag limit
-
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    x -= themeDragStartX;
-                    y -= themeDragStartY;
-                    float distSq = x * x + y * y;
-                    if (distSq < DRAG_LIMIT_SQ) {
-                        if (Klooni.isThemeBought(card.theme))
-                            card.use();
-                        else
-                            buyBand.askBuy(card);
-
-                        for (Actor a : themesGroup.getChildren()) {
-                            ThemeCard c = (ThemeCard)a;
-                            c.usedThemeUpdated();
-                        }
-                    }
-                }
-            });
-            themesGroup.addActor(card);
-        }
-
-        final ScrollPane themesScroll = new ScrollPane(themesGroup);
-        table.add(themesScroll).expand().fill();
+        // Load all the available themes as the default "shop"
+        shopGroup = new VerticalGroup();
+        shopScroll = new ScrollPane(shopGroup);
+        table.add(shopScroll).expand().fill();
+        loadShop();
 
         // Show the current money row
         table.row();
         table.add(buyBand).expandX().fillX();
-
-        // Scroll to the currently selected theme
-        table.layout();
-        for (Actor a : themesGroup.getChildren()) {
-            ThemeCard c = (ThemeCard)a;
-            if (c.isUsed()) {
-                themesScroll.scrollTo(
-                        c.getX(), c.getY() + c.getHeight(),
-                        c.getWidth(), c.getHeight());
-                break;
-            }
-            c.usedThemeUpdated();
-        }
     }
 
     //endregion
@@ -207,6 +181,66 @@ class CustomizeScreen implements Screen {
 
     private void goBack() {
         CustomizeScreen.this.game.transitionTo(lastScreen);
+    }
+
+    private void loadShop() {
+        final GameLayout layout = new GameLayout();
+        shopGroup.clear();
+
+        if (showingEffectsShop) {
+            // TODO Show the effects shop
+        } else {
+            // Showing themes shop otherwise
+            for (Theme theme : Theme.getThemes()) {
+                final ThemeCard card = new ThemeCard(game, layout, theme);
+                card.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        themeDragStartX = x;
+                        themeDragStartY = y;
+                        return true;
+                    }
+
+                    // We could actually rely on touchDragged not being called,
+                    // but perhaps it would be hard for some people not to move
+                    // their fingers even the slightest bit, so we use a custom
+                    // drag limit
+
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        x -= themeDragStartX;
+                        y -= themeDragStartY;
+                        float distSq = x * x + y * y;
+                        if (distSq < DRAG_LIMIT_SQ) {
+                            if (Klooni.isThemeBought(card.theme))
+                                card.use();
+                            else
+                                buyBand.askBuy(card);
+
+                            for (Actor a : shopGroup.getChildren()) {
+                                ThemeCard c = (ThemeCard)a;
+                                c.usedThemeUpdated();
+                            }
+                        }
+                    }
+                });
+
+                shopGroup.addActor(card);
+
+                // Scroll to the currently selected theme
+                table.layout();
+                for (Actor a : shopGroup.getChildren()) {
+                    ThemeCard c = (ThemeCard)a;
+                    if (c.isUsed()) {
+                        shopScroll.scrollTo(
+                                c.getX(), c.getY() + c.getHeight(),
+                                c.getWidth(), c.getHeight());
+                        break;
+                    }
+                    c.usedThemeUpdated();
+                }
+            }
+        }
     }
 
     //endregion
