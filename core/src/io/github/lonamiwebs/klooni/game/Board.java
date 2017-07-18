@@ -17,8 +17,6 @@
 */
 package io.github.lonamiwebs.klooni.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -28,10 +26,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
-import io.github.lonamiwebs.klooni.effects.EvaporateEffect;
 import io.github.lonamiwebs.klooni.effects.IEffect;
-import io.github.lonamiwebs.klooni.effects.VanishEffect;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Represents the on screen board, with all the put cells
@@ -174,7 +171,7 @@ public class Board implements BinSerializable {
     //
     // If the piece is put on the top left corner, all the cells will be cleared.
     // If we first cleared the columns, then the rows wouldn't have been cleared.
-    public int clearComplete() {
+    public int clearComplete(final Effect effect) {
         int clearCount = 0;
         boolean[] clearedRows = new boolean[cellCount];
         boolean[] clearedCols = new boolean[cellCount];
@@ -207,7 +204,7 @@ public class Board implements BinSerializable {
             for (int i = 0; i < cellCount; ++i) {
                 if (clearedRows[i]) {
                     for (int j = 0; j < cellCount; ++j) {
-                        effects.add(Klooni.createEffect(cells[i][j], lastPutPiecePos));
+                        effects.add(effect.create(cells[i][j], lastPutPiecePos));
                         cells[i][j].set(-1);
                     }
                 }
@@ -216,7 +213,7 @@ public class Board implements BinSerializable {
             for (int j = 0; j < cellCount; ++j) {
                 if (clearedCols[j]) {
                     for (int i = 0; i < cellCount; ++i) {
-                        effects.add(Klooni.createEffect(cells[i][j], lastPutPiecePos));
+                        effects.add(effect.create(cells[i][j], lastPutPiecePos));
                         cells[i][j].set(-1);
                     }
                 }

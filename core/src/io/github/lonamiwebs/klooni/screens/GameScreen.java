@@ -238,11 +238,11 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
         if (result.onBoard) {
             scorer.addPieceScore(result.area);
-            int bonus = scorer.addBoardScore(board.clearComplete(), board.cellCount);
+            int bonus = scorer.addBoardScore(board.clearComplete(game.effect), board.cellCount);
             if (bonus > 0) {
                 bonusParticleHandler.addBonus(result.pieceCenter, bonus);
                 if (Klooni.soundsEnabled()) {
-                    game.playEffectSound();
+                    game.effect.playSound();
                 }
             }
 
