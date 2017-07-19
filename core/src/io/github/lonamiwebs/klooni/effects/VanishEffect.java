@@ -57,6 +57,6 @@ public class VanishEffect implements IEffect {
 
     @Override
     public boolean isDone() {
-        return vanishElapsed > vanishElapsed;
+        return vanishElapsed > vanishLifetime;
     }
 }
