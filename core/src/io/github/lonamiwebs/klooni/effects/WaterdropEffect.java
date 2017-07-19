@@ -4,7 +4,7 @@ package io.github.lonamiwebs.klooni.effects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -44,7 +44,7 @@ public class WaterdropEffect implements IEffect {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         final float dt = Gdx.graphics.getDeltaTime();
         fallSpeed += fallAcceleration * dt;
         pos.y -= fallSpeed * dt;

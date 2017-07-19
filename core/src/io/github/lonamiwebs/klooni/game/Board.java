@@ -27,7 +27,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import io.github.lonamiwebs.klooni.Effect;
-import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.effects.IEffect;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 

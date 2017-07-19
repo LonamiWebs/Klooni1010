@@ -17,6 +17,7 @@
 */
 package io.github.lonamiwebs.klooni.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -24,8 +25,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
+import io.github.lonamiwebs.klooni.effects.IEffect;
 import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.game.GameLayout;
+import io.github.lonamiwebs.klooni.game.Piece;
 
 // Card-like actor used to display information about a given theme
 public class EffectCard extends ShopCard {
@@ -33,6 +36,9 @@ public class EffectCard extends ShopCard {
     //region Members
 
     public final Effect effect;
+    private final Cell cell;
+    private IEffect currentEffect;
+
     private final Texture background;
     private Color color;
 
@@ -46,6 +52,7 @@ public class EffectCard extends ShopCard {
         color = Klooni.theme.getRandomCellColor();
 
         this.effect = effect;
+        cell = Piece.randomCell(0, 0, cellSize);
         usedItemUpdated();
     }
 
@@ -62,7 +69,14 @@ public class EffectCard extends ShopCard {
 
         // Avoid drawing on the borders by adding +1 cell padding +1 to center it
         // so it's becomes cellSize * 2
-        Cell.draw(color, batch, x + cellSize * 2, y + cellSize * 2, cellSize);
+        cell.pos.set(x + cellSize * 2, y + cellSize * 2);
+
+        if (currentEffect != null && !currentEffect.isDone()) {
+            currentEffect.draw(batch);
+        } else {
+            cell.draw(batch);
+            currentEffect = effect.create(cell, cell.pos);
+        }
 
         super.draw(batch, parentAlpha);
     }

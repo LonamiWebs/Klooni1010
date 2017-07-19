@@ -20,7 +20,6 @@ package io.github.lonamiwebs.klooni.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.io.DataInputStream;
@@ -62,7 +61,7 @@ public class Cell implements BinSerializable {
         colorIndex = ci;
     }
 
-    void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         // Always query the color to the theme, because it might have changed
         draw(Klooni.theme.getCellColor(colorIndex), batch, pos.x, pos.y, size);
     }

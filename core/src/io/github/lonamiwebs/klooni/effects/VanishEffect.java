@@ -3,7 +3,7 @@ package io.github.lonamiwebs.klooni.effects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
@@ -42,7 +42,7 @@ public class VanishEffect implements IEffect {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
+    public void draw(Batch batch) {
         vanishElapsed += Gdx.graphics.getDeltaTime();
 
         // vanishElapsed might be < 0 (delay), so clamp to 0
