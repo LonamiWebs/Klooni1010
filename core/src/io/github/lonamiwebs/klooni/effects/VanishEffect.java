@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.game.Cell;
@@ -16,6 +17,8 @@ public class VanishEffect implements IEffect {
     private float vanishSize;
     private float vanishElapsed;
     private float vanishLifetime;
+
+    private final static float MINIMUM_SIZE = 0.3f;
 
     public VanishEffect() {
         vanishElapsed = Float.POSITIVE_INFINITY;
@@ -49,7 +52,14 @@ public class VanishEffect implements IEffect {
         float progress = Math.min(1f,
                 Math.max(vanishElapsed, 0f) / vanishLifetime);
 
-        vanishSize = Interpolation.elasticIn.apply(cell.size, 0, progress);
+        // If one were to plot the elasticIn function, they would see that the slope increases
+        // a lot towards the end- a linear interpolation between the last size + the desired
+        // size at 20% seems to look a lot better.
+        vanishSize = MathUtils.lerp(
+                vanishSize,
+                Interpolation.elasticIn.apply(cell.size, 0, progress),
+                0.2f
+        );
 
         float centerOffset = cell.size * 0.5f - vanishSize * 0.5f;
         Cell.draw(vanishColor, batch, cell.pos.x + centerOffset, cell.pos.y + centerOffset, vanishSize);
@@ -57,6 +67,6 @@ public class VanishEffect implements IEffect {
 
     @Override
     public boolean isDone() {
-        return vanishElapsed > vanishLifetime;
+        return vanishSize < MINIMUM_SIZE;
     }
 }
