@@ -67,7 +67,6 @@ public class Effect {
     //region Static methods
 
     public static Effect[] getEffects() {
-        // TODO Load effects
         return new Effect[] {
                 new Effect("vanish"),
                 new Effect("waterdrop"),

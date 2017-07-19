@@ -77,9 +77,8 @@ public class MoneyBuyBand extends Table {
         confirmButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (toBuy != null) {
+                if (toBuy != null)
                     toBuy.performBuy();
-                }
                 showCurrentMoney();
                 hideBuyButtons();
             }
