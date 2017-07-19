@@ -37,6 +37,7 @@ import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
 import io.github.lonamiwebs.klooni.actors.EffectCard;
 import io.github.lonamiwebs.klooni.actors.MoneyBuyBand;
+import io.github.lonamiwebs.klooni.actors.ShopCard;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 import io.github.lonamiwebs.klooni.game.GameLayout;
@@ -189,108 +190,61 @@ class CustomizeScreen implements Screen {
         final GameLayout layout = new GameLayout();
         shopGroup.clear();
 
-        if (showingEffectsShop) {
-            for (Effect effect : Effect.getEffects()) {
-                final EffectCard card = new EffectCard(game, layout, effect);
-                card.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        shopDragStartX = x;
-                        shopDragStartY = y;
-                        return true;
-                    }
+        if (showingEffectsShop)
+            for (Effect effect : Effect.getEffects())
+                addCard(new EffectCard(game, layout, effect));
 
-                    // We could actually rely on touchDragged not being called,
-                    // but perhaps it would be hard for some people not to move
-                    // their fingers even the slightest bit, so we use a custom
-                    // drag limit
+        else // showingThemesShop
+            for (Theme theme : Theme.getThemes())
+                addCard(new ThemeCard(game, layout, theme));
 
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        x -= shopDragStartX;
-                        y -= shopDragStartY;
-                        float distSq = x * x + y * y;
-                        if (distSq < DRAG_LIMIT_SQ) {
-                            if (Klooni.isEffectBought(card.effect))
-                                card.use();
-                            else
-                                buyBand.askBuy(card);
-
-                            for (Actor a : shopGroup.getChildren()) {
-                                EffectCard c = (EffectCard)a;
-                                c.usedEffectUpdated();
-                            }
-                        }
-                    }
-                });
-
-                shopGroup.addActor(card);
-
-                // Scroll to the currently selected theme
-                table.layout();
-                for (Actor a : shopGroup.getChildren()) {
-                    EffectCard c = (EffectCard)a;
-                    if (c.isUsed()) {
-                        shopScroll.scrollTo(
-                                c.getX(), c.getY() + c.getHeight(),
-                                c.getWidth(), c.getHeight());
-                        break;
-                    }
-                    c.usedEffectUpdated();
-                }
+        // Scroll to the currently selected item
+        table.layout();
+        for (Actor a : shopGroup.getChildren()) {
+            ShopCard c = (ShopCard)a;
+            if (c.isUsed()) {
+                shopScroll.scrollTo(
+                        c.getX(), c.getY() + c.getHeight(),
+                        c.getWidth(), c.getHeight());
+                break;
             }
-        } else {
-            // Showing themes shop otherwise
-            for (Theme theme : Theme.getThemes()) {
-                final ThemeCard card = new ThemeCard(game, layout, theme);
-                card.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        shopDragStartX = x;
-                        shopDragStartY = y;
-                        return true;
-                    }
-
-                    // We could actually rely on touchDragged not being called,
-                    // but perhaps it would be hard for some people not to move
-                    // their fingers even the slightest bit, so we use a custom
-                    // drag limit
-
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        x -= shopDragStartX;
-                        y -= shopDragStartY;
-                        float distSq = x * x + y * y;
-                        if (distSq < DRAG_LIMIT_SQ) {
-                            if (Klooni.isThemeBought(card.theme))
-                                card.use();
-                            else
-                                buyBand.askBuy(card);
-
-                            for (Actor a : shopGroup.getChildren()) {
-                                ThemeCard c = (ThemeCard)a;
-                                c.usedThemeUpdated();
-                            }
-                        }
-                    }
-                });
-
-                shopGroup.addActor(card);
-
-                // Scroll to the currently selected theme
-                table.layout();
-                for (Actor a : shopGroup.getChildren()) {
-                    ThemeCard c = (ThemeCard)a;
-                    if (c.isUsed()) {
-                        shopScroll.scrollTo(
-                                c.getX(), c.getY() + c.getHeight(),
-                                c.getWidth(), c.getHeight());
-                        break;
-                    }
-                    c.usedThemeUpdated();
-                }
-            }
+            c.usedItemUpdated();
         }
+    }
+
+    private void addCard(final ShopCard card) {
+        card.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                shopDragStartX = x;
+                shopDragStartY = y;
+                return true;
+            }
+
+            // We could actually rely on touchDragged not being called,
+            // but perhaps it would be hard for some people not to move
+            // their fingers even the slightest bit, so we use a custom
+            // drag limit
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                x -= shopDragStartX;
+                y -= shopDragStartY;
+                float distSq = x * x + y * y;
+                if (distSq < DRAG_LIMIT_SQ) {
+                    if (card.isBought())
+                        card.use();
+                    else
+                        buyBand.askBuy(card);
+
+                    for (Actor a : shopGroup.getChildren()) {
+                        ((ShopCard)a).usedItemUpdated();
+                    }
+                }
+            }
+        });
+
+        shopGroup.addActor(card);
     }
 
     //endregion

@@ -20,9 +20,6 @@ package io.github.lonamiwebs.klooni.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
@@ -31,49 +28,25 @@ import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
 // Card-like actor used to display information about a given theme
-public class EffectCard extends Actor {
+public class EffectCard extends ShopCard {
 
     //region Members
 
-    private final Klooni game;
     public final Effect effect;
     private final Texture background;
     private Color color;
-
-    private final Label nameLabel;
-    private final Label priceLabel;
-
-    public final Rectangle nameBounds;
-    public final Rectangle priceBounds;
-
-    public float cellSize;
 
     //endregion
 
     //region Constructor
 
     public EffectCard(final Klooni game, final GameLayout layout, final Effect effect) {
-        this.game = game;
-        this.effect = effect;
+        super(game, layout, effect.getDisplay(), Klooni.theme.background);
         background = Theme.getBlankTexture();
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.skin.getFont("font_small");
-
-        priceLabel = new Label("", labelStyle);
-        nameLabel = new Label(effect.getDisplay(), labelStyle);
-
-        Color labelColor = Theme.shouldUseWhite(Klooni.theme.background) ? Color.WHITE : Color.BLACK;
-        priceLabel.setColor(labelColor);
-        nameLabel.setColor(labelColor);
-
-        priceBounds = new Rectangle();
-        nameBounds = new Rectangle();
-
-        layout.update(this);
-        usedEffectUpdated();
-
         color = Klooni.theme.getRandomCellColor();
+
+        this.effect = effect;
+        usedItemUpdated();
     }
 
     //endregion
@@ -91,14 +64,11 @@ public class EffectCard extends Actor {
         // so it's becomes cellSize * 2
         Cell.draw(color, batch, x + cellSize * 2, y + cellSize * 2, cellSize);
 
-        nameLabel.setBounds(x + nameBounds.x, y + nameBounds.y, nameBounds.width, nameBounds.height);
-        nameLabel.draw(batch, parentAlpha);
-
-        priceLabel.setBounds(x + priceBounds.x, y + priceBounds.y, priceBounds.width, priceBounds.height);
-        priceLabel.draw(batch, parentAlpha);
+        super.draw(batch, parentAlpha);
     }
 
-    public void usedEffectUpdated() {
+    @Override
+    public void usedItemUpdated() {
         if (game.effect.name.equals(effect.name))
             priceLabel.setText("currently used");
         else if (Klooni.isEffectBought(effect))
@@ -107,16 +77,29 @@ public class EffectCard extends Actor {
             priceLabel.setText("buy for "+effect.price);
     }
 
+    @Override
     public void use() {
         game.updateEffect(effect);
-        usedEffectUpdated();
+        usedItemUpdated();
     }
 
+    @Override
+    public boolean isBought() {
+        return Klooni.isEffectBought(effect);
+    }
+
+    @Override
     public boolean isUsed() {
         return game.effect.equals(effect.name);
     }
 
-    void performBuy() {
+    @Override
+    public float getPrice() {
+        return effect.price;
+    }
+
+    @Override
+    public void performBuy() {
         Klooni.buyEffect(effect);
         use();
     }

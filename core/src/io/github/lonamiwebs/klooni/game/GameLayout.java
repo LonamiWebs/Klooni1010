@@ -23,8 +23,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import io.github.lonamiwebs.klooni.actors.Band;
-import io.github.lonamiwebs.klooni.actors.EffectCard;
-import io.github.lonamiwebs.klooni.actors.ThemeCard;
+import io.github.lonamiwebs.klooni.actors.ShopCard;
 
 // Helper class to calculate the size of each element
 //
@@ -35,7 +34,7 @@ public class GameLayout {
     //region Members
 
     private float screenWidth, marginWidth, availableWidth;
-    private float screenHeight, logoHeight, scoreHeight, boardHeight, pieceHolderHeight, themeCardHeight;
+    private float screenHeight, logoHeight, scoreHeight, boardHeight, pieceHolderHeight, shopCardHeight;
 
     //endregion
 
@@ -63,7 +62,7 @@ public class GameLayout {
         boardHeight = screenHeight * 0.50f;
         pieceHolderHeight = screenHeight * 0.25f;
 
-        themeCardHeight = screenHeight * 0.15f;
+        shopCardHeight = screenHeight * 0.15f;
     }
 
     //endregion
@@ -132,33 +131,18 @@ public class GameLayout {
         band.infoBounds.set(area.x, area.y + area.height * 0.10f, area.width, area.height * 0.35f);
     }
 
-    public void update(ThemeCard card) {
-        card.setSize(availableWidth - marginWidth, themeCardHeight);
-        card.cellSize = themeCardHeight * 0.2f;
+    public void update(ShopCard card) {
+        card.setSize(availableWidth - marginWidth, shopCardHeight);
+        card.cellSize = shopCardHeight * 0.2f;
 
-        // X offset from the cells (5 cells = themeCardHeight)
+        // X offset from the cells (5 cells = shopCardHeight)
         card.nameBounds.set(
-                themeCardHeight, card.cellSize,
-                availableWidth - themeCardHeight, themeCardHeight);
+                shopCardHeight, card.cellSize,
+                availableWidth - shopCardHeight, shopCardHeight);
 
         card.priceBounds.set(
-                themeCardHeight, -card.cellSize,
-                availableWidth - themeCardHeight, themeCardHeight);
-    }
-
-    // TODO Probably a more generic class "card" that can hold any type (theme/effect)
-    public void update(EffectCard card) {
-        card.setSize(availableWidth - marginWidth, themeCardHeight);
-        card.cellSize = themeCardHeight * 0.2f;
-
-        // X offset from the cells (5 cells = themeCardHeight)
-        card.nameBounds.set(
-                themeCardHeight, card.cellSize,
-                availableWidth - themeCardHeight, themeCardHeight);
-
-        card.priceBounds.set(
-                themeCardHeight, -card.cellSize,
-                availableWidth - themeCardHeight, themeCardHeight);
+                shopCardHeight, -card.cellSize,
+                availableWidth - shopCardHeight, shopCardHeight);
     }
 
     //endregion

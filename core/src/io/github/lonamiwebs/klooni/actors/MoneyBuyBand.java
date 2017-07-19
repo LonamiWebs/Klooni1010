@@ -43,7 +43,7 @@ public class MoneyBuyBand extends Table {
     // The theme card that is going to be bought next. We can't
     // only save the Theme because we need to tell the ThemeCard
     // that it was bought so it can reflect the new theme status.
-    private Object toBuy; // Either ThemeCard or EffectCard
+    private ShopCard toBuy;
 
     // Used to interpolate between strings
     private StringBuilder shownText;
@@ -78,10 +78,7 @@ public class MoneyBuyBand extends Table {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (toBuy != null) {
-                    if (toBuy instanceof ThemeCard)
-                        ((ThemeCard)toBuy).performBuy();
-                    else if (toBuy instanceof EffectCard)
-                        ((EffectCard)toBuy).performBuy();
+                    toBuy.performBuy();
                 }
                 showCurrentMoney();
                 hideBuyButtons();
@@ -175,25 +172,10 @@ public class MoneyBuyBand extends Table {
 
     //region Public methods
 
-    // Asks the user to buy the given theme, or shows
-    // that they don't have enough money to buy it
-    public void askBuy(final ThemeCard toBuy) {
-        if (toBuy.theme.getPrice() > Klooni.getMoney()) {
-            setTempText("cannot buy!");
-            confirmButton.setVisible(false);
-            cancelButton.setVisible(false);
-        }
-        else {
-            this.toBuy = toBuy;
-            setText("confirm?");
-            confirmButton.setVisible(true);
-            cancelButton.setVisible(true);
-        }
-    }
-
-    // TODO Make a generic card class so they all inherit
-    public void askBuy(final EffectCard toBuy) {
-        if (toBuy.effect.price > Klooni.getMoney()) {
+    // Asks the user to buy the given theme or effect,
+    // or shows that they don't have enough money to buy it
+    public void askBuy(final ShopCard toBuy) {
+        if (toBuy.getPrice() > Klooni.getMoney()) {
             setTempText("cannot buy!");
             confirmButton.setVisible(false);
             cancelButton.setVisible(false);

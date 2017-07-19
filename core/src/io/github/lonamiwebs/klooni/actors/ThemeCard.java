@@ -17,12 +17,8 @@
 */
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
@@ -30,20 +26,12 @@ import io.github.lonamiwebs.klooni.game.Cell;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 
 // Card-like actor used to display information about a given theme
-public class ThemeCard extends Actor {
+public class ThemeCard extends ShopCard {
 
     //region Members
 
     public final Theme theme;
     private final Texture background;
-
-    private final Label nameLabel;
-    private final Label priceLabel;
-
-    public final Rectangle nameBounds;
-    public final Rectangle priceBounds;
-
-    public float cellSize;
 
     private final static int colorsUsed[][] = {
             {0, 7, 7},
@@ -56,24 +44,11 @@ public class ThemeCard extends Actor {
     //region Constructor
 
     public ThemeCard(final Klooni game, final GameLayout layout, final Theme theme) {
-        this.theme = theme;
+        super(game, layout, theme.getDisplay(), theme.background);
         background = Theme.getBlankTexture();
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.skin.getFont("font_small");
-
-        priceLabel = new Label("", labelStyle);
-        nameLabel = new Label(theme.getDisplay(), labelStyle);
-
-        Color labelColor = Theme.shouldUseWhite(theme.background) ? Color.WHITE : Color.BLACK;
-        priceLabel.setColor(labelColor);
-        nameLabel.setColor(labelColor);
-
-        priceBounds = new Rectangle();
-        nameBounds = new Rectangle();
-
-        layout.update(this);
-        usedThemeUpdated();
+        this.theme = theme;
+        usedItemUpdated();
     }
 
     //endregion
@@ -95,14 +70,11 @@ public class ThemeCard extends Actor {
             }
         }
 
-        nameLabel.setBounds(x + nameBounds.x, y + nameBounds.y, nameBounds.width, nameBounds.height);
-        nameLabel.draw(batch, parentAlpha);
-
-        priceLabel.setBounds(x + priceBounds.x, y + priceBounds.y, priceBounds.width, priceBounds.height);
-        priceLabel.draw(batch, parentAlpha);
+        super.draw(batch, parentAlpha);
     }
 
-    public void usedThemeUpdated() {
+    @Override
+    public void usedItemUpdated() {
         if (Klooni.theme.getName().equals(theme.getName()))
             priceLabel.setText("currently used");
         else if (Klooni.isThemeBought(theme))
@@ -111,16 +83,29 @@ public class ThemeCard extends Actor {
             priceLabel.setText("buy for "+theme.getPrice());
     }
 
+    @Override
     public void use() {
         Klooni.updateTheme(theme);
-        usedThemeUpdated();
+        usedItemUpdated();
     }
 
+    @Override
+    public boolean isBought() {
+        return Klooni.isThemeBought(theme);
+    }
+
+    @Override
     public boolean isUsed() {
         return Klooni.theme.getName().equals(theme.getName());
     }
 
-    void performBuy() {
+    @Override
+    public float getPrice() {
+        return theme.getPrice();
+    }
+
+    @Override
+    public void performBuy() {
         Klooni.buyTheme(theme);
         use();
     }
