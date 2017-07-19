@@ -70,6 +70,11 @@ public abstract class ShopCard extends Actor {
         priceLabel.draw(batch, parentAlpha);
     }
 
+    // Showcases the current effect (the shop will be showcasing them, one by one)
+    // This method should be called on the same card as long as it returns true.
+    // It should return false once it's done so that the next card can be showcased.
+    public boolean showcase(Batch batch, float yDisplacement) { return false; }
+
     public abstract void usedItemUpdated();
     public abstract void use();
     public abstract boolean isBought();

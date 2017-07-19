@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
@@ -59,6 +61,7 @@ class CustomizeScreen implements Screen {
     final MoneyBuyBand buyBand;
 
     private boolean showingEffectsShop;
+    private int showcaseIndex;
 
     private float shopDragStartX, shopDragStartY;
 
@@ -187,6 +190,8 @@ class CustomizeScreen implements Screen {
     }
 
     private void loadShop() {
+        showcaseIndex = 0; // Reset the index
+
         final GameLayout layout = new GameLayout();
         shopGroup.clear();
 
@@ -260,8 +265,27 @@ class CustomizeScreen implements Screen {
     public void render(float delta) {
         Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), MIN_DELTA));
         stage.draw();
+
+        // After everything is drawn, showcase the current shop item
+        SnapshotArray<Actor> children = shopGroup.getChildren();
+        if (children.size > 0) {
+            final ShopCard card = (ShopCard)children.get(showcaseIndex);
+
+            final Batch batch = stage.getBatch();
+            batch.begin();
+            // For some really strange reason, we need to displace the particle effect
+            // by "buyBand.height", or it will render exactly that height below where
+            // it should.
+            // TODO Fix this - maybe use the same project matrix as stage.draw()?
+            // batch.setProjectionMatrix(stage.getViewport().getCamera().combined)
+            if (!card.showcase(batch, buyBand.getHeight())) {
+                showcaseIndex = (showcaseIndex + 1) % children.size;
+            }
+            batch.end();
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
             goBack();

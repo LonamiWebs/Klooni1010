@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Matrix4;
 
 import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
@@ -71,14 +72,28 @@ public class EffectCard extends ShopCard {
         // so it's becomes cellSize * 2
         cell.pos.set(x + cellSize * 2, y + cellSize * 2);
 
-        if (currentEffect != null && !currentEffect.isDone()) {
-            currentEffect.draw(batch);
-        } else {
+        // If we're not showcasing (currentEffect == null), show the cell alone
+        if (currentEffect == null)
             cell.draw(batch);
-            currentEffect = effect.create(cell, cell.pos);
-        }
 
         super.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public boolean showcase(Batch batch, float yDisplacement) {
+        cell.pos.y += yDisplacement;
+
+        // If it's null, create it, then we want to render
+        if (currentEffect == null) {
+            currentEffect = effect.create(cell, cell.pos);
+        } else if (currentEffect.isDone()) {
+            // Set to null so it's created the next time
+            currentEffect = null;
+            return false;
+        }
+
+        currentEffect.draw(batch);
+        return true;
     }
 
     @Override
