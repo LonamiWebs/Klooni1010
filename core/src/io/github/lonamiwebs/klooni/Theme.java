@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -196,6 +197,13 @@ public class Theme {
 
     public Color getCellColor(int colorIndex) {
         return colorIndex < 0 ? emptyCell : cells[colorIndex];
+    }
+
+    public Color getRandomCellColor() {
+        if (cells.length == 0)
+            return emptyCell;
+        else
+            return cells[MathUtils.random(cells.length - 1)];
     }
 
     public void glClearBackground() {

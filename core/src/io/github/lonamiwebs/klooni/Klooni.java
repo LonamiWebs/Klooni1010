@@ -182,6 +182,43 @@ public class Klooni extends Game {
         theme.update(newTheme.getName());
     }
 
+    // Effects related
+    public static boolean isEffectBought(Effect effect) {
+        if (effect.price == 0)
+            return true;
+
+        String[] effects = prefs.getString("boughtEffects", "").split(":");
+        for (String e : effects)
+            if (e.equals(effect.name))
+                return true;
+
+        return false;
+    }
+
+    public static boolean buyEffect(Effect effect) {
+        final float money = getRealMoney();
+        if (effect.price > money)
+            return false;
+
+        setMoney(money - effect.price);
+
+        String bought = prefs.getString("boughtEffects", "");
+        if (bought.equals(""))
+            bought = effect.name;
+        else
+            bought += ":" + effect.name;
+
+        prefs.putString("boughtEffects", bought);
+
+        return true;
+    }
+
+    public void updateEffect(Effect newEffect) {
+        prefs.putString("effectName", newEffect.name).flush();
+        // Create a new effect, since the one passed through the parameter may dispose later
+        effect = new Effect(newEffect.name);
+    }
+
     // Money related
     public static void addMoneyFromScore(int score) {
         setMoney(getRealMoney() + score * SCORE_TO_MONEY);

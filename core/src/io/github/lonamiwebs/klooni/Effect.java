@@ -34,6 +34,8 @@ public class Effect {
 
     private final int effectId;
     private final Sound effectSound;
+    public final String name;
+    public final int price;
 
     //endregion
 
@@ -41,8 +43,10 @@ public class Effect {
 
     // This method will load the sound "sound/effect_{effectName}.mp3"
     public Effect(final String effectName) {
-        effectId = effectNameToInt(effectName);
-        effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_" + effectName + ".mp3"));
+        name = effectName;
+        effectId = effectNameToInt(name);
+        effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_" + name + ".mp3"));
+        price = effectId == 0 ? 0 : 200; // TODO For now they're all 200 coins except the first
     }
 
     //endregion
@@ -51,6 +55,11 @@ public class Effect {
 
     public void playSound() {
         effectSound.play(MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), 0);
+    }
+
+    public String getDisplay() {
+        // TODO For now, uppercase the first letter
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     //endregion
