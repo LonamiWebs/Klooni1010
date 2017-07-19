@@ -32,8 +32,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
+import io.github.lonamiwebs.klooni.actors.EffectCard;
 import io.github.lonamiwebs.klooni.actors.MoneyBuyBand;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
@@ -57,7 +59,7 @@ class CustomizeScreen implements Screen {
 
     private boolean showingEffectsShop;
 
-    private float themeDragStartX, themeDragStartY;
+    private float shopDragStartX, shopDragStartY;
 
     //endregion
 
@@ -188,16 +190,13 @@ class CustomizeScreen implements Screen {
         shopGroup.clear();
 
         if (showingEffectsShop) {
-            // TODO Show the effects shop
-        } else {
-            // Showing themes shop otherwise
-            for (Theme theme : Theme.getThemes()) {
-                final ThemeCard card = new ThemeCard(game, layout, theme);
+            for (Effect effect : Effect.getEffects()) {
+                final EffectCard card = new EffectCard(game, layout, effect);
                 card.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        themeDragStartX = x;
-                        themeDragStartY = y;
+                        shopDragStartX = x;
+                        shopDragStartY = y;
                         return true;
                     }
 
@@ -208,8 +207,59 @@ class CustomizeScreen implements Screen {
 
                     @Override
                     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                        x -= themeDragStartX;
-                        y -= themeDragStartY;
+                        x -= shopDragStartX;
+                        y -= shopDragStartY;
+                        float distSq = x * x + y * y;
+                        if (distSq < DRAG_LIMIT_SQ) {
+                            if (Klooni.isEffectBought(card.effect))
+                                card.use();
+                            else
+                                buyBand.askBuy(card);
+
+                            for (Actor a : shopGroup.getChildren()) {
+                                EffectCard c = (EffectCard)a;
+                                c.usedEffectUpdated();
+                            }
+                        }
+                    }
+                });
+
+                shopGroup.addActor(card);
+
+                // Scroll to the currently selected theme
+                table.layout();
+                for (Actor a : shopGroup.getChildren()) {
+                    EffectCard c = (EffectCard)a;
+                    if (c.isUsed()) {
+                        shopScroll.scrollTo(
+                                c.getX(), c.getY() + c.getHeight(),
+                                c.getWidth(), c.getHeight());
+                        break;
+                    }
+                    c.usedEffectUpdated();
+                }
+            }
+        } else {
+            // Showing themes shop otherwise
+            for (Theme theme : Theme.getThemes()) {
+                final ThemeCard card = new ThemeCard(game, layout, theme);
+                card.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        shopDragStartX = x;
+                        shopDragStartY = y;
+                        return true;
+                    }
+
+                    // We could actually rely on touchDragged not being called,
+                    // but perhaps it would be hard for some people not to move
+                    // their fingers even the slightest bit, so we use a custom
+                    // drag limit
+
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        x -= shopDragStartX;
+                        y -= shopDragStartY;
                         float distSq = x * x + y * y;
                         if (distSq < DRAG_LIMIT_SQ) {
                             if (Klooni.isThemeBought(card.theme))

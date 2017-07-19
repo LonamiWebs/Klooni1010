@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import io.github.lonamiwebs.klooni.actors.Band;
+import io.github.lonamiwebs.klooni.actors.EffectCard;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 
 // Helper class to calculate the size of each element
@@ -132,6 +133,21 @@ public class GameLayout {
     }
 
     public void update(ThemeCard card) {
+        card.setSize(availableWidth - marginWidth, themeCardHeight);
+        card.cellSize = themeCardHeight * 0.2f;
+
+        // X offset from the cells (5 cells = themeCardHeight)
+        card.nameBounds.set(
+                themeCardHeight, card.cellSize,
+                availableWidth - themeCardHeight, themeCardHeight);
+
+        card.priceBounds.set(
+                themeCardHeight, -card.cellSize,
+                availableWidth - themeCardHeight, themeCardHeight);
+    }
+
+    // TODO Probably a more generic class "card" that can hold any type (theme/effect)
+    public void update(EffectCard card) {
         card.setSize(availableWidth - marginWidth, themeCardHeight);
         card.cellSize = themeCardHeight * 0.2f;
 
