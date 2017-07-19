@@ -74,7 +74,7 @@ public class Klooni extends Game {
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
-        effect = new Effect(prefs.getString("effectName"));
+        effect = new Effect(prefs.getString("effectName", "vanish"));
     }
 
     //endregion
