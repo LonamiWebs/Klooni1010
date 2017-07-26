@@ -62,8 +62,7 @@ public class Board implements BinSerializable {
         cells = new Cell[this.cellCount][this.cellCount];
         for (int i = 0; i < this.cellCount; ++i) {
             for (int j = 0; j < this.cellCount; ++j) {
-                cells[i][j] = new Cell(
-                        pos.x + j * cellSize, pos.y + i * cellSize, cellSize);
+                cells[i][j] = new Cell(j * cellSize, i * cellSize, cellSize);
             }
         }
     }
@@ -114,6 +113,8 @@ public class Board implements BinSerializable {
     //region Public methods
 
     public void draw(SpriteBatch batch) {
+        batch.setTransformMatrix(batch.getTransformMatrix().translate(pos.x, pos.y, 0));
+
         for (int i = 0; i < cellCount; ++i)
             for (int j = 0; j < cellCount; ++j)
                 cells[i][j].draw(batch);
@@ -123,6 +124,8 @@ public class Board implements BinSerializable {
             if (effects.get(i).isDone())
                 effects.removeIndex(i);
         }
+
+        batch.setTransformMatrix(batch.getTransformMatrix().translate(-pos.x, -pos.y, 0));
     }
 
     public boolean canPutPiece(Piece piece) {
