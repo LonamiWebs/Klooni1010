@@ -27,11 +27,11 @@ import java.util.Arrays;
 public class BinSerializer {
 
     // ascii (klooni) and binary (1010b)
-    private static byte[] HEADER = { 0x6B, 0x6C, 0x6F, 0x6F, 0x6E, 0x69, 0xa };
+    private final static byte[] HEADER = { 0x6B, 0x6C, 0x6F, 0x6F, 0x6E, 0x69, 0xa };
 
     // MODIFY THIS VALUE EVERY TIME A BinSerializable IMPLEMENTATION CHANGES
     // Or unwanted results will happen and corrupt the game in an unknown way.
-    private static int VERSION = 2;
+    private final static int VERSION = 2;
 
     public static void serialize(final BinSerializable serializable, final OutputStream output)
             throws IOException {

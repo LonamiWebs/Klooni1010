@@ -30,7 +30,7 @@ public class ThemeCard extends ShopCard {
 
     //region Members
 
-    public final Theme theme;
+    private final Theme theme;
     private final Texture background;
 
     private final static int colorsUsed[][] = {

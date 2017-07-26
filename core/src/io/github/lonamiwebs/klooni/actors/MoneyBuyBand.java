@@ -46,7 +46,7 @@ public class MoneyBuyBand extends Table {
     private ShopCard toBuy;
 
     // Used to interpolate between strings
-    private StringBuilder shownText;
+    private final StringBuilder shownText;
 
     // When the next text update will take place
     private long nextTextUpdate;

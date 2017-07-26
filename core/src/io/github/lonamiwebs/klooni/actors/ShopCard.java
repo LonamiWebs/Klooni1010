@@ -31,7 +31,7 @@ public abstract class ShopCard extends Actor {
 
     final Klooni game;
 
-    final Label nameLabel;
+    private final Label nameLabel;
     final Label priceLabel;
 
     public final Rectangle nameBounds;
@@ -39,8 +39,8 @@ public abstract class ShopCard extends Actor {
 
     public float cellSize;
 
-    public ShopCard(final Klooni game, final GameLayout layout,
-                    final String itemName, final Color backgroundColor) {
+    ShopCard(final Klooni game, final GameLayout layout,
+             final String itemName, final Color backgroundColor) {
         this.game = game;
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font_small");

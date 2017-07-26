@@ -46,9 +46,9 @@ code {
 <td style="width:100%;">
   <h1>Theme properties</h1>
   <p><i>Change the theme name, price, shape and elements' color.</i></p>
-  <label for="themeName" autocomplete="off">Theme name:</label>
+  <label for="themeName">Theme name:</label>
   <input id="themeName" type="text" placeholder="Name..."
-         onchange="updateJson()">
+         onchange="updateJson()" autocomplete="off">
   <br />
   <label for="themePrice">Theme name:</label>
   <input id="themePrice" type="number" min="0" max="1000"

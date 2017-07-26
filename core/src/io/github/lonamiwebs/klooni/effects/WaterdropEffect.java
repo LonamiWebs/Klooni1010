@@ -25,7 +25,7 @@ public class WaterdropEffect implements IEffect {
     private static final float FALL_VARIATION = 50.0f;
     private static final float COLOR_SPEED = 7.5f;
 
-    private static Texture dropTexture;
+    private final static Texture dropTexture;
 
     static {
         dropTexture = SkinLoader.loadPng("cells/drop.png");

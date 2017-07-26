@@ -41,7 +41,7 @@ public class Piece {
     private final int rotation;
 
     public final int cellCols, cellRows;
-    private boolean shape[][];
+    private final boolean shape[][];
 
     // Default arbitrary value
     float cellSize = 10f;

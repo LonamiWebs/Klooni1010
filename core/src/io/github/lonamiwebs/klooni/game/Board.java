@@ -235,21 +235,17 @@ public class Board implements BinSerializable {
         return clearCount;
     }
 
-    public int clearAll(final int clearFromX, final int clearFromY, final Effect effect) {
-        int clearCount = 0;
+    public void clearAll(final int clearFromX, final int clearFromY, final Effect effect) {
         final Vector2 culprit = cells[clearFromY][clearFromX].pos;
 
         for (int i = 0; i < cellCount; ++i) {
             for (int j = 0; j < cellCount; ++j) {
                 if (!cells[i][j].isEmpty()) {
-                    clearCount++;
                     effects.add(effect.create(cells[i][j], culprit));
                     cells[i][j].set(-1);
                 }
             }
         }
-
-        return clearCount;
     }
 
     public boolean effectsDone() { return effects.size == 0; }

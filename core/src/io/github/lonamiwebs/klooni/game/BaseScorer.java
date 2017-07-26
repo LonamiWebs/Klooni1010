@@ -17,7 +17,6 @@
 */
 package io.github.lonamiwebs.klooni.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -88,9 +87,8 @@ public abstract class BaseScorer implements BinSerializable {
     //region Public methods
 
     // Adds the score a given piece would give
-    public int addPieceScore(int areaPut) {
+    public void addPieceScore(final int areaPut) {
         currentScore += areaPut;
-        return areaPut;
     }
 
     // Adds the score given by the board, this is, the count of cleared strips

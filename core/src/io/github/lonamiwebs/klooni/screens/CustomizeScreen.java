@@ -49,8 +49,8 @@ class CustomizeScreen implements Screen {
 
     //region Members
 
-    private Klooni game;
-    private Stage stage;
+    private final Klooni game;
+    private final Stage stage;
 
     private final Screen lastScreen;
 
@@ -58,7 +58,7 @@ class CustomizeScreen implements Screen {
     private final SoftButton toggleShopButton;
     private final VerticalGroup shopGroup; // Showing available themes or effects
     private final ScrollPane shopScroll;
-    final MoneyBuyBand buyBand;
+    private final MoneyBuyBand buyBand;
 
     private boolean showingEffectsShop;
     private int showcaseIndex;

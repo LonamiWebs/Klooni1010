@@ -66,7 +66,7 @@ public class PieceHolder implements BinSerializable {
 
     //region Static members
 
-    public static final float DRAG_SPEED = 0.5f; // Interpolation value ((pos -> new) / frame)
+    private static final float DRAG_SPEED = 0.5f; // Interpolation value ((pos -> new) / frame)
 
     //endregion
 
@@ -188,11 +188,11 @@ public class PieceHolder implements BinSerializable {
     }
 
     // If no piece is currently being held, the area will be 0
-    public int calculateHeldPieceArea() {
+    private int calculateHeldPieceArea() {
         return heldPiece > -1 ? pieces[heldPiece].calculateArea() : 0;
     }
 
-    public Vector2 calculateHeldPieceCenter() {
+    private Vector2 calculateHeldPieceCenter() {
         return heldPiece > -1 ? pieces[heldPiece].calculateGravityCenter() : null;
     }
 

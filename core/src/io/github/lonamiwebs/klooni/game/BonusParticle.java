@@ -27,7 +27,7 @@ import io.github.lonamiwebs.klooni.Klooni;
 
 class BonusParticle {
 
-    private Label label;
+    private final Label label;
     private float lifetime;
 
     private final static float SPEED = 1f;

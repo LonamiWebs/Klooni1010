@@ -37,7 +37,7 @@ public class Klooni extends Game {
 
     public Skin skin;
 
-    public ShareChallenge shareChallenge;
+    public final ShareChallenge shareChallenge;
 
     public static boolean onDesktop;
 

@@ -33,7 +33,7 @@ public class EffectCard extends ShopCard {
 
     //region Members
 
-    public final Effect effect;
+    private final Effect effect;
     private final Board board;
 
     // We want to create an effect from the beginning
@@ -139,7 +139,7 @@ public class EffectCard extends ShopCard {
 
     @Override
     public boolean isUsed() {
-        return game.effect.equals(effect.name);
+        return game.effect.name.equals(effect.name);
     }
 
     @Override

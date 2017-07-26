@@ -22,8 +22,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -58,7 +56,7 @@ public class Theme {
     public Texture cellTexture;
 
     // Save the button styles so the changes here get reflected
-    private ImageButton.ImageButtonStyle[] buttonStyles;
+    private final ImageButton.ImageButtonStyle[] buttonStyles;
 
     //endregion
 
@@ -199,13 +197,6 @@ public class Theme {
         return colorIndex < 0 ? emptyCell : cells[colorIndex];
     }
 
-    public Color getRandomCellColor() {
-        if (cells.length == 0)
-            return emptyCell;
-        else
-            return cells[MathUtils.random(cells.length - 1)];
-    }
-
     public void glClearBackground() {
         Gdx.gl.glClearColor(background.r, background.g, background.b, background.a);
     }
@@ -234,7 +225,7 @@ public class Theme {
     //region Disposal
 
     void dispose() {
-
+        cellTexture.dispose();
     }
 
     //endregion

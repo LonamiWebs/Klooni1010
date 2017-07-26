@@ -19,37 +19,20 @@ package io.github.lonamiwebs.klooni.screens;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import io.github.lonamiwebs.klooni.Klooni;
-import io.github.lonamiwebs.klooni.Theme;
-import io.github.lonamiwebs.klooni.actors.MoneyBuyBand;
-import io.github.lonamiwebs.klooni.actors.SoftButton;
-import io.github.lonamiwebs.klooni.actors.ThemeCard;
-import io.github.lonamiwebs.klooni.game.GameLayout;
 
 // Screen where the user can customize the look and feel of the game
 class ShareScoreScreen implements Screen {
 
     //region Members
 
-    private Klooni game;
+    private final Klooni game;
     private final Label infoLabel;
     private final SpriteBatch spriteBatch;
 

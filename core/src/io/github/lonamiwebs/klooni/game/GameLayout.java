@@ -131,6 +131,7 @@ public class GameLayout {
         band.infoBounds.set(area.x, area.y + area.height * 0.10f, area.width, area.height * 0.35f);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public void update(ShopCard card) {
         card.setSize(availableWidth - marginWidth, shopCardHeight);
         card.cellSize = shopCardHeight * 0.2f;
