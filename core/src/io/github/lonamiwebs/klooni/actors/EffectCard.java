@@ -17,17 +17,14 @@
 */
 package io.github.lonamiwebs.klooni.actors;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 
 import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
-import io.github.lonamiwebs.klooni.effects.IEffect;
-import io.github.lonamiwebs.klooni.game.Cell;
+import io.github.lonamiwebs.klooni.game.Board;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
 
@@ -37,11 +34,12 @@ public class EffectCard extends ShopCard {
     //region Members
 
     public final Effect effect;
-    private final Cell cell;
-    private IEffect currentEffect;
+    private final Board board;
+
+    // We want to create an effect from the beginning
+    private boolean needCreateEffect = true;
 
     private final Texture background;
-    private Color color;
 
     //endregion
 
@@ -50,11 +48,27 @@ public class EffectCard extends ShopCard {
     public EffectCard(final Klooni game, final GameLayout layout, final Effect effect) {
         super(game, layout, effect.getDisplay(), Klooni.theme.background);
         background = Theme.getBlankTexture();
-        color = Klooni.theme.getRandomCellColor();
-
         this.effect = effect;
-        cell = Piece.randomCell(0, 0, cellSize);
+
+        // Let the board have room for 3 cells, so cellSize * 3
+        board = new Board(new Rectangle(0, 0, cellSize * 3, cellSize * 3), 3);
+
+        setRandomPiece();
         usedItemUpdated();
+    }
+
+    private void setRandomPiece() {
+        while (true) {
+            final Piece piece = Piece.random();
+            if (piece.cellCols > 3 || piece.cellRows > 3)
+                continue;
+
+            // Try to center it (max size is 3, so center is the second grid bit unless max size)
+            int x = piece.cellCols == 3 ? 0 : 1;
+            int y = piece.cellRows == 3 ? 0 : 1;
+            if (board.putPiece(piece, x, y))
+                break; // Should not fail, but if it does, don't break
+        }
     }
 
     //endregion
@@ -68,31 +82,37 @@ public class EffectCard extends ShopCard {
         batch.setColor(Klooni.theme.background);
         batch.draw(background, x, y, getWidth(), getHeight());
 
-        // Avoid drawing on the borders by adding +1 cell padding +1 to center it
-        // so it's becomes cellSize * 2
-        cell.pos.set(x + cellSize * 2, y + cellSize * 2);
+        // Avoid drawing on the borders by adding +1 cell padding
+        board.pos.set(x + cellSize * 1, y + cellSize * 1);
 
-        // If we're not showcasing (currentEffect == null), show the cell alone
-        if (currentEffect == null)
-            cell.draw(batch);
+        // Draw only if effects are done, i.e. not showcasing
+        if (board.effectsDone())
+            board.draw(batch);
 
         super.draw(batch, parentAlpha);
     }
 
     @Override
     public boolean showcase(Batch batch, float yDisplacement) {
-        cell.pos.y += yDisplacement;
+        board.pos.y += yDisplacement;
 
-        // If it's null, create it, then we want to render
-        if (currentEffect == null) {
-            currentEffect = effect.create(cell, cell.pos);
-        } else if (currentEffect.isDone()) {
-            // Set to null so it's created the next time
-            currentEffect = null;
-            return false;
+        // If no effect is running
+        if (board.effectsDone()) {
+            // And we want to create a new one
+            if (needCreateEffect) {
+                // Clear at cells[1][1], the center one
+                board.clearAll(1, 1, effect);
+                needCreateEffect = false;
+            } else {
+                // Otherwise, the previous effect finished, so return false because we're done
+                // We also want to draw the next time so set the flag to true
+                setRandomPiece();
+                needCreateEffect = true;
+                return false;
+            }
         }
 
-        currentEffect.draw(batch);
+        board.draw(batch);
         return true;
     }
 

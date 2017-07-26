@@ -37,10 +37,10 @@ public class Piece {
     //region Members
 
     final Vector2 pos;
-    final int colorIndex;
+    public final int colorIndex;
     private final int rotation;
 
-    final int cellCols, cellRows;
+    public final int cellCols, cellRows;
     private boolean shape[][];
 
     // Default arbitrary value
@@ -112,16 +112,8 @@ public class Piece {
 
     //region Static methods
 
-    // Only the pieces know how many colors there are, so the method for
-    // creating cells belongs here as a public static one.
-    public static Cell randomCell(final float x, final float y, final float size) {
-        final Cell cell = new Cell(x, y, size);
-        cell.set(MathUtils.random(8));
-        return cell;
-    }
-
     // Generates a random piece with always the same color for the generated shape
-    static Piece random() {
+    public static Piece random() {
         // 9 pieces [0…8]; 4 possible rotations [0…3]
         return fromIndex(MathUtils.random(8), MathUtils.random(4));
     }

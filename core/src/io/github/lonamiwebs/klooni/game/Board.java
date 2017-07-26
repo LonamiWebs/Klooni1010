@@ -17,8 +17,9 @@
 */
 package io.github.lonamiwebs.klooni.game;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -39,12 +40,12 @@ public class Board implements BinSerializable {
     public final int cellCount;
     public float cellSize;
     private Cell[][] cells;
-    private final Array<IEffect> effects; // Particle effects once they vanish
+    private final Array<IEffect> effects = new Array<IEffect>(); // Particle effects once they vanish
 
-    final Vector2 pos;
+    public final Vector2 pos = new Vector2();
 
     // Used to animate cleared cells vanishing
-    private final Vector2 lastPutPiecePos;
+    private final Vector2 lastPutPiecePos = new Vector2();
 
     //endregion
 
@@ -53,12 +54,21 @@ public class Board implements BinSerializable {
     public Board(final GameLayout layout, int cellCount) {
         this.cellCount = cellCount;
 
-        lastPutPiecePos = new Vector2();
-        pos = new Vector2();
-        effects = new Array<IEffect>(32); // 32 capacity for 3 rows (most common)
-
         // Cell size depends on the layout to be updated first
         layout.update(this);
+        createCells();
+    }
+
+    public Board(final Rectangle area, int cellCount) {
+        this.cellCount = cellCount;
+
+        // Cell size depends on the layout to be updated first
+        pos.set(area.x, area.y);
+        cellSize = Math.min(area.height, area.width) / cellCount;
+        createCells();
+    }
+
+    private void createCells() {
         cells = new Cell[this.cellCount][this.cellCount];
         for (int i = 0; i < this.cellCount; ++i) {
             for (int j = 0; j < this.cellCount; ++j) {
@@ -95,7 +105,7 @@ public class Board implements BinSerializable {
     }
 
     // Returns true iff the piece was put on the board
-    private boolean putPiece(Piece piece, int x, int y) {
+    public boolean putPiece(Piece piece, int x, int y) {
         if (!canPutPiece(piece, x, y))
             return false;
 
@@ -112,7 +122,7 @@ public class Board implements BinSerializable {
 
     //region Public methods
 
-    public void draw(SpriteBatch batch) {
+    public void draw(final Batch batch) {
         batch.setTransformMatrix(batch.getTransformMatrix().translate(pos.x, pos.y, 0));
 
         for (int i = 0; i < cellCount; ++i)
@@ -137,7 +147,7 @@ public class Board implements BinSerializable {
         return false;
     }
 
-    boolean putScreenPiece(Piece piece) {
+    public boolean putScreenPiece(final Piece piece) {
         // Convert the on screen coordinates of the piece to the local-board-space coordinates
         // This is done by subtracting the piece coordinates from the board coordinates
         Vector2 local = piece.pos.cpy().sub(pos);
@@ -224,6 +234,25 @@ public class Board implements BinSerializable {
 
         return clearCount;
     }
+
+    public int clearAll(final int clearFromX, final int clearFromY, final Effect effect) {
+        int clearCount = 0;
+        final Vector2 culprit = cells[clearFromY][clearFromX].pos;
+
+        for (int i = 0; i < cellCount; ++i) {
+            for (int j = 0; j < cellCount; ++j) {
+                if (!cells[i][j].isEmpty()) {
+                    clearCount++;
+                    effects.add(effect.create(cells[i][j], culprit));
+                    cells[i][j].set(-1);
+                }
+            }
+        }
+
+        return clearCount;
+    }
+
+    public boolean effectsDone() { return effects.size == 0; }
 
     //endregion
 
