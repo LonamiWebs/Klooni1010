@@ -1,0 +1,26 @@
+{
+  "name": "Winter",
+  "price": 50,
+  "colors": {
+    "background": "81b9b7ff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "1e9dc8ff",
+      "00e0ffff",
+      "2fdbdbff",
+      "51a0e9ff"
+    ],
+    "empty_cell": "4085bfff",
+    "cells": [
+      "d0defbff", "bddedcff", "d9ecf8ff",
+      "d9f7fcff", "cbe6f1ff", "dfeff2ff", "d9eaf0ff",
+      "c1dfeaff", "ccdeeaff"
+    ],
+    "current_score": "165456ff",
+    "high_score": "633ad2ff",
+    "bonus": "103caaff",
+    "band": "0c2e3cff",
+    "text": "ffffffff"
+  },
+  "cell_texture": "snowflake.png"
+}

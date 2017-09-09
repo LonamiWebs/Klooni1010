@@ -43,7 +43,8 @@ cells = [
     'basic',
     'bubble',
     'ghost',
-    'drop'
+    'drop',
+    'snowflake'
 ]
 
 inkscape_default_dpi = 90
@@ -54,7 +55,7 @@ gen_only = sys.argv[1:]
 for multiplier in multipliers:
     folder = os.path.join(root, f'x{multiplier}')
     os.makedirs(folder, exist_ok=True)
-    
+
     dpi = int(inkscape_default_dpi * multiplier)
     print('Generating assets for', folder)
     for objectid in ids:
@@ -68,7 +69,7 @@ for multiplier in multipliers:
         # -d to specify the DPI
         run(f'inkscape -z -i{objectid} -j -e{filename} -d{dpi} {svg}',
             shell=True, stdout=DEVNULL)
-    
+
     folder = os.path.join(folder, 'cells')
     os.makedirs(folder, exist_ok=True)
     for cellid in cells:
