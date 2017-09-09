@@ -1,0 +1,26 @@
+{
+  "name": "Spring",
+  "price": 50,
+  "colors": {
+    "background": "caf597ff",
+    "foreground": "e4ffe4ff",
+    "buttons": [
+      "2bbd48ff",
+      "67ff00ff",
+      "3fc200ff",
+      "72eb2cff"
+    ],
+    "empty_cell": "9bdb7dff",
+    "cells": [
+      "1edd00ff", "7cd71fff", "9adf0dff",
+      "18d808ff", "3ab616ff", "6cd814ff", "3eca0eff",
+      "1ebe32ff", "44e17eff"
+    ],
+    "current_score": "d77c10ff",
+    "high_score": "ff3400ff",
+    "bonus": "00800cff",
+    "band": "57ff46ff",
+    "text": "1f5a00ff"
+  },
+  "cell_texture": "grass.png"
+}
