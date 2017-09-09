@@ -133,7 +133,7 @@ class CustomizeScreen implements Screen {
 
         // Snap to grid on/off
         final SoftButton snapButton = new SoftButton(
-                2, Klooni.shouldSnapToGrid() ? "snap_on_texture" : "snap_off_texture");
+                1, Klooni.shouldSnapToGrid() ? "snap_on_texture" : "snap_off_texture");
 
         snapButton.addListener(new ChangeListener() {
             @Override
