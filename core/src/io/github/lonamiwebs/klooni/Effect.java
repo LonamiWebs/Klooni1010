@@ -106,10 +106,10 @@ public class Effect {
         // String comparision is more expensive compared to a single integer one,
         // and when creating instances of a lot of effects it's better if we can
         // save some processor cycles.
-        if (name.equals("vanish")) return 0;
-        if (name.equals("waterdrop")) return 1;
-        if (name.equals("evaporate")) return 2;
-        if (name.equals("spin")) return 3;
+        final Effect[] effects = getEffects();
+        for (int i = 0; i != effects.length; ++i)
+            if (effects[i].name.equals(name))
+                return i;
         return -1;
     }
 
