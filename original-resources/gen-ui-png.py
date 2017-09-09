@@ -45,7 +45,8 @@ cells = [
     'ghost',
     'drop',
     'snowflake',
-    'grass'
+    'grass',
+    'sun'
 ]
 
 inkscape_default_dpi = 90

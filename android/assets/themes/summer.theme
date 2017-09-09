@@ -1,0 +1,26 @@
+{
+  "name": "Summer",
+  "price": 50,
+  "colors": {
+    "background": "fff8baff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "ff9b00ff",
+      "ffb000ff",
+      "fc7523ff",
+      "ff5600ff"
+    ],
+    "empty_cell": "e3de81ff",
+    "cells": [
+      "ffcb00ff", "f8a000ff", "ffab20ff",
+      "f8c900ff", "ffa200ff", "ffd601ff", "ff7a11ff",
+      "ff9811ff", "ff8913ff"
+    ],
+    "current_score": "ffc300ff",
+    "high_score": "ff2600ff",
+    "bonus": "000000ff",
+    "band": "ff8f00ff",
+    "text": "111111ff"
+  },
+  "cell_texture": "sun.png"
+}
