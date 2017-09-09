@@ -126,7 +126,9 @@ public class MoneyBuyBand extends Table {
 
     // Temporary text will always reset to the shown money
     // because it would make no sense to go back to the buy "confirm?"
-    private void setTempText(String text) {
+    //
+    // Can also be used to show a temporary notification text.
+    public void setTempText(String text) {
         setText(text);
         showingTemp = true;
         nextTempRevertUpdate = TimeUtils.millis() + TEMP_TEXT_DELAY;

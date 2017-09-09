@@ -109,6 +109,8 @@ class CustomizeScreen implements Screen {
                 final boolean enabled = Klooni.toggleSound();
                 soundButton.image = CustomizeScreen.this.game.skin.getDrawable(
                         enabled ? "sound_on_texture" : "sound_off_texture");
+
+                buyBand.setTempText("sound " + (enabled ? "on" : "off"));
             }
         });
         optionsGroup.addActor(soundButton);
@@ -139,6 +141,8 @@ class CustomizeScreen implements Screen {
                 final boolean shouldSnap = Klooni.toggleSnapToGrid();
                 snapButton.image = CustomizeScreen.this.game.skin.getDrawable(
                         shouldSnap ? "snap_on_texture" : "snap_off_texture");
+
+                buyBand.setTempText("snap to grid " + (shouldSnap ? "on" : "off"));
             }
         });
         optionsGroup.addActor(snapButton);
