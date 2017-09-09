@@ -1,0 +1,26 @@
+{
+  "name": "Autumn",
+  "price": 50,
+  "colors": {
+    "background": "f5e7cbff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "99df08ff",
+      "c1a300ff",
+      "ffa70fff",
+      "932e2eff"
+    ],
+    "empty_cell": "f0d2b2ff",
+    "cells": [
+      "ea7100ff", "4da30bff", "fcaa08ff",
+      "fec63dff", "ec9548ff", "f56101ff", "da6554ff",
+      "9e8850ff", "ffaf24ff"
+    ],
+    "current_score": "ff7300ff",
+    "high_score": "0a7224ff",
+    "bonus": "4d4d4dff",
+    "band": "fef282ff",
+    "text": "111111ff"
+  },
+  "cell_texture": "leaf.png"
+}

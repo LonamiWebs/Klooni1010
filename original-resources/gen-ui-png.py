@@ -46,7 +46,8 @@ cells = [
     'drop',
     'snowflake',
     'grass',
-    'sun'
+    'sun',
+    "leaf"
 ]
 
 inkscape_default_dpi = 90
