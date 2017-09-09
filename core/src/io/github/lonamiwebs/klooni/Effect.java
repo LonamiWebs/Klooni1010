@@ -19,6 +19,7 @@ package io.github.lonamiwebs.klooni;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -44,9 +45,18 @@ public class Effect {
 
     // This method will load the sound "sound/effect_{effectName}.mp3"
     public Effect(final String effectName) {
+        this(effectName, effectNameToInt(effectName));
+    }
+
+    public Effect(final String effectName, final int id) {
         name = effectName;
-        effectId = effectNameToInt(name);
-        effectSound = Gdx.audio.newSound(Gdx.files.internal("sound/effect_" + name + ".mp3"));
+        effectId = id;
+
+        FileHandle soundFile = Gdx.files.internal("sound/effect_" + name + ".mp3");
+        if (!soundFile.exists())
+            soundFile = Gdx.files.internal("sound/effect_vanish.mp3");
+
+        effectSound = Gdx.audio.newSound(soundFile);
         price = effectId == 0 ? 0 : 200; // TODO For now they're all 200 coins except the first
     }
 
@@ -68,11 +78,12 @@ public class Effect {
     //region Static methods
 
     public static Effect[] getEffects() {
+        int id = 0;
         return new Effect[] {
-                new Effect("vanish"),
-                new Effect("waterdrop"),
-                new Effect("evaporate"),
-                new Effect("spin")
+                new Effect("vanish", id++),
+                new Effect("waterdrop", id++),
+                new Effect("evaporate", id++),
+                new Effect("spin", id++)
         };
     }
 
