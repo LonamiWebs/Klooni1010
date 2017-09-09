@@ -15,7 +15,6 @@ public class SpinEffect implements IEffect {
     private float size;
     private Color color;
 
-    private static final float UP_SPEED = 100.0f;
     private static final float LIFETIME = 2.0f;
     private static final float INV_LIFETIME = 1.0f / LIFETIME;
 
