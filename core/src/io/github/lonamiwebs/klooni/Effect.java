@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.effects.EvaporateEffect;
+import io.github.lonamiwebs.klooni.effects.ExplodeEffect;
 import io.github.lonamiwebs.klooni.effects.IEffect;
 import io.github.lonamiwebs.klooni.effects.SpinEffect;
 import io.github.lonamiwebs.klooni.effects.VanishEffect;
@@ -83,7 +84,8 @@ public class Effect {
                 new Effect("vanish", id++),
                 new Effect("waterdrop", id++),
                 new Effect("evaporate", id++),
-                new Effect("spin", id++)
+                new Effect("spin", id++),
+                new Effect("explode", id++)
         };
     }
 
@@ -107,6 +109,9 @@ public class Effect {
                 break;
             case 3:
                 effect = new SpinEffect();
+                break;
+            case 4:
+                effect = new ExplodeEffect();
                 break;
         }
         effect.setInfo(deadCell, culprit);
