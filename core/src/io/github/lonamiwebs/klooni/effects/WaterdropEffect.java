@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import io.github.lonamiwebs.klooni.SkinLoader;
 import io.github.lonamiwebs.klooni.game.Cell;
 
 public class WaterdropEffect implements IEffect {
     private Vector2 pos;
+    private boolean dead;
 
     private Color cellColor;
     private Color dropColor;
@@ -60,10 +62,13 @@ public class WaterdropEffect implements IEffect {
 
         Cell.draw(cellColor, batch, pos.x, pos.y, cellSize);
         Cell.draw(dropTexture, dropColor, batch, pos.x, pos.y, cellSize);
+
+        final Vector3 translation = batch.getTransformMatrix().getTranslation(new Vector3());
+        dead = translation.y + pos.y + dropTexture.getHeight() < 0;
     }
 
     @Override
     public boolean isDone() {
-        return pos.y + dropTexture.getHeight() < 0;
+        return dead;
     }
 }

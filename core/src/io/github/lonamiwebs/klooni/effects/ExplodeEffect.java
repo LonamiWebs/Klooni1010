@@ -3,18 +3,15 @@ package io.github.lonamiwebs.klooni.effects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import io.github.lonamiwebs.klooni.game.Cell;
 
 public class ExplodeEffect implements IEffect {
-    private float age;
-    private Vector2 pos;
-    private float size;
     private Color color;
+    boolean dead;
 
     private final static float EXPLOSION_X_RANGE = 0.25f;
     private final static float EXPLOSION_Y_RANGE = 0.30f;
@@ -39,17 +36,12 @@ public class ExplodeEffect implements IEffect {
             pos.add(vel.x * dt, vel.y * dt);
             Cell.draw(color, batch, pos.x, pos.y, size);
         }
-
-        public boolean isDead() {
-            return pos.y - size < 0;
-        }
     }
 
     private Shard[] shards;
 
     @Override
     public void setInfo(Cell deadCell, Vector2 culprit) {
-        age = 0;
         color = deadCell.getColorCopy();
 
         shards = new Shard[MathUtils.random(4, 6)];
@@ -59,16 +51,16 @@ public class ExplodeEffect implements IEffect {
 
     @Override
     public void draw(Batch batch) {
-        for (int i = 0; i != shards.length; ++i)
+        dead = true; // assume we're death
+        final Vector3 translation = batch.getTransformMatrix().getTranslation(new Vector3());
+        for (int i = shards.length; i-- != 0; ) {
             shards[i].draw(batch, Gdx.graphics.getDeltaTime());
+            dead &= translation.y + shards[i].pos.y + shards[i].size < 0; // all must be dead
+        }
     }
 
     @Override
     public boolean isDone() {
-        for (int i = 0; i != shards.length; ++i)
-            if (!shards[i].isDead())
-                return false;
-
-        return true;
+        return dead;
     }
 }
