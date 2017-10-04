@@ -1,0 +1,26 @@
+{
+  "name": "Smile",
+  "price": 100,
+  "colors": {
+         "background": "fdf6e3ff",
+         "foreground": "eee8d5ff",
+         "buttons": [
+             "859900ff",
+             "268bd2ff",
+             "d33682ff",
+             "cb4b16ff"
+         ],
+    "empty_cell": "EEEEEEEE",
+    "cells": [
+      "FF0000ff", "FF0000ff", "FF0000ff",
+      "FF0000ff", "CCFF33ff", "99CCFFff", "993366ff",
+      "66FFFFff", "CCCCFFff"
+    ],
+    "current_score": "0000FFff",
+    "high_score": "CCCCFFff",
+    "bonus": "FFCCFFff",
+    "band": "CCCCFFff",
+    "text": "ffffffff"
+  },
+  "cell_texture": "smile.png"
+}
