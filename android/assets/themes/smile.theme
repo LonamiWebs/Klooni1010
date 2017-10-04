@@ -1,6 +1,6 @@
 {
   "name": "Smile",
-  "price": 0,
+  "price": 100,
   "colors": {
          "background": "fdf6e3ff",
          "foreground": "eee8d5ff",
