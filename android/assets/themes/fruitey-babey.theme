@@ -1,0 +1,26 @@
+{
+  "name": "Fruitey Babey",
+  "price": 25,
+  "colors": {
+    "background": "f9cdaeff",
+    "foreground": "1c0f1fff",
+    "buttons": [
+      "f8a934ff",
+      "a8557eff",
+      "a5b680ff",
+      "d94848ff"
+    ],
+    "empty_cell": "dbab89ff",
+    "cells": [
+      "6941b0ff", "b64883ff", "73af75ff",
+      "f9bd35ff", "ec9548ff", "c24860ff", "e16469ff",
+      "6aa3d0ff", "bc3f39ff"
+    ],
+    "current_score": "e67c86ff",
+    "high_score": "83ae9bff",
+    "bonus": "4d4d4dff",
+    "band": "f69a9aff",
+    "text": "111111ff"
+  },
+  "cell_texture": "basic.png"
+}
