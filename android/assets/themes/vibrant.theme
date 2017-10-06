@@ -1,0 +1,27 @@
+{
+  "name": "Vibrant",
+  "price": 30,
+  "colors": {
+    "background": "ffffffff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "AB47BCff",
+      "E040FB",
+      "e2f243FF",
+      "e84242FF"
+    ],
+    "empty_cell": "757575ff",
+    "cells": [
+      "91a1d5ff", "a9ea67ff", "4d92f6ff",
+      "ffc63aff", "ff8b25ff", "f98198ff", "e07667ff",
+      "67d0f5ff", "63e897ff"
+    ],
+    "current_score": "00BCD4ff",
+    "high_score": "41f395ff",
+    "bonus": "2f2f2fff",
+    "band": "757575ff",
+    "text": "000000ff"
+  },
+  "cell_texture": "snowflake.png"
+}
+

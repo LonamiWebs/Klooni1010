@@ -1,0 +1,26 @@
+{
+  "name": "Material Light",
+  "price": 50,
+  "colors": {
+    "background": "ffffffff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "FDD835ff",
+      "24f995ff",
+      "569ff1ff",
+      "e84242ff"
+    ],
+    "empty_cell": "e6e6e6ff",
+    "cells": [
+      "91a1d5ff", "a9ea67ff", "4d92f6ff",
+      "ffc63aff", "ff8b25ff", "f98198ff", "e07667ff",
+      "67d0f5ff", "63e897ff"
+    ],
+    "current_score": "7297ffff",
+    "high_score": "41f395ff",
+    "bonus": "2f2f2fff",
+    "band": "000000ff",
+    "text": "ffffffff"
+  },
+  "cell_texture": "basic.png"
+}
