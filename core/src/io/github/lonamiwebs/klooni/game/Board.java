@@ -232,6 +232,22 @@ public class Board implements BinSerializable {
             }
         }
 
+        // Check wheather all are cleared
+        boolean allEmpty = true;
+        for (int j = 0; j < cellCount; ++j) {
+            for (int i = 0; i < cellCount; ++i) {
+                if (!cells[i][j].isEmpty()) {
+                    allEmpty = false;
+                    break;
+                }
+            } 
+        }
+ 
+        // If all are empty, assing a bonus
+        if (allEmpty) {
+            clearCount += 5;
+        }
+
         return clearCount;
     }
 
