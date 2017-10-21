@@ -1,0 +1,26 @@
+{
+  "name": "Greyscale",
+  "price": 30,
+  "colors": {
+    "background": "eeeeeeff",
+    "foreground": "ffffffff",
+    "buttons": [
+      "555555ff",
+      "777777ff",
+      "888888ff",
+      "999999ff"
+    ],
+    "empty_cell": "ddddddff",
+    "cells": [
+      "444444ff", "444444ff", "333333ff",
+      "444444ff", "333333ff", "222222ff", "111111ff",
+      "333333ff", "222222ff"
+    ],
+    "current_score": "777777ff",
+    "high_score": "555555ff",
+    "bonus": "4d4d4dff",
+    "band": "aaaaaaff",
+    "text": "222222ff"
+  },
+  "cell_texture": "basic.png"
+}
