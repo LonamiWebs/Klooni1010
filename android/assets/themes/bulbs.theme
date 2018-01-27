@@ -1,0 +1,26 @@
+{
+    "name": "Bulbs",
+    "price": 100,
+    "colors": {
+        "background": "101010ff",
+        "foreground": "808080ff",
+        "buttons": [
+            "ffb20bff",
+            "00da6dff",
+            "983c71ff",
+            "146371ff"
+        ],
+        "empty_cell": "202030CF",
+        "cells": [
+            "ff3a49ff", "ff8cffff", "369cacff",
+            "146effff", "85d085ff", "ffc519ff", "56ff42ff",
+            "9843ffff", "00f2f5ff"
+        ],
+        "current_score": "f9f9f9f9",
+        "high_score": "f9f9f9ff",
+        "bonus": "f9f9f9ff",
+        "band": "f0f0f0ff",
+        "text": "0a0a0aff"
+    },
+    "cell_texture": "bulb.png"
+}
