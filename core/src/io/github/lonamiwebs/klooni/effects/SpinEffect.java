@@ -8,8 +8,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.game.Cell;
+import io.github.lonamiwebs.klooni.interfaces.IEffect;
 
-public class SpinEffect implements IEffect {
+class SpinEffect implements IEffect {
     private float age;
     private Vector2 pos;
     private float size;

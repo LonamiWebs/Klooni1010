@@ -8,8 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import io.github.lonamiwebs.klooni.game.Cell;
+import io.github.lonamiwebs.klooni.interfaces.IEffect;
 
-public class ExplodeEffect implements IEffect {
+class ExplodeEffect implements IEffect {
     private Color color;
     boolean dead;
 

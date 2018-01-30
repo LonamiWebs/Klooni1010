@@ -21,19 +21,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
 import io.github.lonamiwebs.klooni.game.Board;
 import io.github.lonamiwebs.klooni.game.GameLayout;
 import io.github.lonamiwebs.klooni.game.Piece;
+import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 
 // Card-like actor used to display information about a given theme
 public class EffectCard extends ShopCard {
 
     //region Members
 
-    private final Effect effect;
+    private final IEffectFactory effect;
     private final Board board;
 
     // We want to create an effect from the beginning
@@ -45,7 +45,7 @@ public class EffectCard extends ShopCard {
 
     //region Constructor
 
-    public EffectCard(final Klooni game, final GameLayout layout, final Effect effect) {
+    public EffectCard(final Klooni game, final GameLayout layout, final IEffectFactory effect) {
         super(game, layout, effect.getDisplay(), Klooni.theme.background);
         background = Theme.getBlankTexture();
         this.effect = effect;
@@ -118,12 +118,12 @@ public class EffectCard extends ShopCard {
 
     @Override
     public void usedItemUpdated() {
-        if (game.effect.name.equals(effect.name))
+        if (game.effect.getName().equals(effect.getName()))
             priceLabel.setText("currently used");
         else if (Klooni.isEffectBought(effect))
             priceLabel.setText("bought");
         else
-            priceLabel.setText("buy for "+effect.price);
+            priceLabel.setText("buy for "+effect.getPrice());
     }
 
     @Override
@@ -139,12 +139,12 @@ public class EffectCard extends ShopCard {
 
     @Override
     public boolean isUsed() {
-        return game.effect.name.equals(effect.name);
+        return game.effect.getName().equals(effect.getName());
     }
 
     @Override
     public float getPrice() {
-        return effect.price;
+        return effect.getPrice();
     }
 
     @Override

@@ -22,18 +22,58 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.github.lonamiwebs.klooni.effects.EvaporateEffectFactory;
+import io.github.lonamiwebs.klooni.effects.ExplodeEffectFactory;
+import io.github.lonamiwebs.klooni.effects.SpinEffectFactory;
+import io.github.lonamiwebs.klooni.effects.VanishEffectFatory;
+import io.github.lonamiwebs.klooni.effects.WaterdropEffectFactory;
+import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 import io.github.lonamiwebs.klooni.screens.TransitionScreen;
 
 public class Klooni extends Game {
+    // region Effects
+
+    // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
+    public static final IEffectFactory[] EFFECTS = {
+            new VanishEffectFatory(),
+            new WaterdropEffectFactory(),
+            new EvaporateEffectFactory(),
+            new SpinEffectFactory(),
+            new ExplodeEffectFactory(),
+    };
+
+    private Map<String, Sound> effectSounds;
+
+    private void loadEffectSound(final String effectName) {
+        FileHandle soundFile = Gdx.files.internal("sound/effect_" + effectName + ".mp3");
+        if (!soundFile.exists())
+            soundFile = Gdx.files.internal("sound/effect_vanish.mp3");
+
+        effectSounds.put(effectName, Gdx.audio.newSound(soundFile));
+    }
+
+    public void playEffectSound() {
+        effectSounds.get(effect.getName())
+                .play(MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), 0);
+    }
+
+    // endregion
 
     //region Members
 
     // TODO Not sure whether the theme should be static or not since it might load textures
     public static Theme theme;
-    public Effect effect;
+    public IEffectFactory effect;
+
 
     public Skin skin;
 
@@ -74,7 +114,15 @@ public class Klooni extends Game {
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
-        effect = new Effect(prefs.getString("effectName", "vanish"));
+        String effectName = prefs.getString("effectName", "vanish");
+        effectSounds = new HashMap<String, Sound>(EFFECTS.length);
+        effect = EFFECTS[0];
+        for(IEffectFactory e : EFFECTS) {
+            loadEffectSound(e.getName());
+            if(e.getName().equals(effectName)) {
+                effect = e;
+            }
+        }
     }
 
     //endregion
@@ -99,7 +147,12 @@ public class Klooni extends Game {
         super.dispose();
         skin.dispose();
         theme.dispose();
-        effect.dispose();
+        if(effectSounds != null) {
+            for (Sound s : effectSounds.values()) {
+                s.dispose();
+            }
+            effectSounds = null;
+        }
     }
 
     //endregion
@@ -183,40 +236,40 @@ public class Klooni extends Game {
     }
 
     // Effects related
-    public static boolean isEffectBought(Effect effect) {
-        if (effect.price == 0)
+    public static boolean isEffectBought(IEffectFactory effect) {
+        if (effect.getPrice()== 0)
             return true;
 
         String[] effects = prefs.getString("boughtEffects", "").split(":");
         for (String e : effects)
-            if (e.equals(effect.name))
+            if (e.equals(effect.getName()))
                 return true;
 
         return false;
     }
 
-    public static boolean buyEffect(Effect effect) {
+    public static boolean buyEffect(IEffectFactory effect) {
         final float money = getRealMoney();
-        if (effect.price > money)
+        if (effect.getPrice()> money)
             return false;
 
-        setMoney(money - effect.price);
+        setMoney(money - effect.getPrice());
 
         String bought = prefs.getString("boughtEffects", "");
         if (bought.equals(""))
-            bought = effect.name;
+            bought = effect.getName();
         else
-            bought += ":" + effect.name;
+            bought += ":" + effect.getName();
 
         prefs.putString("boughtEffects", bought);
 
         return true;
     }
 
-    public void updateEffect(Effect newEffect) {
-        prefs.putString("effectName", newEffect.name).flush();
+    public void updateEffect(IEffectFactory newEffect) {
+        prefs.putString("effectName", newEffect.getName()).flush();
         // Create a new effect, since the one passed through the parameter may dispose later
-        effect = new Effect(newEffect.name);
+        effect = newEffect;
     }
 
     // Money related

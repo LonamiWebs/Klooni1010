@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import io.github.lonamiwebs.klooni.game.Cell;
+import io.github.lonamiwebs.klooni.interfaces.IEffect;
 
-public class EvaporateEffect implements IEffect {
+class EvaporateEffect implements IEffect {
     private Vector2 pos;
     private float originalX;
 

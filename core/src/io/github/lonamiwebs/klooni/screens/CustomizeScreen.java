@@ -34,7 +34,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-import io.github.lonamiwebs.klooni.Effect;
 import io.github.lonamiwebs.klooni.Klooni;
 import io.github.lonamiwebs.klooni.Theme;
 import io.github.lonamiwebs.klooni.actors.EffectCard;
@@ -43,6 +42,7 @@ import io.github.lonamiwebs.klooni.actors.ShopCard;
 import io.github.lonamiwebs.klooni.actors.SoftButton;
 import io.github.lonamiwebs.klooni.actors.ThemeCard;
 import io.github.lonamiwebs.klooni.game.GameLayout;
+import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 
 // Screen where the user can customize the look and feel of the game
 class CustomizeScreen implements Screen {
@@ -200,7 +200,7 @@ class CustomizeScreen implements Screen {
         shopGroup.clear();
 
         if (showingEffectsShop)
-            for (Effect effect : Effect.getEffects())
+            for (IEffectFactory effect : Klooni.EFFECTS)
                 addCard(new EffectCard(game, layout, effect));
 
         else // showingThemesShop
