@@ -11,8 +11,9 @@ import com.badlogic.gdx.math.Vector3;
 
 import io.github.lonamiwebs.klooni.SkinLoader;
 import io.github.lonamiwebs.klooni.game.Cell;
+import io.github.lonamiwebs.klooni.interfaces.IEffect;
 
-public class WaterdropEffect implements IEffect {
+class WaterdropEffect implements IEffect {
     private Vector2 pos;
     private boolean dead;
 
