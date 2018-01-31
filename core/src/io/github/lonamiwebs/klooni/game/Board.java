@@ -27,8 +27,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import io.github.lonamiwebs.klooni.Effect;
-import io.github.lonamiwebs.klooni.effects.IEffect;
+import io.github.lonamiwebs.klooni.interfaces.IEffect;
+import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 import io.github.lonamiwebs.klooni.serializer.BinSerializable;
 
 // Represents the on screen board, with all the put cells
@@ -183,7 +183,7 @@ public class Board implements BinSerializable {
     //
     // If the piece is put on the top left corner, all the cells will be cleared.
     // If we first cleared the columns, then the rows wouldn't have been cleared.
-    public int clearComplete(final Effect effect) {
+    public int clearComplete(final IEffectFactory effect) {
         int clearCount = 0;
         boolean[] clearedRows = new boolean[cellCount];
         boolean[] clearedCols = new boolean[cellCount];
@@ -235,7 +235,7 @@ public class Board implements BinSerializable {
         return clearCount;
     }
 
-    public void clearAll(final int clearFromX, final int clearFromY, final Effect effect) {
+    public void clearAll(final int clearFromX, final int clearFromY, final IEffectFactory effect) {
         final Vector2 culprit = cells[clearFromY][clearFromX].pos;
 
         for (int i = 0; i < cellCount; ++i) {
