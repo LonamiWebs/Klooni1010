@@ -33,6 +33,7 @@ public class SkinLoader {
 
     private final static float bestMultiplier;
 
+    // FIXME this static code is exposed to a race condition and will fail if called class gets loaded before execution of Klooni.create
     static {
         // Use the height to determine the best match
         // We cannot use a size which is over the device height,
