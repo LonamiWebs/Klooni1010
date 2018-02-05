@@ -3,7 +3,7 @@
     "price": 100,
     "colors": {
         "background": "101010ff",
-        "foreground": "808080ff",
+        "foreground": "ffffffc0",
         "buttons": [
             "ffb20bff",
             "00da6dff",
