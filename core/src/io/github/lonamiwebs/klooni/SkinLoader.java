@@ -39,7 +39,7 @@ public class SkinLoader {
         // We cannot use a size which is over the device height,
         // so use the closest smaller one
         int i;
-        float desired = (float)Gdx.graphics.getHeight() / (float)Klooni.GAME_HEIGHT;
+        float desired = (float) Gdx.graphics.getHeight() / (float) Klooni.GAME_HEIGHT;
         for (i = multipliers.length - 1; i > 0; --i) {
             if (multipliers[i] < desired)
                 break;
@@ -57,7 +57,7 @@ public class SkinLoader {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         // Nine patches
-        final int border = (int)(28 * bestMultiplier);
+        final int border = (int) (28 * bestMultiplier);
         skin.add("button_up", new NinePatch(new Texture(
                 Gdx.files.internal(folder + "button_up.png")), border, border, border, border));
 

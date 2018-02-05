@@ -36,7 +36,7 @@ public class WaterdropEffectFactory implements IEffectFactory {
 
 
     private void init() {
-        if(dropTexture == null)
+        if (dropTexture == null)
             dropTexture = SkinLoader.loadPng("cells/drop.png");
     }
 

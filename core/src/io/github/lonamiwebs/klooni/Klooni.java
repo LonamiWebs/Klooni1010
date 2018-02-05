@@ -40,7 +40,12 @@ import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
 import io.github.lonamiwebs.klooni.screens.TransitionScreen;
 
 public class Klooni extends Game {
-    // region Effects
+
+    //region Members
+
+    // FIXME theme should NOT be static as it might load textures which will expose it to the race condition iff GDX got initialized before or not
+    public static Theme theme;
+    public IEffectFactory effect;
 
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
@@ -51,31 +56,7 @@ public class Klooni extends Game {
             new ExplodeEffectFactory(),
     };
 
-
     private Map<String, Sound> effectSounds;
-
-    private void loadEffectSound(final String effectName) {
-        FileHandle soundFile = Gdx.files.internal("sound/effect_" + effectName + ".mp3");
-        if (!soundFile.exists())
-            soundFile = Gdx.files.internal("sound/effect_vanish.mp3");
-
-        effectSounds.put(effectName, Gdx.audio.newSound(soundFile));
-    }
-
-    public void playEffectSound() {
-        effectSounds.get(effect.getName())
-                .play(MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), 0);
-    }
-
-    // endregion
-
-    //region Members
-
-    // FIXME theme should NOT be static as it might load textures which will expose it to the race condition iff GDX got initialized before or not
-    public static Theme theme;
-    public IEffectFactory effect;
-
-
     public Skin skin;
 
     public final ShareChallenge shareChallenge;
@@ -157,6 +138,23 @@ public class Klooni extends Game {
     }
 
     //endregion
+
+    // region Effects
+
+    private void loadEffectSound(final String effectName) {
+        FileHandle soundFile = Gdx.files.internal("sound/effect_" + effectName + ".mp3");
+        if (!soundFile.exists())
+            soundFile = Gdx.files.internal("sound/effect_vanish.mp3");
+
+        effectSounds.put(effectName, Gdx.audio.newSound(soundFile));
+    }
+
+    public void playEffectSound() {
+        effectSounds.get(effect.getName())
+                .play(MathUtils.random(0.7f, 1f), MathUtils.random(0.8f, 1.2f), 0);
+    }
+
+    // endregion
 
     //region Settings
 
@@ -283,7 +281,7 @@ public class Klooni extends Game {
     }
 
     public static int getMoney() {
-        return (int)getRealMoney();
+        return (int) getRealMoney();
     }
 
     private static float getRealMoney() {

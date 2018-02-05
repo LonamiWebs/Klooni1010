@@ -98,7 +98,7 @@ public class Board implements BinSerializable {
 
         for (int i = 0; i < piece.cellRows; ++i)
             for (int j = 0; j < piece.cellCols; ++j)
-                if (!cells[y+i][x+j].isEmpty() && piece.filled(i, j))
+                if (!cells[y + i][x + j].isEmpty() && piece.filled(i, j))
                     return false;
 
         return true;
@@ -113,7 +113,7 @@ public class Board implements BinSerializable {
         for (int i = 0; i < piece.cellRows; ++i)
             for (int j = 0; j < piece.cellCols; ++j)
                 if (piece.filled(i, j))
-                    cells[y+i][x+j].set(piece.colorIndex);
+                    cells[y + i][x + j].set(piece.colorIndex);
 
         return true;
     }
@@ -129,7 +129,7 @@ public class Board implements BinSerializable {
             for (int j = 0; j < cellCount; ++j)
                 cells[i][j].draw(batch);
 
-        for (int i = effects.size; i-- != 0;) {
+        for (int i = effects.size; i-- != 0; ) {
             effects.get(i).draw(batch);
             if (effects.get(i).isDone())
                 effects.removeIndex(i);
@@ -248,7 +248,9 @@ public class Board implements BinSerializable {
         }
     }
 
-    public boolean effectsDone() { return effects.size == 0; }
+    public boolean effectsDone() {
+        return effects.size == 0;
+    }
 
     //endregion
 

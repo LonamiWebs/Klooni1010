@@ -106,7 +106,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
                 scorer = new TimeScorer(game, layout);
                 break;
             default:
-                throw new RuntimeException("Unknown game mode given: "+gameMode);
+                throw new RuntimeException("Unknown game mode given: " + gameMode);
         }
 
         board = new Board(layout, BOARD_SIZE);
@@ -258,10 +258,12 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     //region Unused methods
 
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int width, int height) {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
     public void hide() { /* Hide can only be called if the menu was shown. Place logic there. */ }
@@ -341,7 +343,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
                 // After it's been loaded, delete the save file
                 deleteSave();
                 return true;
-            } catch (IOException ignored) { }
+            } catch (IOException ignored) {
+            }
         }
         return false;
     }

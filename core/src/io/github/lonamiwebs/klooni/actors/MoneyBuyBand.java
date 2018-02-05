@@ -158,8 +158,7 @@ public class MoneyBuyBand extends Table {
             if (shownText.length() > infoText.length()) {
                 // The old text was longer than the new one, so shorten it
                 shownText.setLength(shownText.length() - 1);
-            }
-            else {
+            } else {
                 // It can't be equal length or we wouldn't be here,
                 // so avoid checking shown.length() < info.length().
                 // We need to append the next character that we want to show
@@ -180,8 +179,7 @@ public class MoneyBuyBand extends Table {
             setTempText("cannot buy!");
             confirmButton.setVisible(false);
             cancelButton.setVisible(false);
-        }
-        else {
+        } else {
             this.toBuy = toBuy;
             setText("confirm?");
             confirmButton.setVisible(true);

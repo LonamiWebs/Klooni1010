@@ -96,8 +96,7 @@ public class TransitionScreen implements Screen {
                 fadedElapsed = 0;
                 fadingOut = false;
             }
-        }
-        else {
+        } else {
             toScreen.render(delta);
             opacity = Math.min(fadedElapsed * FADE_INVERSE_DELAY, 1);
         }
@@ -146,13 +145,16 @@ public class TransitionScreen implements Screen {
     //region Unused methods
 
     @Override
-    public void pause() { }
+    public void pause() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
-    public void hide() { }
+    public void hide() {
+    }
 
     //endregion
 }

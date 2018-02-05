@@ -70,8 +70,8 @@ class CustomizeScreen implements Screen {
     //region Static members
 
     // As the examples show on the LibGdx wiki
-    private static final float MIN_DELTA = 1/30f;
-    private static final float DRAG_LIMIT_SQ = 20*20;
+    private static final float MIN_DELTA = 1 / 30f;
+    private static final float DRAG_LIMIT_SQ = 20 * 20;
 
     //endregion
 
@@ -210,7 +210,7 @@ class CustomizeScreen implements Screen {
         // Scroll to the currently selected item
         table.layout();
         for (Actor a : shopGroup.getChildren()) {
-            ShopCard c = (ShopCard)a;
+            ShopCard c = (ShopCard) a;
             if (c.isUsed()) {
                 shopScroll.scrollTo(
                         c.getX(), c.getY() + c.getHeight(),
@@ -247,7 +247,7 @@ class CustomizeScreen implements Screen {
                         buyBand.askBuy(card);
 
                     for (Actor a : shopGroup.getChildren()) {
-                        ((ShopCard)a).usedItemUpdated();
+                        ((ShopCard) a).usedItemUpdated();
                     }
                 }
             }
@@ -276,7 +276,7 @@ class CustomizeScreen implements Screen {
         // After everything is drawn, showcase the current shop item
         SnapshotArray<Actor> children = shopGroup.getChildren();
         if (children.size > 0) {
-            final ShopCard card = (ShopCard)children.get(showcaseIndex);
+            final ShopCard card = (ShopCard) children.get(showcaseIndex);
 
             final Batch batch = stage.getBatch();
             batch.begin();
@@ -311,13 +311,16 @@ class CustomizeScreen implements Screen {
     //region Empty methods
 
     @Override
-    public void pause() { }
+    public void pause() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
-    public void hide() { }
+    public void hide() {
+    }
 
     //endregion
 }

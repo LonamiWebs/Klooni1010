@@ -80,7 +80,7 @@ class PauseMenuStage extends Stage {
         table.add(homeButton).space(16);
 
         homeButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.transitionTo(new MainMenuScreen(game));
             }
         });

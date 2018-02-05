@@ -43,7 +43,7 @@ public class MainMenuScreen extends InputListener implements Screen {
     //region Static members
 
     // As the examples show on the LibGdx wiki
-    private static final float minDelta = 1/30f;
+    private static final float minDelta = 1 / 30f;
 
     //endregion
 
@@ -62,7 +62,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         final SoftButton playButton = new SoftButton(
                 0, GameScreen.hasSavedData() ? "play_saved_texture" : "play_texture");
         playButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
@@ -95,7 +95,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         // Palette button (buy colors)
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 // Don't dispose because then it needs to take us to the previous screen
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
@@ -140,13 +140,16 @@ public class MainMenuScreen extends InputListener implements Screen {
     //region Unused methods
 
     @Override
-    public void pause() { }
+    public void pause() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
-    public void hide() { }
+    public void hide() {
+    }
 
     //endregion
 }

@@ -71,7 +71,7 @@ public class Theme {
     //region Static methods
 
     static boolean exists(final String name) {
-        return Gdx.files.internal("themes/"+name+".theme").exists();
+        return Gdx.files.internal("themes/" + name + ".theme").exists();
     }
 
     // Gets all the available themes on the available on the internal game storage
@@ -86,7 +86,7 @@ public class Theme {
             else {
                 Gdx.app.log(
                         "Theme/Info", "Non-existing theme '" + themes[i] +
-                        "' found on theme.list (line " + (i + 1) + ")");
+                                "' found on theme.list (line " + (i + 1) + ")");
             }
         }
 
@@ -121,7 +121,7 @@ public class Theme {
 
     // Updates the theme with all the values from the specified file or name
     public Theme update(final String name) {
-        return update(Gdx.files.internal("themes/"+name+".theme"));
+        return update(Gdx.files.internal("themes/" + name + ".theme"));
     }
 
     private Theme update(final FileHandle handle) {
@@ -137,13 +137,13 @@ public class Theme {
 
         JsonValue colors = json.get("colors");
         // Java won't allow unsigned integers, we need to use Long
-        background = new Color((int)Long.parseLong(colors.getString("background"), 16));
-        foreground = new Color((int)Long.parseLong(colors.getString("foreground"), 16));
+        background = new Color((int) Long.parseLong(colors.getString("background"), 16));
+        foreground = new Color((int) Long.parseLong(colors.getString("foreground"), 16));
 
         JsonValue buttonColors = colors.get("buttons");
         Color[] buttons = new Color[buttonColors.size];
         for (int i = 0; i < buttons.length; ++i) {
-            buttons[i] = new Color((int)Long.parseLong(buttonColors.getString(i), 16));
+            buttons[i] = new Color((int) Long.parseLong(buttonColors.getString(i), 16));
             if (buttonStyles[i] == null) {
                 buttonStyles[i] = new ImageButton.ImageButtonStyle();
             }
@@ -153,22 +153,22 @@ public class Theme {
             buttonStyles[i].down = skin.newDrawable("button_down", buttons[i]);
         }
 
-        currentScore = new Color((int)Long.parseLong(colors.getString("current_score"), 16));
-        highScore = new Color((int)Long.parseLong(colors.getString("high_score"), 16));
-        bonus = new Color((int)Long.parseLong(colors.getString("bonus"), 16));
-        bandColor = new Color((int)Long.parseLong(colors.getString("band"), 16));
-        textColor = new Color((int)Long.parseLong(colors.getString("text"), 16));
+        currentScore = new Color((int) Long.parseLong(colors.getString("current_score"), 16));
+        highScore = new Color((int) Long.parseLong(colors.getString("high_score"), 16));
+        bonus = new Color((int) Long.parseLong(colors.getString("bonus"), 16));
+        bandColor = new Color((int) Long.parseLong(colors.getString("band"), 16));
+        textColor = new Color((int) Long.parseLong(colors.getString("text"), 16));
 
-        emptyCell = new Color((int)Long.parseLong(colors.getString("empty_cell"), 16));
+        emptyCell = new Color((int) Long.parseLong(colors.getString("empty_cell"), 16));
 
         JsonValue cellColors = colors.get("cells");
         cells = new Color[cellColors.size];
         for (int i = 0; i < cells.length; ++i) {
-            cells[i] = new Color((int)Long.parseLong(cellColors.getString(i), 16));
+            cells[i] = new Color((int) Long.parseLong(cellColors.getString(i), 16));
         }
 
         String cellTextureFile = json.getString("cell_texture");
-        cellTexture = SkinLoader.loadPng("cells/"+cellTextureFile);
+        cellTexture = SkinLoader.loadPng("cells/" + cellTextureFile);
 
         return this;
     }

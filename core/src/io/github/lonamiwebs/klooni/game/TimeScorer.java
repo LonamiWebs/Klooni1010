@@ -83,11 +83,11 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     //region Private methods
 
     private int nanosToSeconds(long nano) {
-        return MathUtils.ceil((float)(nano * NANOS_TO_SECONDS));
+        return MathUtils.ceil((float) (nano * NANOS_TO_SECONDS));
     }
 
     private long scoreToNanos(int score) {
-        return (long)(score * SCORE_TO_NANOS);
+        return (long) (score * SCORE_TO_NANOS);
     }
 
     private int getTimeLeft() {
@@ -114,7 +114,9 @@ public class TimeScorer extends BaseScorer implements BinSerializable {
     }
 
     @Override
-    public String gameOverReason() { return "time is up"; }
+    public String gameOverReason() {
+        return "time is up";
+    }
 
     @Override
     public void saveScore() {

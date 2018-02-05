@@ -7,6 +7,8 @@ import io.github.lonamiwebs.klooni.game.Cell;
 
 public interface IEffect {
     void setInfo(Cell deadCell, Vector2 culprit);
+
     void draw(Batch batch);
+
     boolean isDone();
 }

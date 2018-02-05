@@ -123,7 +123,7 @@ public class EffectCard extends ShopCard {
         else if (Klooni.isEffectBought(effect))
             priceLabel.setText("bought");
         else
-            priceLabel.setText("buy for "+effect.getPrice());
+            priceLabel.setText("buy for " + effect.getPrice());
     }
 
     @Override

@@ -102,13 +102,19 @@ public abstract class BaseScorer implements BinSerializable {
         return currentScore;
     }
 
-    public void pause() { }
-    public void resume() { }
+    public void pause() {
+    }
+
+    public void resume() {
+    }
 
     abstract public boolean isGameOver();
+
     abstract protected boolean isNewRecord();
 
-    public String gameOverReason() { return ""; }
+    public String gameOverReason() {
+        return "";
+    }
 
     abstract public void saveScore();
 

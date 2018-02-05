@@ -80,7 +80,7 @@ public class ThemeCard extends ShopCard {
         else if (Klooni.isThemeBought(theme))
             priceLabel.setText("bought");
         else
-            priceLabel.setText("buy for "+theme.getPrice());
+            priceLabel.setText("buy for " + theme.getPrice());
     }
 
     @Override

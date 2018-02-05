@@ -91,17 +91,17 @@ public class Piece {
                 for (int j = 0; j < lSize; ++j)
                     shape[0][j] = true;
                 for (int i = 0; i < lSize; ++i)
-                    shape[i][lSize-1] = true;
+                    shape[i][lSize - 1] = true;
                 break;
             case 2: // ┘
                 for (int j = 0; j < lSize; ++j)
-                    shape[lSize-1][j] = true;
+                    shape[lSize - 1][j] = true;
                 for (int i = 0; i < lSize; ++i)
-                    shape[i][lSize-1] = true;
+                    shape[i][lSize - 1] = true;
                 break;
             case 3: // └
                 for (int j = 0; j < lSize; ++j)
-                    shape[lSize-1][j] = true;
+                    shape[lSize - 1][j] = true;
                 for (int i = 0; i < lSize; ++i)
                     shape[i][0] = true;
                 break;
@@ -121,19 +121,28 @@ public class Piece {
     private static Piece fromIndex(int colorIndex, int rotateCount) {
         switch (colorIndex) {
             // Squares
-            case 0: return new Piece(1, 1, 0, colorIndex);
-            case 1: return new Piece(2, 2, 0, colorIndex);
-            case 2: return new Piece(3, 3, 0, colorIndex);
+            case 0:
+                return new Piece(1, 1, 0, colorIndex);
+            case 1:
+                return new Piece(2, 2, 0, colorIndex);
+            case 2:
+                return new Piece(3, 3, 0, colorIndex);
 
             // Lines
-            case 3: return new Piece(1, 2, rotateCount, colorIndex);
-            case 4: return new Piece(1, 3, rotateCount, colorIndex);
-            case 5: return new Piece(1, 4, rotateCount, colorIndex);
-            case 6: return new Piece(1, 5, rotateCount, colorIndex);
+            case 3:
+                return new Piece(1, 2, rotateCount, colorIndex);
+            case 4:
+                return new Piece(1, 3, rotateCount, colorIndex);
+            case 5:
+                return new Piece(1, 4, rotateCount, colorIndex);
+            case 6:
+                return new Piece(1, 5, rotateCount, colorIndex);
 
             // L's
-            case 7: return new Piece(2, rotateCount, colorIndex);
-            case 8: return new Piece(3, rotateCount, colorIndex);
+            case 7:
+                return new Piece(2, rotateCount, colorIndex);
+            case 8:
+                return new Piece(3, rotateCount, colorIndex);
         }
         throw new RuntimeException("Random function is broken.");
     }

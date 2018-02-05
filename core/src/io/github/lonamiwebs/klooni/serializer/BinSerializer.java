@@ -27,7 +27,7 @@ import java.util.Arrays;
 public class BinSerializer {
 
     // ascii (klooni) and binary (1010b)
-    private final static byte[] HEADER = { 0x6B, 0x6C, 0x6F, 0x6F, 0x6E, 0x69, 0xa };
+    private final static byte[] HEADER = {0x6B, 0x6C, 0x6F, 0x6F, 0x6E, 0x69, 0xa};
 
     // MODIFY THIS VALUE EVERY TIME A BinSerializable IMPLEMENTATION CHANGES
     // Or unwanted results will happen and corrupt the game in an unknown way.
@@ -43,7 +43,8 @@ public class BinSerializer {
         } finally {
             try {
                 out.close();
-            } catch (IOException ignored) { }
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -68,7 +69,8 @@ public class BinSerializer {
         } finally {
             try {
                 in.close();
-            } catch (IOException ignored) { }
+            } catch (IOException ignored) {
+            }
         }
     }
 }

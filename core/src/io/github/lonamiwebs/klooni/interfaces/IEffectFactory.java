@@ -23,14 +23,17 @@ import io.github.lonamiwebs.klooni.game.Cell;
 
 /**
  * IEffectEfactory interface has to be implemented for each effect.
- *
+ * <p>
  * It tells the name and the price of the effect and will create it, when needed.
  *
  * @see IEffect
  */
 public interface IEffectFactory {
     public String getName();
+
     public String getDisplay();
+
     public int getPrice();
+
     public IEffect create(final Cell deadCell, final Vector2 culprit);
 }
