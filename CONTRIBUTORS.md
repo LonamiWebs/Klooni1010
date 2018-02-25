@@ -8,6 +8,7 @@ Programming
 
 Art
 ===
+- Icon by [JustMeErazem](https://github.com/JustMeErazem)
 - [Lonami Exo](https://lonamiwebs.github.io/)
 
 Fonts
