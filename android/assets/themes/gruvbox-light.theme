@@ -1,0 +1,26 @@
+{
+    "name": "Gruvbox Light",
+    "price": 30,
+    "colors": {
+        "background": "fbf1c7ff",
+        "foreground": "fbf1c7ff",
+        "buttons": [
+            "98971aff",
+            "d79921ff",
+            "458588ff",
+            "cc241dff"
+        ],
+        "empty_cell": "ebdbb2ff",
+        "cells": [
+            "8f3f71ff", "689d6aff", "b16286ff",
+            "458588ff", "d79921ff", "98971aff", "cc241dff",
+            "076678ff", "427b58ff"
+        ],
+        "current_score": "d79921ff",
+        "high_score": "689d6aff",
+        "bonus": "3c3836ff",
+        "band": "458588ff",
+        "text": "fbf1c7ff"
+    },
+    "cell_texture": "basic.png"
+}

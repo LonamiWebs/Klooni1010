@@ -1,0 +1,26 @@
+{
+    "name": "Gruvbox Dark",
+    "price": 30,
+    "colors": {
+        "background": "282828ff",
+        "foreground": "ffffffff",
+        "buttons": [
+            "b8bb26ff",
+            "fabd2fff",
+            "83a598ff",
+            "fb4934ff"
+        ],
+        "empty_cell": "504945ff",
+        "cells": [
+            "458588ff", "8ec07cff", "689d6aff",
+            "fabd2fff", "d79921ff", "d3869bff", "fb4934ff",
+            "83a598ff", "98971aff"
+        ],
+        "current_score": "fabd2fff",
+        "high_score": "8ec07cff",
+        "bonus": "ebdbb2ff",
+        "band": "458588ff",
+        "text": "ffffffff"
+    },
+    "cell_texture": "basic.png"
+}
