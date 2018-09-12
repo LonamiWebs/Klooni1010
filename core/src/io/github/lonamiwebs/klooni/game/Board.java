@@ -98,8 +98,9 @@ public class Board implements BinSerializable {
 
         for (int i = 0; i < piece.cellRows; ++i)
             for (int j = 0; j < piece.cellCols; ++j)
-                if (!cells[y + i][x + j].isEmpty() && piece.filled(i, j))
+                if (!cells[y + i][x + j].isEmpty() && piece.filled(i, j)) {
                     return false;
+                }
 
         return true;
     }
@@ -121,6 +122,11 @@ public class Board implements BinSerializable {
     //endregion
 
     //region Public methods
+
+    // Return true if the cell in given coordinates is empty
+    public boolean isEmpty(int x, int y) {
+        return cells[x][y].isEmpty();
+    }
 
     public void draw(final Batch batch) {
         batch.setTransformMatrix(batch.getTransformMatrix().translate(pos.x, pos.y, 0));

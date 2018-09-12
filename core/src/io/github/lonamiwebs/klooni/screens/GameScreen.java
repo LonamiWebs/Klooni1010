@@ -140,6 +140,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         return true;
     }
 
+    // If no piece can be put, then it is considered to be game over
     private void doGameOver(final String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
