@@ -1,0 +1,26 @@
+Introducing Klooni
+------------------
+
+1010! Klooni is a free, libre and open source klooni of
+the original minimalistic puzzle game by Gram Games.
+
+
+Fill Up the Board
+-----------------
+
+Drag the pieces on the board and try to clear as many
+strips as you can! Beware though, it is not that easy o:)
+
+
+Hack It
+-------
+
+Make the game yours! Collaborate! Add new themes, pieces,
+sounds or even explosions!
+
+
+Have Fun :)
+-----------
+
+Overall, remember to have fun while playing the game. Also
+share the love with the original developers if you like it!

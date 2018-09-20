@@ -1,0 +1,30 @@
+Présentation de 1010! Klooni
+----------------------
+
+1010! Klooni est un jeu gratuit, libre et open-source 
+repoduisant les mécanismes du jeu puzzle minimaliste 
+original écrit par Gram Games.
+
+
+Remplissez le Plateau de Jeu
+----------------------------
+
+Glissez et déposez les pièces sur le plateau de jeu et 
+tentez de réaliser le maximum de lignes possible !
+Attention, ce n'est pas si facile que cela en a l'air o:)
+
+
+Hackez le Jeu
+-------------
+
+Personnlisez le jeu ! Vous pouvez collaborer à ce jeu 
+en ajoutant de nouveaux thèmes, pièces, sons ou encore 
+des explosions!
+
+
+Faites-vous plaisir :)
+----------------------
+
+N'oubliez de vous amuser pendant que vous jouez à ce jeu ! 
+N'hésitez pas non plus à faire un petit coucou au dévelopeur 
+original pour le remercier si vous aimez ce jeu !
