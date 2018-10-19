@@ -198,6 +198,16 @@ public class Klooni extends Game {
         return result;
     }
 
+    public static boolean shouldInfiniteMode() {
+        return prefs.getBoolean("infiniteMode", false);
+    }
+
+    public static boolean toggleInfiniteMode() {
+        final boolean result = !shouldInfiniteMode();
+        prefs.putBoolean("infiniteMode", result).flush();
+        return result;
+    }
+
     // Themes related
     public static boolean isThemeBought(Theme theme) {
         if (theme.getPrice() == 0)

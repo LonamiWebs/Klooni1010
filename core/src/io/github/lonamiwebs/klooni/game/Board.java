@@ -98,9 +98,8 @@ public class Board implements BinSerializable {
 
         for (int i = 0; i < piece.cellRows; ++i)
             for (int j = 0; j < piece.cellCols; ++j)
-                if (!cells[y + i][x + j].isEmpty() && piece.filled(i, j)) {
+                if (!cells[y + i][x + j].isEmpty() && piece.filled(i, j))
                     return false;
-                }
 
         return true;
     }

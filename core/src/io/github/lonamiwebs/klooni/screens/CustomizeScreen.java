@@ -147,6 +147,22 @@ class CustomizeScreen implements Screen {
         });
         optionsGroup.addActor(snapButton);
 
+        // Infinite mode on/off
+        final SoftButton infiniteButton = new SoftButton(
+                1, Klooni.shouldInfiniteMode() ? "infinite_on_texture" : "infinite_off_texture");
+
+        infiniteButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                final boolean shouldInfinite = Klooni.toggleInfiniteMode();
+                infiniteButton.image = CustomizeScreen.this.game.skin.getDrawable(
+                        shouldInfinite ? "infinite_on_texture" : "infinite_off_texture");
+
+                buyBand.setTempText("infinite mode " + (shouldInfinite ? "on" : "off"));
+            }
+        });
+        optionsGroup.addActor(infiniteButton);
+
         // Issues
         final SoftButton issuesButton = new SoftButton(3, "issues_texture");
         issuesButton.addListener(new ChangeListener() {

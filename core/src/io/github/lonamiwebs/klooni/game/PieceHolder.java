@@ -119,12 +119,13 @@ public class PieceHolder implements BinSerializable {
 
     // Takes a new set of pieces. Should be called when there are no more piece left
     private void takeMore() {
-        for (int i = 0; i < count; ++i) {
+        for (int i = 0; i < count; ++i)
             pieces[i] = Piece.random();
-        }
 
-        // Validate blocks before displaying
-        pieces = State.validateBlock(pieces, board);
+        // If infinite mode is turned on, make sure all pieces always fit
+        if (Klooni.shouldInfiniteMode())
+            pieces = State.validateBlock(pieces, board);
+
         updatePiecesStartLocation();
 
         if (Klooni.soundsEnabled()) {
@@ -226,9 +227,8 @@ public class PieceHolder implements BinSerializable {
             }
 
             heldPiece = -1;
-            if (handFinished()) {
+            if (handFinished())
                 takeMore();
-            }
 
         } else
             result = new DropResult(false);

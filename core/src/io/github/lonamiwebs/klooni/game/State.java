@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
     position creates new states. Thus to validate a set of generated blocks, we have to check all
     possible states. Instead of checking them directly on the board, we create a special class for
     validation.
+
+    This is used in infinite mode.
  */
 
 public class State {
@@ -104,11 +106,12 @@ public class State {
 
     // Check every possible state from a set of blocks and an initial state.
     // Immediately return true if found one fitting occurrence.
-    // Do not try to optimize. This code's already working. Leave it be.
     private static boolean checkPermute(Piece[] holder, State state) {
         Vector2 temp1, temp2, temp3, pos1 = ORIGIN, pos2 = ORIGIN;
         for (int i = 0; i < 6; i++) {
             unfitBlock[i] = -1;
+            // TODO: Optimize the checking algorithm (use any pruning techniques?)
+            // TODO: Determine better criteria to change unfit block
             while(true) {
                 State state1 = new State(state);
                 temp1 = state.canPutPiece(holder[CHECKER[i][0]], pos1);

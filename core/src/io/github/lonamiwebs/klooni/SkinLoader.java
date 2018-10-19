@@ -28,7 +28,8 @@ public class SkinLoader {
     private final static String[] ids = {
             "play", "play_saved", "star", "stopwatch", "palette", "home", "replay",
             "share", "sound_on", "sound_off", "snap_on", "snap_off", "issues", "credits",
-            "web", "back", "ok", "cancel", "power_off", "effects"
+            "web", "back", "ok", "cancel", "power_off", "effects", "infinite_on",
+            "infinite_off"
     };
 
     private final static float bestMultiplier;
