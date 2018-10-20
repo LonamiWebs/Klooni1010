@@ -1,3 +1,20 @@
+/*
+    1010! Klooni, a free customizable puzzle game for Android and Desktop
+    Copyright (C) 2017  Lonami Exo | LonamiWebs
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package io.github.lonamiwebs.klooni.game;
 
 import com.badlogic.gdx.Gdx;
@@ -8,8 +25,8 @@ import com.badlogic.gdx.math.Vector2;
     State is an object designed to help validating randomly-generated blocks. Every time a block is
     inserted into the board, the game's state changes. Different permutation of blocks and different
     position creates new states. Thus to validate a set of generated blocks, we have to check all
-    possible states. Instead of checking them directly on the board, we create a special class for
-    validation.
+    possible states. Instead of validating them directly on the board, we create a special class to
+    simulate all possible states.
 
     This is used in infinite mode.
  */
@@ -21,9 +38,16 @@ public class State {
     private boolean[][] state;
     private final int cellCount;
     private int emptySpace = 0;
+
+    // All 6 possible combination to put blocks in the board.
+    private final static int[][] CHECKER = {{0, 1, 2}, {0, 2, 1}, {1, 0, 2}, {1, 2, 0}, {2, 0, 1}, {2, 1, 0}};
+
+    // Track which block caused unfitness in each combination
     private static int[] unfitBlock = new int[6];
-    private final static int [][] CHECKER = {{0,1,2},{0,2,1},{1,0,2},{1,2,0},{2,0,1},{2,1,0}};
-    private final static Vector2 ORIGIN = new Vector2(0, -1);
+
+    // CanPutPiece check a block's next possible position from its right side
+    // To make sure it checks (0,0), ORIGIN should begin from x = -1
+    private final static Vector2 ORIGIN = new Vector2(-1, 0);
 
     // endregion
 
@@ -33,7 +57,7 @@ public class State {
         this.cellCount = board.cellCount;
         this.state = new boolean[cellCount][cellCount];
         for (int i = 0; i < board.cellCount; ++i)
-            for(int j = 0; j < board.cellCount; ++j)
+            for (int j = 0; j < board.cellCount; ++j)
                 if (board.isEmpty(i, j))
                     emptySpace += 1;
                 else
@@ -45,7 +69,7 @@ public class State {
         this.cellCount = toClone.state.length;
         this.state = new boolean[cellCount][cellCount];
         for (int i = 0; i < cellCount; ++i)
-            for(int j = 0; j < cellCount; ++j)
+            for (int j = 0; j < cellCount; ++j)
                 if (toClone.state[i][j])
                     this.state[i][j] = true;
                 else
@@ -92,11 +116,14 @@ public class State {
     // Given Vector2 as last checked coordinates, return a new vector where the piece fits,
     // else the same vector if there are no longer any place in board to fit the piece
     private Vector2 canPutPiece(Piece piece, Vector2 origin) {
-        for (int j = (int) (origin.x + 1); j < cellCount; ++j)
-            if (canPutPiece(piece, j, (int) origin.y))
-                return new Vector2(j, origin.y);
+        int xBegin = (int) (origin.x + 1);
+        int yBegin = (int) (origin.y);
 
-        for (int i = (int) (origin.y + 1); i < cellCount; ++i)
+        for (int j = xBegin; j < cellCount; ++j)
+            if (canPutPiece(piece, j, yBegin))
+                return new Vector2(j, yBegin);
+
+        for (int i = yBegin + 1; i < cellCount; ++i)
             for (int j = 0; j < cellCount; ++j)
                 if (canPutPiece(piece, j, i))
                     return new Vector2(j, i);
@@ -108,11 +135,11 @@ public class State {
     // Immediately return true if found one fitting occurrence.
     private static boolean checkPermute(Piece[] holder, State state) {
         Vector2 temp1, temp2, temp3, pos1 = ORIGIN, pos2 = ORIGIN;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < unfitBlock.length; i++) {
             unfitBlock[i] = -1;
             // TODO: Optimize the checking algorithm (use any pruning techniques?)
             // TODO: Determine better criteria to change unfit block
-            while(true) {
+            while (true) {
                 State state1 = new State(state);
                 temp1 = state.canPutPiece(holder[CHECKER[i][0]], pos1);
                 if (temp1.epsilonEquals(pos1, MathUtils.FLOAT_ROUNDING_ERROR)) {
@@ -140,8 +167,7 @@ public class State {
                         Gdx.app.log("Check permute", "Piece " +
                                 holder[CHECKER[i][2]].colorIndex + " at" + temp3.toString());
                         return true;
-                    }
-                    else
+                    } else
                         unfitBlock[i] = 2;
                     pos2 = new Vector2(temp2);
                 }
@@ -194,8 +220,7 @@ public class State {
             Gdx.app.log("Validation", "Validation ends, takes " +
                     (System.nanoTime() - invocationTime) + " ns!");
             return holder;
-        }
-        else {
+        } else {
             Gdx.app.log("Validation", "Validation ends, takes " +
                     (System.nanoTime() - invocationTime) + " ns with changeBlock.");
             return changeBlock(holder, initialState);
@@ -265,7 +290,7 @@ public class State {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("State:\n");
-        for (int i = cellCount - 1 ; i > -1; --i) {
+        for (int i = cellCount - 1; i > -1; --i) {
             for (int j = 0; j < cellCount; ++j) {
                 if (state[i][j]) {
                     sb.append(1);
