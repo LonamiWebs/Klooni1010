@@ -43,7 +43,7 @@ public class State {
     private final static int[][] CHECKER = {{0, 1, 2}, {0, 2, 1}, {1, 0, 2}, {1, 2, 0}, {2, 0, 1}, {2, 1, 0}};
 
     // Track which block caused unfitness in each combination
-    private static int[] unfitBlock = new int[6];
+    private int[] unfitBlock = new int[6];
 
     // CanPutPiece check a block's next possible position from its right side
     // To make sure it checks (0,0), ORIGIN should begin from x = -1
@@ -80,7 +80,7 @@ public class State {
 
     //region Check piece
 
-    private static String getUnfitBlock() {
+    private String getUnfitBlock() {
         StringBuilder sb = new StringBuilder();
         for (int i : unfitBlock) {
             sb.append(i);
@@ -135,16 +135,16 @@ public class State {
     // Immediately return true if found one fitting occurrence.
     private static boolean checkPermute(Piece[] holder, State state) {
         Vector2 temp1, temp2, temp3, pos1 = ORIGIN, pos2 = ORIGIN;
-        for (int i = 0; i < unfitBlock.length; i++) {
-            unfitBlock[i] = -1;
+        for (int i = 0; i < state.unfitBlock.length; i++) {
+            state.unfitBlock[i] = -1;
             // TODO: Optimize the checking algorithm (use any pruning techniques?)
             // TODO: Determine better criteria to change unfit block
             while (true) {
                 State state1 = new State(state);
                 temp1 = state.canPutPiece(holder[CHECKER[i][0]], pos1);
                 if (temp1.epsilonEquals(pos1, MathUtils.FLOAT_ROUNDING_ERROR)) {
-                    if (unfitBlock[i] < 0)
-                        unfitBlock[i] = 0;
+                    if (state.unfitBlock[i] < 0)
+                        state.unfitBlock[i] = 0;
                     break;
                 }
                 state1.putPiece(holder[CHECKER[i][0]], temp1);
@@ -152,8 +152,8 @@ public class State {
                     State state2 = new State(state1);
                     temp2 = state1.canPutPiece(holder[CHECKER[i][1]], pos2);
                     if (temp2.epsilonEquals(pos2, MathUtils.FLOAT_ROUNDING_ERROR)) {
-                        if (unfitBlock[i] < 1)
-                            unfitBlock[i] = 1;
+                        if (state.unfitBlock[i] < 1)
+                            state.unfitBlock[i] = 1;
                         break;
                     }
                     state2.putPiece(holder[CHECKER[i][1]], temp2);
@@ -168,13 +168,13 @@ public class State {
                                 holder[CHECKER[i][2]].colorIndex + " at" + temp3.toString());
                         return true;
                     } else
-                        unfitBlock[i] = 2;
+                        state.unfitBlock[i] = 2;
                     pos2 = new Vector2(temp2);
                 }
                 pos1 = new Vector2(temp1);
             }
         }
-        Gdx.app.log("Check permute", getUnfitBlock());
+        Gdx.app.log("Check permute", state.getUnfitBlock());
         return false;
     }
 
@@ -183,8 +183,8 @@ public class State {
         int[] weight = new int[3];
         int max = 0;
         for (int i = 0; i < 6; i++) {
-            int temp = CHECKER[i][unfitBlock[i]];
-            weight[temp] += (unfitBlock[i] + 1) * 5;
+            int temp = CHECKER[i][state.unfitBlock[i]];
+            weight[temp] += (state.unfitBlock[i] + 1) * 5;
         }
 
         for (int i : weight) {
