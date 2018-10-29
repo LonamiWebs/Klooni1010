@@ -40,7 +40,7 @@ public class PieceHolder implements BinSerializable {
     //region Members
 
     final Rectangle area;
-    private final Piece[] pieces;
+    private Piece[] pieces;
 
     private final Sound pieceDropSound;
     private final Sound invalidPieceDropSound;
@@ -99,6 +99,15 @@ public class PieceHolder implements BinSerializable {
 
     //region Private methods
 
+    // If no piece is currently being held, the area will be 0
+    private int calculateHeldPieceArea() {
+        return heldPiece > -1 ? pieces[heldPiece].calculateArea() : 0;
+    }
+
+    private Vector2 calculateHeldPieceCenter() {
+        return heldPiece > -1 ? pieces[heldPiece].calculateGravityCenter() : null;
+    }
+
     // Determines whether all the pieces have been put (and the "hand" is finished)
     private boolean handFinished() {
         for (int i = 0; i < count; ++i)
@@ -112,6 +121,11 @@ public class PieceHolder implements BinSerializable {
     private void takeMore() {
         for (int i = 0; i < count; ++i)
             pieces[i] = Piece.random();
+
+        // If infinite mode is turned on, make sure all pieces always fit
+        if (Klooni.shouldInfiniteMode())
+            pieces = State.validateBlock(pieces, board);
+
         updatePiecesStartLocation();
 
         if (Klooni.soundsEnabled()) {
@@ -187,15 +201,6 @@ public class PieceHolder implements BinSerializable {
         return result;
     }
 
-    // If no piece is currently being held, the area will be 0
-    private int calculateHeldPieceArea() {
-        return heldPiece > -1 ? pieces[heldPiece].calculateArea() : 0;
-    }
-
-    private Vector2 calculateHeldPieceCenter() {
-        return heldPiece > -1 ? pieces[heldPiece].calculateGravityCenter() : null;
-    }
-
     // Tries to drop the piece on the given board. As a result, it
     // returns one of the following: NO_DROP, NORMAL_DROP, ON_BOARD_DROP
     public DropResult dropPiece() {
@@ -224,6 +229,7 @@ public class PieceHolder implements BinSerializable {
             heldPiece = -1;
             if (handFinished())
                 takeMore();
+
         } else
             result = new DropResult(false);
 

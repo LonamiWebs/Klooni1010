@@ -122,6 +122,11 @@ public class Board implements BinSerializable {
 
     //region Public methods
 
+    // Return true if the cell in given coordinates is empty
+    public boolean isEmpty(int x, int y) {
+        return cells[x][y].isEmpty();
+    }
+
     public void draw(final Batch batch) {
         batch.setTransformMatrix(batch.getTransformMatrix().translate(pos.x, pos.y, 0));
 

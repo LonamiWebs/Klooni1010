@@ -140,6 +140,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         return true;
     }
 
+    // If no piece can be put, then it is considered to be game over
     private void doGameOver(final String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
@@ -245,9 +246,11 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
                 }
             }
 
-            // After the piece was put, check if it's game over
+            // After the piece was put, check if it's game over.
+            // If infinite mode is on, the reason will be "wrong move".
             if (isGameOver()) {
-                doGameOver("no moves left");
+                doGameOver(Klooni.shouldInfiniteMode() ? "made wrong move" :
+                        "no moves left");
             }
         }
         return true;
