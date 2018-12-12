@@ -43,26 +43,23 @@ class AndroidShareChallenge extends ShareChallenge {
 
     @Override
     public void shareScreenshot(final boolean ok) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!ok) {
-                    Toast.makeText(context, "Failed to create the file", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                final String text = "Check out my score at 1010 Klooni!";
-                final Uri pictureUri = Uri.fromFile(getShareImageFilePath());
-                final Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.setType("image/png");
-
-                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
-
-                context.startActivity(Intent.createChooser(shareIntent, "Challenge your friends..."));
+        handler.post(() -> {
+            if (!ok) {
+                Toast.makeText(context, "Failed to create the file", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            final String text = "Check out my score on 1010 Klooni!";
+            final Uri pictureUri = Uri.fromFile(getShareImageFilePath());
+            final Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("image/png");
+
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, pictureUri);
+
+            context.startActivity(Intent.createChooser(shareIntent, "Challenge your friends..."));
         });
     }
 }
