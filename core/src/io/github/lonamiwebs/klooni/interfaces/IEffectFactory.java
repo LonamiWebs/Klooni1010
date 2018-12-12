@@ -29,11 +29,11 @@ import io.github.lonamiwebs.klooni.game.Cell;
  * @see IEffect
  */
 public interface IEffectFactory {
-    public String getName();
+    String getName();
 
-    public String getDisplay();
+    String getDisplay();
 
-    public int getPrice();
+    int getPrice();
 
-    public IEffect create(final Cell deadCell, final Vector2 culprit);
+    IEffect create(final Cell deadCell, final Vector2 culprit);
 }

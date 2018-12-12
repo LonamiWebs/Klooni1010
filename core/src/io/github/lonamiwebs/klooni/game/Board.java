@@ -40,7 +40,7 @@ public class Board implements BinSerializable {
     public final int cellCount;
     public float cellSize;
     private Cell[][] cells;
-    private final Array<IEffect> effects = new Array<IEffect>(); // Particle effects once they vanish
+    private final Array<IEffect> effects = new Array<>(); // Particle effects once they vanish
 
     public final Vector2 pos = new Vector2();
 

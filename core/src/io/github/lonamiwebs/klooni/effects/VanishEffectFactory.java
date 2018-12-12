@@ -29,7 +29,7 @@ import io.github.lonamiwebs.klooni.interfaces.IEffect;
 import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 
 
-public class VanishEffectFatory implements IEffectFactory {
+public class VanishEffectFactory implements IEffectFactory {
     @Override
     public String getName() {
         return "vanish";

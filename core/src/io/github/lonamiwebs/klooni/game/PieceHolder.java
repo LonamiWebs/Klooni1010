@@ -179,7 +179,7 @@ public class PieceHolder implements BinSerializable {
     }
 
     public Array<Piece> getAvailablePieces() {
-        Array<Piece> result = new Array<Piece>(count);
+        Array<Piece> result = new Array<>(count);
         for (int i = 0; i < count; ++i)
             if (pieces[i] != null)
                 result.add(pieces[i]);

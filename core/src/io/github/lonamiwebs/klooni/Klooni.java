@@ -33,7 +33,7 @@ import java.util.Map;
 import io.github.lonamiwebs.klooni.effects.EvaporateEffectFactory;
 import io.github.lonamiwebs.klooni.effects.ExplodeEffectFactory;
 import io.github.lonamiwebs.klooni.effects.SpinEffectFactory;
-import io.github.lonamiwebs.klooni.effects.VanishEffectFatory;
+import io.github.lonamiwebs.klooni.effects.VanishEffectFactory;
 import io.github.lonamiwebs.klooni.effects.WaterdropEffectFactory;
 import io.github.lonamiwebs.klooni.interfaces.IEffectFactory;
 import io.github.lonamiwebs.klooni.screens.MainMenuScreen;
@@ -43,13 +43,13 @@ public class Klooni extends Game {
 
     //region Members
 
-    // FIXME theme should NOT be static as it might load textures which will expose it to the race condition iff GDX got initialized before or not
+    // FIXME theme should NOT be static as it might load textures which will expose it to the race condition if GDX got initialized before or not
     public static Theme theme;
     public IEffectFactory effect;
 
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
-            new VanishEffectFatory(),
+            new VanishEffectFactory(),
             new WaterdropEffectFactory(),
             new EvaporateEffectFactory(),
             new SpinEffectFactory(),
@@ -97,7 +97,7 @@ public class Klooni extends Game {
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
         String effectName = prefs.getString("effectName", "vanish");
-        effectSounds = new HashMap<String, Sound>(EFFECTS.length);
+        effectSounds = new HashMap<>(EFFECTS.length);
         effect = EFFECTS[0];
         for (IEffectFactory e : EFFECTS) {
             loadEffectSound(e.getName());

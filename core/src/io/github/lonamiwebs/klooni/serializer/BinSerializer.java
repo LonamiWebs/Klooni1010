@@ -35,23 +35,16 @@ public class BinSerializer {
 
     public static void serialize(final BinSerializable serializable, final OutputStream output)
             throws IOException {
-        DataOutputStream out = new DataOutputStream(output);
-        try {
+        try (DataOutputStream out = new DataOutputStream(output)) {
             out.write(HEADER);
             out.writeInt(VERSION);
             serializable.write(out);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ignored) {
-            }
         }
     }
 
     public static void deserialize(final BinSerializable serializable, final InputStream input)
             throws IOException {
-        DataInputStream in = new DataInputStream(input);
-        try {
+        try (DataInputStream in = new DataInputStream(input)) {
             // Read the HEADER and the VERSION (checks)
             byte[] savedBuffer = new byte[HEADER.length];
             in.readFully(savedBuffer);
@@ -66,11 +59,6 @@ public class BinSerializer {
 
             // Read the saved data if the checks passed
             serializable.read(in);
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ignored) {
-            }
         }
     }
 }

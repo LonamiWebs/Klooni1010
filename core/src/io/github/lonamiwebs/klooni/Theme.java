@@ -78,7 +78,7 @@ public class Theme {
     public static Array<Theme> getThemes() {
         String[] themes = Gdx.files.internal("themes/theme.list").readString().split("\n");
 
-        Array<Theme> result = new Array<Theme>(themes.length);
+        Array<Theme> result = new Array<>(themes.length);
         for (int i = 0; i < themes.length; ++i) {
             FileHandle file = Gdx.files.internal("themes/" + themes[i] + ".theme");
             if (file.exists())
