@@ -20,10 +20,11 @@ package io.github.lonamiwebs.klooni.desktop;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
 import io.github.lonamiwebs.klooni.Klooni;
 
 class DesktopLauncher {
-    public static void main (String[] arg) {
+    public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Klooni 1010!";
         config.width = Klooni.GAME_WIDTH;
