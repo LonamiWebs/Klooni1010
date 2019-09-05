@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,18 +22,18 @@ import com.badlogic.gdx.math.Vector2;
 import dev.lonami.klooni.game.Cell;
 
 /**
- * IEffectEfactory interface has to be implemented for each effect.
+ * IEffectFactory interface has to be implemented for each effect.
  * <p>
  * It tells the name and the price of the effect and will create it, when needed.
  *
  * @see IEffect
  */
 public interface IEffectFactory {
-    public String getName();
+    String getName();
 
-    public String getDisplay();
+    String getDisplay();
 
-    public int getPrice();
+    int getPrice();
 
-    public IEffect create(final Cell deadCell, final Vector2 culprit);
+    IEffect create(final Cell deadCell, final Vector2 culprit);
 }

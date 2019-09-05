@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class Piece {
     private final int rotation;
 
     public final int cellCols, cellRows;
-    private final boolean shape[][];
+    private final boolean[][] shape;
 
     // Default arbitrary value
     float cellSize = 10f;

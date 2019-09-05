@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public class ExplodeEffectFactory implements IEffectFactory {
                 this.pos = pos.cpy().add(this.size * 0.5f, this.size * 0.5f);
             }
 
-            public void draw(final Batch batch, final float dt) {
+            void draw(final Batch batch, final float dt) {
                 vel.add(acc.x * dt, acc.y * dt).scl(0.99f);
                 pos.add(vel.x * dt, vel.y * dt);
                 Cell.draw(color, batch, pos.x, pos.y, size);

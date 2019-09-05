@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ public class ThemeCard extends ShopCard {
     private final Theme theme;
     private final Texture background;
 
-    private final static int colorsUsed[][] = {
+    private final static int[][] colorsUsed = {
             {0, 7, 7},
             {8, 7, 3},
             {8, 8, 3}
@@ -106,8 +106,9 @@ public class ThemeCard extends ShopCard {
 
     @Override
     public void performBuy() {
-        Klooni.buyTheme(theme);
-        use();
+        if (Klooni.buyTheme(theme)) {
+            use();
+        }
     }
 
     //endregion

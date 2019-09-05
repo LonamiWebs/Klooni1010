@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import java.util.Map;
 import dev.lonami.klooni.effects.EvaporateEffectFactory;
 import dev.lonami.klooni.effects.ExplodeEffectFactory;
 import dev.lonami.klooni.effects.SpinEffectFactory;
-import dev.lonami.klooni.effects.VanishEffectFatory;
+import dev.lonami.klooni.effects.VanishEffectFactory;
 import dev.lonami.klooni.effects.WaterdropEffectFactory;
 import dev.lonami.klooni.interfaces.IEffectFactory;
 import dev.lonami.klooni.screens.MainMenuScreen;
@@ -49,7 +49,7 @@ public class Klooni extends Game {
 
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
-            new VanishEffectFatory(),
+            new VanishEffectFactory(),
             new WaterdropEffectFactory(),
             new EvaporateEffectFactory(),
             new SpinEffectFactory(),

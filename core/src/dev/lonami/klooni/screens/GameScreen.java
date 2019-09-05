@@ -1,6 +1,6 @@
 /*
     1010! Klooni, a free customizable puzzle game for Android and Desktop
-    Copyright (C) 2017  Lonami Exo | LonamiWebs
+    Copyright (C) 2017-2019  Lonami Exo @ lonami.dev
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -119,7 +119,9 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         if (gameMode == GAME_MODE_SCORE) {
             if (loadSave) {
                 // The user might have a previous game. If this is the case, load it
-                tryLoad();
+                if (!tryLoad()) {
+                    System.err.println("failed to load previous games");
+                }
             } else {
                 // Ensure that there is no old save, we don't want to load it, thus delete it
                 deleteSave();
