@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "io.github.lonamiwebs.klooni"
+        applicationId "dev.lonami.klooni"
         minSdkVersion 8
         targetSdkVersion 25
 
@@ -74,7 +74,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'io.github.lonamiwebs.klooni/io.github.lonamiwebs.klooni.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'dev.lonami.klooni/dev.lonami.klooni.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

@@ -15,22 +15,25 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.lonami.klooni.desktop;
+package dev.lonami.klooni;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.uikit.UIApplication;
+
+import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
+import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import dev.lonami.klooni.Klooni;
 
-class DesktopLauncher {
-    public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Klooni 1010!";
-        config.width = Klooni.GAME_WIDTH;
-        config.height = Klooni.GAME_HEIGHT;
-        config.addIcon("ic_launcher/icon128.png", Files.FileType.Internal);
-        config.addIcon("ic_launcher/icon32.png", Files.FileType.Internal);
-        config.addIcon("ic_launcher/icon16.png", Files.FileType.Internal);
-        new LwjglApplication(new Klooni(null), config);
+class IOSLauncher extends IOSApplication.Delegate {
+    @Override
+    protected IOSApplication createApplication() {
+        IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        return new IOSApplication(new Klooni(null), config);
+    }
+
+    public static void main(String[] argv) {
+        NSAutoreleasePool pool = new NSAutoreleasePool();
+        UIApplication.main(argv, null, IOSLauncher.class);
+        pool.close();
     }
 }

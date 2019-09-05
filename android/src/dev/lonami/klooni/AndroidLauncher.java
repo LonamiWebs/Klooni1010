@@ -15,22 +15,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.lonami.klooni.desktop;
+package dev.lonami.klooni;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import dev.lonami.klooni.Klooni;
+import android.os.Bundle;
 
-class DesktopLauncher {
-    public static void main (String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Klooni 1010!";
-        config.width = Klooni.GAME_WIDTH;
-        config.height = Klooni.GAME_HEIGHT;
-        config.addIcon("ic_launcher/icon128.png", Files.FileType.Internal);
-        config.addIcon("ic_launcher/icon32.png", Files.FileType.Internal);
-        config.addIcon("ic_launcher/icon16.png", Files.FileType.Internal);
-        new LwjglApplication(new Klooni(null), config);
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+public class AndroidLauncher extends AndroidApplication {
+    @Override
+    protected void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
+        initialize(new Klooni(shareChallenge), config);
     }
 }
