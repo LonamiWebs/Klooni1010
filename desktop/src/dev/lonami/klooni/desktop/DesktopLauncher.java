@@ -29,7 +29,6 @@ class DesktopLauncher {
         config.title = "Klooni 1010!";
         config.width = Klooni.GAME_WIDTH;
         config.height = Klooni.GAME_HEIGHT;
-        config.resizable = false;
         config.addIcon("ic_launcher/icon128.png", Files.FileType.Internal);
         config.addIcon("ic_launcher/icon32.png", Files.FileType.Internal);
         config.addIcon("ic_launcher/icon16.png", Files.FileType.Internal);
