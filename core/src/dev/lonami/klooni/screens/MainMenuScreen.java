@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import dev.lonami.klooni.Klooni;
 import dev.lonami.klooni.actors.SoftButton;
@@ -57,6 +58,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+        stage.setViewport(new FitViewport(Klooni.GAME_WIDTH, Klooni.GAME_HEIGHT));
 
         // Play button
         final SoftButton playButton = new SoftButton(
