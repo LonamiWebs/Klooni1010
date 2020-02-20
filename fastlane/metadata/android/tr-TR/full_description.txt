@@ -1,0 +1,26 @@
+Klooni Tanıtımı
+------------------
+
+1010! Klooni, Gram Games'in orijinal minimalist bulmaca oyununun 
+ücretsiz, özgür ve açık kaynaklı bir kopyasıdır.
+
+
+Tahtayı Doldur
+-----------------
+
+Blokları tahtaya sürükleyin ve mümkün olduğunca çok sayıda
+şeridi temizlemeye çalışın! Göründüğü kadar kolay değil :)
+
+
+Geliştir
+-------
+
+Oyunu özelleştir! İşbirliği yap! Yeni temalar,
+parçalar, sesler ve hatta patlamalar ekle!
+
+
+İyi eğlenceler :)
+-----------
+
+Genel olarak, oyunu oynarken eğlenmeyi unutmayın.
+İsterseniz hayranlığınızı orijinal geliştiricilerle paylaşın!
