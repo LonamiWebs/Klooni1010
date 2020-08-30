@@ -323,7 +323,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         }
     }
 
-    private void deleteSave() {
+    private static void deleteSave() {
         final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
         if (handle.exists())
             handle.delete();
