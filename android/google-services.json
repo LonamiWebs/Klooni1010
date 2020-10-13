@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "110813579858",
+    "firebase_url": "https://block-puzzle-e3639.firebaseio.com",
+    "project_id": "block-puzzle-e3639",
+    "storage_bucket": "block-puzzle-e3639.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110813579858:android:7b83a98ad7573d1bf2ed8b",
+        "android_client_info": {
+          "package_name": "com.vision.elimination"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110813579858-rkgh3is8c6vd85qd8q3op6sotlv273ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwPgq84yKn1U6V-QOPIocQpKHKB1Jv-lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110813579858-rkgh3is8c6vd85qd8q3op6sotlv273ii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

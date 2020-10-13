@@ -12,6 +12,7 @@ buildscript {
         // Don't update to avoid breaking the build; noinspection GradleDependency
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.8'
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 }
 
@@ -51,17 +52,24 @@ project(":desktop") {
 
 project(":android") {
     apply plugin: "android"
-
+    apply plugin: 'com.google.gms.google-services'
     configurations { natives }
 
     dependencies {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        implementation 'com.google.android.gms:play-services-ads:19.4.0'
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+        implementation 'com.google.firebase:firebase-analytics:17.5.0'
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+        def lifecycle_version = "2.0.0"
+        implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+        annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+//        implementation 'com.android.billingclient:billing:2.1.0'
     }
 }
 

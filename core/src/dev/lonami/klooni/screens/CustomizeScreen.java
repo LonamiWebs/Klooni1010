@@ -147,22 +147,22 @@ class CustomizeScreen implements Screen {
         });
         optionsGroup.addActor(snapButton);
 
-        // Issues
-        final SoftButton issuesButton = new SoftButton(3, "issues_texture");
-        issuesButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/issues");
-            }
-        });
-        optionsGroup.addActor(issuesButton);
+//        // Issues
+//        final SoftButton issuesButton = new SoftButton(3, "issues_texture");
+//        issuesButton.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/issues");
+//            }
+//        });
+//        optionsGroup.addActor(issuesButton);
 
         // Website
         final SoftButton webButton = new SoftButton(2, "web_texture");
         webButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://lonamiwebs.github.io");
+                Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
             }
         });
         optionsGroup.addActor(webButton);
@@ -241,8 +241,10 @@ class CustomizeScreen implements Screen {
                 y -= shopDragStartY;
                 float distSq = x * x + y * y;
                 if (distSq < DRAG_LIMIT_SQ) {
-                    if (card.isBought())
+                    if (card.isBought()){
                         card.use();
+
+                    }
                     else
                         buyBand.askBuy(card);
 

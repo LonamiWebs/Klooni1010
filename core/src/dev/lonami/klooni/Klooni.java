@@ -49,17 +49,19 @@ public class Klooni extends Game {
 
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
+            new ExplodeEffectFactory(),
             new VanishEffectFactory(),
             new WaterdropEffectFactory(),
             new EvaporateEffectFactory(),
             new SpinEffectFactory(),
-            new ExplodeEffectFactory(),
+
     };
 
     private Map<String, Sound> effectSounds;
     public Skin skin;
 
     public final ShareChallenge shareChallenge;
+    public final IActivityRequestHandler iActivityRequestHandler;
 
     public static boolean onDesktop;
 
@@ -74,15 +76,19 @@ public class Klooni extends Game {
 
     // TODO Possibly implement a 'ShareChallenge'
     //      for other platforms instead passing null
+    public Klooni(final ShareChallenge shareChallenge, final IActivityRequestHandler activityRequestHandler) {
+        this.shareChallenge = shareChallenge;
+        this.iActivityRequestHandler = activityRequestHandler;
+    }
     public Klooni(final ShareChallenge shareChallenge) {
         this.shareChallenge = shareChallenge;
+        this.iActivityRequestHandler=null;
     }
 
     @Override
     public void create() {
         onDesktop = Gdx.app.getType().equals(Application.ApplicationType.Desktop);
         prefs = Gdx.app.getPreferences("dev.lonami.klooni.game");
-
         // Load the best match for the skin (depending on the device screen dimensions)
         skin = SkinLoader.loadSkin();
 
@@ -96,7 +102,7 @@ public class Klooni extends Game {
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
         setScreen(new MainMenuScreen(this));
-        String effectName = prefs.getString("effectName", "vanish");
+        String effectName = prefs.getString("effectName", "Explode");
         effectSounds = new HashMap<String, Sound>(EFFECTS.length);
         effect = EFFECTS[0];
         for (IEffectFactory e : EFFECTS) {
@@ -234,6 +240,20 @@ public class Klooni extends Game {
         theme.update(newTheme.getName());
     }
 
+    public static void switchTheme() {
+        Theme newTheme;
+        int position = prefs.getInteger("ThemePosition", 0);
+        if (position == 0) {
+            newTheme = Theme.getThemes().get(1);
+            prefs.putInteger("ThemePosition", 1);
+        } else {
+            newTheme = Theme.getThemes().get(0);
+            prefs.putInteger("ThemePosition", 0);
+        }
+        prefs.putString("themeName", newTheme.getName()).flush();
+        theme.update(newTheme.getName());
+    }
+
     // Effects related
     public static boolean isEffectBought(IEffectFactory effect) {
         if (effect.getPrice() == 0)
@@ -278,6 +298,14 @@ public class Klooni extends Game {
 
     private static void setMoney(float money) {
         prefs.putFloat("money", money).flush();
+    }
+
+    public static void setBoardSize(float boardSize) {
+        prefs.putFloat("BoardSize", boardSize).flush();
+    }
+
+    public static float getBoardSize() {
+        return prefs.getFloat("BoardSize");
     }
 
     public static int getMoney() {

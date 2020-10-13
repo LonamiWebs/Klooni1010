@@ -106,7 +106,7 @@ public class MoneyBuyBand extends Table {
     //region Private methods
 
     private void showCurrentMoney() {
-        setText("money: " + Klooni.getMoney());
+//        setText("money: " + Klooni.getMoney());
     }
 
     private void hideBuyButtons() {

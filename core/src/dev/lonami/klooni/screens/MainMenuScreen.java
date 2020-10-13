@@ -20,14 +20,28 @@ package dev.lonami.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import dev.lonami.klooni.Klooni;
+import dev.lonami.klooni.SkinLoader;
+import dev.lonami.klooni.Theme;
 import dev.lonami.klooni.actors.SoftButton;
 
 // Main menu screen, presenting some options (play, customize…)
@@ -37,61 +51,75 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     private final Klooni game;
     private final Stage stage;
-
     //endregion
 
     //region Static members
 
     // As the examples show on the LibGdx wiki
     private static final float minDelta = 1 / 30f;
-
     //endregion
 
-    //region Constructor
 
     public MainMenuScreen(Klooni game) {
         this.game = game;
-
         stage = new Stage();
-
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
         // Play button
         final SoftButton playButton = new SoftButton(
-                0, GameScreen.hasSavedData() ? "play_saved_texture" : "play_texture");
+                0, GameScreen.hasSavedData(10) ? "bg_10X10_s_texture" : "bg_10X10_texture");
         playButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(10);
                 MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(playButton).colspan(3).fill().space(16);
-
+        table.add(playButton).colspan(2).fill().space(16);
         table.row();
-
+        final SoftButton playButton15 = new SoftButton(
+                1, GameScreen.hasSavedData(15) ? "bg_15X15_s_texture" : "bg_15X15_texture");
+        playButton15.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(15);
+                MainMenuScreen.this.game.transitionTo(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
+            }
+        });
+        table.add(playButton15).space(16);
+        final SoftButton playButton20 = new SoftButton(
+                2, GameScreen.hasSavedData(20) ? "bg_20X20_s_texture" : "bg_20X20_texture");
+        playButton20.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(20);
+                MainMenuScreen.this.game.transitionTo(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
+            }
+        });
+        table.add(playButton20).space(16);
+        table.row();
+        final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
+        statsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(10);
+                MainMenuScreen.this.game.transitionTo(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
+            }
+        });
+        table.add(statsButton).colspan(2).fill().space(16);
+        table.row();
         // Star button (on GitHub)
         final SoftButton starButton = new SoftButton(1, "star_texture");
         starButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/stargazers");
+                Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
             }
         });
         table.add(starButton).space(16);
-
         // Time mode
-        final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
-        statsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                MainMenuScreen.this.game.transitionTo(
-                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
-            }
-        });
-        table.add(statsButton).space(16);
-
         // Palette button (buy colors)
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
@@ -99,18 +127,21 @@ public class MainMenuScreen extends InputListener implements Screen {
                 // Don't dispose because then it needs to take us to the previous screen
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
+                Klooni.switchTheme();
+//                usedItemUpdated();
+
             }
         });
         table.add(paletteButton).space(16);
+        table.row();
     }
 
-    //endregion
-
-    //region Screen
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        game.iActivityRequestHandler.loadInterstitial();
+//        game.iActivityRequestHandler.showBanner();
     }
 
     @Override
@@ -145,10 +176,12 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+//        game.iActivityRequestHandler.hideBanner();
     }
 
     //endregion

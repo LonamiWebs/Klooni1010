@@ -1,6 +1,6 @@
 {
   "name": "Summer",
-  "price": 50,
+  "price": 0,
   "colors": {
     "background": "fff8baff",
     "foreground": "ffffffff",

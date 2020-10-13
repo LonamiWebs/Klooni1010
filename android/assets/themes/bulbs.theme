@@ -1,6 +1,6 @@
 {
     "name": "Bulbs",
-    "price": 100,
+    "price": 0,
     "colors": {
         "background": "101010ff",
         "foreground": "ffffffc0",

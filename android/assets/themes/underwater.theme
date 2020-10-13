@@ -1,6 +1,6 @@
 {
     "name": "Underwater",
-    "price": 75,
+    "price": 0,
     "colors": {
         "background": "0044aaff",
         "foreground": "d7f4e3ff",
