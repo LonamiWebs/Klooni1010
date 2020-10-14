@@ -17,6 +17,7 @@
 */
 package dev.lonami.klooni;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
@@ -91,33 +93,37 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             @Override
             public void onBillingInitialized() {
                 readyToPurchase = true;
+//                bp.loadOwnedPurchasesFromGoogle();
             }
 
             @Override
             public void onPurchaseHistoryRestored() {
+                Log.e("billing", bp.listOwnedProducts().size() + "");
                 for (String sku : bp.listOwnedProducts()) {
                     Log.e("billing", sku);
-                    if ("com.vision.remove.ad".equals(sku)) {
-                        table.removeActor(softButton);
-                        game.setRemoveAd(true);
-
-                    }else
-                        game.setRemoveAd(false);
                 }
+                if (bp.isPurchased(PRODUCT_ID)) {
+                    game.setRemoveAd(true);
+                } else
+                    game.setRemoveAd(false);
             }
         });
+
         layout = new RelativeLayout(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layout.setLayoutParams(params);
         final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         game = new Klooni(shareChallenge, this);
+
         gameView = initializeForView(game, config);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         gameView.setLayoutParams(gameViewParams);
         layout.addView(gameView);
         adView = new AdView(this);
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        //test ca-app-pub-3940256099942544/1033173712
+        //ca-app-pub-3940256099942544/6300978111
+        adView.setAdUnitId("a-app-pub-3940256099942544/6300978111");
         RelativeLayout.LayoutParams adViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         adViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         adView.setLayoutParams(adViewParams);
@@ -159,14 +165,15 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showInterstitial() {
+        Log.e("billing", game.getIsRemove() + "");
         if (!game.getIsRemove())
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.loadAd(adRequest);
-                        loadInterstitial();
+                        mInterstitialAd.show();
                     } else {
+                        loadInterstitial();
                         Log.e("TAG", "The interstitial wasn't loaded yet.");
                     }
                 }
@@ -180,6 +187,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 @Override
                 public void run() {
                     mInterstitialAd = new InterstitialAd(AndroidLauncher.this);
+                    //test ca-app-pub-3940256099942544/1033173712
+                    //ca-app-pub-3241270777052923/7165836741
                     mInterstitialAd.setAdUnitId("ca-app-pub-3241270777052923/7165836741");
                     mInterstitialAd.loadAd(new AdRequest.Builder().build());
                     mInterstitialAd.setAdListener(new AdListener() {
@@ -221,8 +230,31 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e("TAG", "onStart: ");
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        bp.loadOwnedPurchasesFromGoogle();
+        if (bp.isPurchased(PRODUCT_ID)) {
+            game.setRemoveAd(true);
+        } else
+            game.setRemoveAd(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null)
+            bp.release();
+        super.onDestroy();
     }
 }

@@ -135,7 +135,8 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(paletteButton).space(16);
         table.row();
-        if (game.getIsRemove()) {
+        System.err.println(game.getIsRemove());
+        if (!game.getIsRemove()) {
             final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
             adButton.addListener(new ChangeListener() {
                 @Override
