@@ -8,16 +8,17 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:appCategory="game"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"
         android:label="@string/app_name"
-        android:theme="@style/GdxTheme"
-        android:name=".App">
+        android:theme="@style/GdxTheme">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

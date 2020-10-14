@@ -81,7 +81,6 @@ class CustomizeScreen implements Screen {
         this.game = game;
         this.lastScreen = lastScreen;
         stage = new Stage();
-
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -95,7 +94,7 @@ class CustomizeScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 goBack();
-                game.iActivityRequestHandler.showInterstitial();
+
             }
         });
         optionsGroup.addActor(backButton);
@@ -192,6 +191,7 @@ class CustomizeScreen implements Screen {
 
     private void goBack() {
         CustomizeScreen.this.game.transitionTo(lastScreen);
+        game.iActivityRequestHandler.showInterstitial();
     }
 
     private void loadShop() {
@@ -238,15 +238,15 @@ class CustomizeScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.iActivityRequestHandler.showInterstitial();
                 x -= shopDragStartX;
                 y -= shopDragStartY;
                 float distSq = x * x + y * y;
                 if (distSq < DRAG_LIMIT_SQ) {
-                    if (card.isBought()){
+                    if (card.isBought()) {
                         card.use();
 
-                    }
-                    else
+                    } else
                         buyBand.askBuy(card);
 
                     for (Actor a : shopGroup.getChildren()) {

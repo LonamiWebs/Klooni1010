@@ -60,10 +60,10 @@ public class MainMenuScreen extends InputListener implements Screen {
     //endregion
 
 
-    public MainMenuScreen(Klooni game) {
+    public MainMenuScreen(final Klooni game) {
         this.game = game;
         stage = new Stage();
-        Table table = new Table();
+        final Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
         // Play button
@@ -125,6 +125,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         paletteButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 // Don't dispose because then it needs to take us to the previous screen
+                game.iActivityRequestHandler.loadInterstitial();
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
 //                Klooni.switchTheme();
@@ -134,6 +135,17 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(paletteButton).space(16);
         table.row();
+        if (game.getIsRemove()) {
+            final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
+            adButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.iActivityRequestHandler.removeAd(table, adButton);
+                }
+            });
+            table.add(adButton).colspan(2).fill().space(16);
+        }
+
     }
 
 
