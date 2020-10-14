@@ -135,8 +135,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(paletteButton).space(16);
         table.row();
-        System.err.println(game.getIsRemove());
-        if (!game.getIsRemove()) {
+        if (game.iActivityRequestHandler.isAdAvaliable() & !game.getIsRemove()) {
             final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
             adButton.addListener(new ChangeListener() {
                 @Override
@@ -146,7 +145,6 @@ public class MainMenuScreen extends InputListener implements Screen {
             });
             table.add(adButton).colspan(2).fill().space(16);
         }
-
     }
 
 

@@ -230,6 +230,17 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public boolean isAdAvaliable() {
+        if (bp.isPurchased(PRODUCT_ID)) {
+            game.setRemoveAd(true);
+            return false;
+        } else {
+            game.setRemoveAd(false);
+            return true;
+        }
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.e("TAG", "onStart: ");
