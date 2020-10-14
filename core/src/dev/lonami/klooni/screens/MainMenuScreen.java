@@ -34,10 +34,14 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import dev.lonami.klooni.Klooni;
 import dev.lonami.klooni.SkinLoader;
@@ -57,6 +61,9 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     // As the examples show on the LibGdx wiki
     private static final float minDelta = 1 / 30f;
+    final Texture cupTexture;
+    final Image cupImage;
+    final Label highScoreLabel;
     //endregion
 
 
@@ -64,8 +71,23 @@ public class MainMenuScreen extends InputListener implements Screen {
         this.game = game;
         stage = new Stage();
         final Table table = new Table();
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
         table.setFillParent(true);
         stage.addActor(table);
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
+        Color colorScore=new Color(Color.RED);
+        highScoreLabel = new Label(Integer.toString(Klooni.getMaxScore()), labelStyle);
+        highScoreLabel.setColor(colorScore);
+        cupTexture = SkinLoader.loadPng("cup.png");
+        cupImage = new Image(cupTexture);
+        Color color=new Color(Color.RED);
+        cupImage.setColor(color);
+        table.add(cupImage).align(Align.top).colspan(2).space(0,0,16,0).center();
+        table.row();
+        table.add(highScoreLabel).colspan(2).space(0,0,height/30,0).center();
+        table.row();
         // Play button
         final SoftButton playButton = new SoftButton(
                 0, GameScreen.hasSavedData(10) ? "bg_10X10_s_texture" : "bg_10X10_texture");
@@ -76,7 +98,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(playButton).colspan(2).fill().space(16);
+        table.add(playButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
         table.row();
         final SoftButton playButton15 = new SoftButton(
                 1, GameScreen.hasSavedData(15) ? "bg_15X15_s_texture" : "bg_15X15_texture");
@@ -87,7 +109,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(playButton15).space(16);
+        table.add(playButton15).minWidth(width / 3).space(16);
         final SoftButton playButton20 = new SoftButton(
                 2, GameScreen.hasSavedData(20) ? "bg_20X20_s_texture" : "bg_20X20_texture");
         playButton20.addListener(new ChangeListener() {
@@ -97,7 +119,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(playButton20).space(16);
+        table.add(playButton20).minWidth(width / 3).space(16);
         table.row();
         final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
         statsButton.addListener(new ChangeListener() {
@@ -108,7 +130,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
             }
         });
-        table.add(statsButton).colspan(2).fill().space(16);
+        table.add(statsButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
         table.row();
         // Star button (on GitHub)
         final SoftButton starButton = new SoftButton(1, "star_texture");
@@ -118,7 +140,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                 Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
             }
         });
-        table.add(starButton).space(16);
+        table.add(starButton).minWidth(width / 3).space(16);
         // Time mode
         // Palette button (buy colors)
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
@@ -133,7 +155,7 @@ public class MainMenuScreen extends InputListener implements Screen {
 
             }
         });
-        table.add(paletteButton).space(16);
+        table.add(paletteButton).minWidth(width / 3).space(16);
         table.row();
         if (game.iActivityRequestHandler.isAdAvaliable() & !game.getIsRemove()) {
             final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
@@ -143,7 +165,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                     game.iActivityRequestHandler.removeAd(table, adButton);
                 }
             });
-            table.add(adButton).colspan(2).fill().space(16);
+            table.add(adButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
         }
     }
 
