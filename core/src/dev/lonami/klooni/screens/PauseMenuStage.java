@@ -136,7 +136,7 @@ class PauseMenuStage extends Stage {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             // Don't dispose because then it needs to take us to the previous screen
-            game.iActivityRequestHandler.loadInterstitial();
+//            game.iActivityRequestHandler.loadInterstitial();
             game.transitionTo(new CustomizeScreen(game, game.getScreen()), false);
         }
     };

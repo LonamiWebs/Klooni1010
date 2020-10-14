@@ -48,8 +48,10 @@ public class AppOpenManager implements Application.ActivityLifecycleCallbacks, L
      */
     @OnLifecycleEvent(ON_START)
     public void onStart() {
-                showAdIfAvailable();
+        if (!Klooni.getIsRemove())
+            showAdIfAvailable();
     }
+
     /**
      * Request an ad
      */

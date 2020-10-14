@@ -8,11 +8,14 @@ import android.util.Log;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import dev.lonami.klooni.Klooni;
 
 
 public class GoogleInterstitialAdsPool {
@@ -25,9 +28,10 @@ public class GoogleInterstitialAdsPool {
     public static void init(Context ctx) {
         context = ctx;
         // 缓存一些广告
-        add("ca-app-pub-3241270777052923/1648334180");
-        add("ca-app-pub-3241270777052923/7752462127");
-        add("ca-app-pub-3241270777052923/9626094225");
+        if (!Klooni.getIsRemove()) {
+            add("ca-app-pub-3241270777052923/7165836741");
+            add("ca-app-pub-3241270777052923/9681081186");
+        }
     }
 
     private static void add(String adKey) {
@@ -57,7 +61,7 @@ public class GoogleInterstitialAdsPool {
             }
 
             @Override
-            public void onAdFailedToLoad(int i) { // 加载失败
+            public void onAdFailedToLoad(LoadAdError i) { // 加载失败
                 super.onAdFailedToLoad(i);
                 Log.e(TAG, "onAdFailedToLoad: " + ad.getAdUnitId());
                 // 做统计

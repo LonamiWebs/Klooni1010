@@ -46,7 +46,7 @@ public class Klooni extends Game {
     // FIXME theme should NOT be static as it might load textures which will expose it to the race condition iff GDX got initialized before or not
     public static Theme theme;
     public IEffectFactory effect;
-    public boolean isRemove=false;
+    public boolean isRemove = false;
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
             new ExplodeEffectFactory(),
@@ -317,12 +317,12 @@ public class Klooni extends Game {
         return prefs.getFloat("money");
     }
 
-    public void setRemoveAd(boolean isRemove) {
-        this.isRemove = isRemove;
+    public static void setRemoveAd(boolean isRemove) {
+        Gdx.app.getPreferences("dev.lonami.klooni.game").putBoolean("adIsRemove", isRemove).flush();
     }
 
-    public boolean getIsRemove() {
-        return isRemove;
+    public static boolean getIsRemove() {
+        return Gdx.app.getPreferences("dev.lonami.klooni.game").getBoolean("adIsRemove");
     }
     //endregion
 }

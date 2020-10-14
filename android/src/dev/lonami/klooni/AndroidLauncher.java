@@ -40,10 +40,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.RequestConfiguration;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import dev.lonami.klooni.actors.SoftButton;
+import dev.lonami.klooni.adcache.GoogleInterstitialAdsPool;
+import dev.lonami.klooni.adcache.InterstitialAdsManager;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler {
     private InterstitialAd mInterstitialAd;
@@ -63,8 +67,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // FIXME: Hack to allow us use the old way to share files
         // https://stackoverflow.com/a/42437379/
         if (Build.VERSION.SDK_INT >= 24) {
             try {
@@ -77,7 +79,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         if (!BillingProcessor.isIabServiceAvailable(this)) {
             Log.e("billing", "onCreate: serviceisAvailable");
         }
-
         bp = new BillingProcessor(this, LICENSE_KEY, MERCHANT_ID, new BillingProcessor.IBillingHandler() {
             @Override
             public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
@@ -87,13 +88,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
             @Override
             public void onBillingError(int errorCode, @Nullable Throwable error) {
-                Log.e("billing", "onBillingError: " + error.getMessage());
+                Log.e("billing", "onBillingError: " + errorCode);
             }
-
             @Override
             public void onBillingInitialized() {
                 readyToPurchase = true;
-//                bp.loadOwnedPurchasesFromGoogle();
             }
 
             @Override
@@ -115,8 +114,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         game = new Klooni(shareChallenge, this);
-
         gameView = initializeForView(game, config);
+        new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E189A701CB7ADBE9C09BCB9754032F2A"));
+        InterstitialAdsManager.getInstance().init(this);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         gameView.setLayoutParams(gameViewParams);
         layout.addView(gameView);
@@ -170,12 +170,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.show();
-                    } else {
-                        loadInterstitial();
-                        Log.e("TAG", "The interstitial wasn't loaded yet.");
-                    }
+//                    if (mInterstitialAd.isLoaded()) {
+//                        mInterstitialAd.show();
+//                    } else {
+//                        loadInterstitial();
+//                        Log.e("TAG", "The interstitial wasn't loaded yet.");
+//                    }
+                    GoogleInterstitialAdsPool.showAd("gameover");
                 }
             });
     }

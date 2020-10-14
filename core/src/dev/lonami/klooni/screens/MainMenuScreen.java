@@ -147,7 +147,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         paletteButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 // Don't dispose because then it needs to take us to the previous screen
-                game.iActivityRequestHandler.loadInterstitial();
+//                game.iActivityRequestHandler.loadInterstitial();
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
 //                Klooni.switchTheme();
@@ -173,7 +173,7 @@ public class MainMenuScreen extends InputListener implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        game.iActivityRequestHandler.loadInterstitial();
+//        game.iActivityRequestHandler.loadInterstitial();
 //        game.iActivityRequestHandler.showBanner();
     }
 
