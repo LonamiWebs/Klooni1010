@@ -127,7 +127,7 @@ public class MainMenuScreen extends InputListener implements Screen {
                 // Don't dispose because then it needs to take us to the previous screen
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
-                Klooni.switchTheme();
+//                Klooni.switchTheme();
 //                usedItemUpdated();
 
             }

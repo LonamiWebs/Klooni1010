@@ -77,7 +77,7 @@ class CustomizeScreen implements Screen {
 
     //region Constructor
 
-    CustomizeScreen(Klooni game, final Screen lastScreen) {
+    CustomizeScreen(final Klooni game, final Screen lastScreen) {
         this.game = game;
         this.lastScreen = lastScreen;
         stage = new Stage();
@@ -95,6 +95,7 @@ class CustomizeScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 goBack();
+                game.iActivityRequestHandler.showInterstitial();
             }
         });
         optionsGroup.addActor(backButton);

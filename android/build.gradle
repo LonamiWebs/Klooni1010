@@ -3,7 +3,6 @@ ext.myStorePassword = 'wmj141519'
 ext.myKeyAlias = 'BlockPuzzle'
 ext.myKeyPassword = 'wmj141519'
 android {
-    buildToolsVersion "29.0.3"
     compileSdkVersion 29
     sourceSets {
         main {
@@ -25,8 +24,8 @@ android {
         //noinspection MinSdkTooLow
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 974
-        versionName "9.7.4"
+        versionCode 975
+        versionName "9.7.5"
     }
     signingConfigs {
         release {
