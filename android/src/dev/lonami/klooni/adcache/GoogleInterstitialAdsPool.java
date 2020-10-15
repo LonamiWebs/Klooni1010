@@ -31,6 +31,8 @@ public class GoogleInterstitialAdsPool {
         if (!Klooni.getIsRemove()) {
             add("ca-app-pub-3241270777052923/7165836741");
             add("ca-app-pub-3241270777052923/9681081186");
+//        add("ca-app-pub-3940256099942544/1033173712");
+//        add("ca-app-pub-3940256099942544/1033173712");
         }
     }
 

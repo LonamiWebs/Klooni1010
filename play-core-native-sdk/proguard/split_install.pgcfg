@@ -1,0 +1,136 @@
+# Copyright 2018 Google LLC
+#
+# The Play Core Library is licensed to you under the Android Software
+# Development Kit License Agreement -
+# https://developer.android.com/studio/terms ("Agreement"). By using the Play
+# Core Library, you agree to the terms of this Agreement.
+
+# Play Core Proguard Rules: Split Install API for dynamic feature modules
+
+-keep class com.google.android.play.core.missingsplits.MissingSplitsDetectingApplication { *; }
+
+-keep class com.google.android.play.core.missingsplits.MissingSplitsManager {
+    public boolean disableAppIfMissingRequiredSplits();
+    public boolean isMissingRequiredSplits();
+}
+
+-keep class com.google.android.play.core.missingsplits.MissingSplitsManagerFactory {
+    public static com.google.android.play.core.missingsplits.MissingSplitsManager create(android.content.Context);
+}
+
+-keep class com.google.android.play.core.splitcompat.SplitCompat {
+    public static boolean install(android.content.Context);
+    public static boolean installActivity(android.content.Context);
+}
+
+-keep class com.google.android.play.core.splitcompat.SplitCompatApplication {
+    protected void attachBaseContext(android.content.Context);
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallException {
+    public int getErrorCode();
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallHelper {
+    public static void loadLibrary(android.content.Context, java.lang.String);
+    public static void updateAppInfo(android.content.Context);
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallManager {
+    public abstract com.google.android.play.core.tasks.Task cancelInstall(int);
+    public abstract com.google.android.play.core.tasks.Task deferredInstall(java.util.List);
+    public abstract com.google.android.play.core.tasks.Task deferredUninstall(java.util.List);
+    public abstract com.google.android.play.core.tasks.Task deferredLanguageInstall(java.util.List);
+    public abstract com.google.android.play.core.tasks.Task deferredLanguageUninstall(java.util.List);
+    public abstract java.util.Set getInstalledLanguages();
+    public abstract java.util.Set getInstalledModules();
+    public abstract com.google.android.play.core.tasks.Task getSessionState(int);
+    public abstract com.google.android.play.core.tasks.Task getSessionStates();
+    public abstract void registerListener(com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener);
+    public abstract boolean startConfirmationDialogForResult(com.google.android.play.core.splitinstall.SplitInstallSessionState, android.app.Activity, int);
+    public abstract boolean startConfirmationDialogForResult(com.google.android.play.core.splitinstall.SplitInstallSessionState, com.google.android.play.core.common.IntentSenderForResultStarter, int);
+    public abstract com.google.android.play.core.tasks.Task startInstall(com.google.android.play.core.splitinstall.SplitInstallRequest);
+    public abstract void unregisterListener(com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener);
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallManagerFactory {
+    <init>();
+
+    public static com.google.android.play.core.splitinstall.SplitInstallManager create(android.content.Context);
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallRequest {
+    public java.util.List getLanguages();
+    public java.util.List getModuleNames();
+    public static com.google.android.play.core.splitinstall.SplitInstallRequest$Builder newBuilder();
+    public java.lang.String toString();
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallRequest$Builder {
+    public com.google.android.play.core.splitinstall.SplitInstallRequest$Builder addLanguage(java.util.Locale);
+    public com.google.android.play.core.splitinstall.SplitInstallRequest$Builder addModule(java.lang.String);
+    public com.google.android.play.core.splitinstall.SplitInstallRequest build();
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallSessionState {
+    public long bytesDownloaded();
+    public int errorCode();
+    public java.util.List moduleNames();
+    public android.app.PendingIntent resolutionIntent();
+    public int sessionId();
+    public int status();
+    public long totalBytesToDownload();
+    public java.util.List languages();
+    public static com.google.android.play.core.splitinstall.SplitInstallSessionState create(int, int, int, long, long, java.util.List, java.util.List);
+    public boolean hasTerminalStatus();
+}
+
+-keep class com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener {
+    <init>();
+
+    public void onStateUpdate(com.google.android.play.core.splitinstall.SplitInstallSessionState);
+}
+
+-keep class com.google.android.play.core.splitinstall.model.SplitInstallErrorCode {
+    public static int ACCESS_DENIED;
+    public static int ACTIVE_SESSIONS_LIMIT_EXCEEDED;
+    public static int API_NOT_AVAILABLE;
+    public static int APP_NOT_OWNED;
+    public static int INCOMPATIBLE_WITH_EXISTING_SESSION;
+    public static int INTERNAL_ERROR;
+    public static int INVALID_REQUEST;
+    public static int INSUFFICIENT_STORAGE;
+    public static int MODULE_UNAVAILABLE;
+    public static int NETWORK_ERROR;
+    public static int NO_ERROR;
+    public static int PLAY_STORE_NOT_FOUND;
+    public static int SESSION_NOT_FOUND;
+    public static int SPLITCOMPAT_COPY_ERROR;
+    public static int SPLITCOMPAT_EMULATION_ERROR;
+    public static int SPLITCOMPAT_VERIFICATION_ERROR;
+    public static int SERVICE_DIED;
+}
+
+-keep class com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus {
+    public static int CANCELED;
+    public static int CANCELING;
+    public static int DOWNLOADED;
+    public static int DOWNLOADING;
+    public static int FAILED;
+    public static int INSTALLED;
+    public static int INSTALLING;
+    public static int PENDING;
+    public static int REQUIRES_USER_CONFIRMATION;
+    public static int UNKNOWN;
+}
+
+-keep class com.google.android.play.core.splitinstall.testing.FakeSplitInstallManagerFactory {
+    public static com.google.android.play.core.splitinstall.testing.FakeSplitInstallManager create(android.content.Context, java.io.File);
+    public static com.google.android.play.core.splitinstall.testing.FakeSplitInstallManager create(android.content.Context);
+    public static com.google.android.play.core.splitinstall.testing.FakeSplitInstallManager createNewInstance(android.content.Context, java.io.File);
+}
+
+-keep class com.google.android.play.core.splitinstall.testing.FakeSplitInstallManager {
+    public <init>(android.content.Context, java.io.File);
+    public void setShouldNetworkError(boolean);
+}

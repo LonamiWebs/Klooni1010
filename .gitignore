@@ -16,6 +16,9 @@ hs_err_pid*
 
 ## Robovm
 robovm-build/
+android/.cxx/
+android/.externalNativeBuild/
+
 
 ## GWT
 war/

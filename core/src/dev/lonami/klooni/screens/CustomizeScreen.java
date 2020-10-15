@@ -230,25 +230,17 @@ class CustomizeScreen implements Screen {
                 shopDragStartY = y;
                 return true;
             }
-
-            // We could actually rely on touchDragged not being called,
-            // but perhaps it would be hard for some people not to move
-            // their fingers even the slightest bit, so we use a custom
-            // drag limit
-
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.iActivityRequestHandler.showInterstitial();
                 x -= shopDragStartX;
                 y -= shopDragStartY;
                 float distSq = x * x + y * y;
                 if (distSq < DRAG_LIMIT_SQ) {
                     if (card.isBought()) {
                         card.use();
-
+                        game.iActivityRequestHandler.showInterstitial();
                     } else
                         buyBand.askBuy(card);
-
                     for (Actor a : shopGroup.getChildren()) {
                         ((ShopCard) a).usedItemUpdated();
                     }

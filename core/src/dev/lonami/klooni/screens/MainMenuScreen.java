@@ -77,16 +77,16 @@ public class MainMenuScreen extends InputListener implements Screen {
         stage.addActor(table);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
-        Color colorScore=new Color(Color.RED);
+        Color colorScore = new Color(Color.RED);
         highScoreLabel = new Label(Integer.toString(Klooni.getMaxScore()), labelStyle);
         highScoreLabel.setColor(colorScore);
         cupTexture = SkinLoader.loadPng("cup.png");
         cupImage = new Image(cupTexture);
-        Color color=new Color(Color.RED);
+        Color color = new Color(Color.RED);
         cupImage.setColor(color);
-        table.add(cupImage).align(Align.top).colspan(2).space(0,0,16,0).center();
+        table.add(cupImage).align(Align.top).colspan(2).space(0, 0, 16, 0).center();
         table.row();
-        table.add(highScoreLabel).colspan(2).space(0,0,height/30,0).center();
+        table.add(highScoreLabel).colspan(2).space(0, 0, height / 30, 0).center();
         table.row();
         // Play button
         final SoftButton playButton = new SoftButton(
@@ -137,21 +137,15 @@ public class MainMenuScreen extends InputListener implements Screen {
         starButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
+                game.iActivityRequestHandler.inAppReview();
             }
         });
         table.add(starButton).minWidth(width / 3).space(16);
-        // Time mode
-        // Palette button (buy colors)
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                // Don't dispose because then it needs to take us to the previous screen
-//                game.iActivityRequestHandler.loadInterstitial();
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
                         MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
-//                Klooni.switchTheme();
-//                usedItemUpdated();
 
             }
         });
@@ -173,8 +167,6 @@ public class MainMenuScreen extends InputListener implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-//        game.iActivityRequestHandler.loadInterstitial();
-//        game.iActivityRequestHandler.showBanner();
     }
 
     @Override
