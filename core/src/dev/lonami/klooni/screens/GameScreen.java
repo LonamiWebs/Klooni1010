@@ -99,8 +99,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         BOARD_SIZE = (int) Klooni.getBoardSize();
         if (BOARD_SIZE == 20) {
             HOLDER_PIECE_COUNT = 4;
-        }else {
-            HOLDER_PIECE_COUNT=3;
+        } else {
+            HOLDER_PIECE_COUNT = 3;
         }
         batch = new SpriteBatch();
         this.game = game;
@@ -160,12 +160,12 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         for (Piece piece : holder.getAvailablePieces())
             if (board.canPutPiece(piece))
                 return false;
-
+        game.iActivityRequestHandler.showInterstitial();
         return true;
     }
 
     private void doGameOver(final String gameOverReason) {
-        game.iActivityRequestHandler.showInterstitial();
+
         if (!gameOverDone) {
             gameOverDone = true;
             saveMoney();

@@ -21,12 +21,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,18 +34,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.games.EventsClient;
+import com.google.android.gms.games.LeaderboardsClient;
+import com.google.android.gms.games.PlayersClient;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.review.testing.FakeReviewManager;
 import com.google.android.play.core.tasks.OnCompleteListener;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -67,10 +64,15 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private SoftButton softButton;
     private BillingProcessor bp;
     private boolean readyToPurchase = false;
-    View gameView;
-    private AdView adView;
-    AdRequest adRequest;
-    Klooni game;
+    private View gameView;
+    private Klooni game;
+    private ReviewManager manager;
+    private GoogleSignInClient mGoogleSignInClient;
+    private LeaderboardsClient mLeaderboardsClient;
+    private EventsClient mEventsClient;
+    private PlayersClient mPlayersClient;
+    private static final int RC_UNUSED = 5001;
+    private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +86,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 e.printStackTrace();
             }
         }
+        mGoogleSignInClient = GoogleSignIn.getClient(this,
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
         if (!BillingProcessor.isIabServiceAvailable(this)) {
             Log.e("billing", "onCreate: serviceisAvailable");
         }
         bp = new BillingProcessor(this, LICENSE_KEY, MERCHANT_ID, new BillingProcessor.IBillingHandler() {
             @Override
             public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-                game.setRemoveAd(true);
+//                Log.e("billing", "onProductPurchased: "+details.purchaseInfo.responseData.toString() );
+                Klooni.setRemoveAd(true);
                 table.removeActor(softButton);
             }
 
@@ -112,9 +117,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                     Log.e("billing", sku);
                 }
                 if (bp.isPurchased(PRODUCT_ID)) {
-                    game.setRemoveAd(true);
+                    Klooni.setRemoveAd(true);
                 } else
-                    game.setRemoveAd(false);
+                    Klooni.setRemoveAd(false);
             }
         });
 
@@ -134,17 +139,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showInterstitial() {
-        Log.e("billing", game.getIsRemove() + "");
-        if (!game.getIsRemove())
+        Log.e("billing", Klooni.getIsRemove() + "");
+        if (!Klooni.getIsRemove())
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    if (mInterstitialAd.isLoaded()) {
-//                        mInterstitialAd.show();
-//                    } else {
-//                        loadInterstitial();
-//                        Log.e("TAG", "The interstitial wasn't loaded yet.");
-//                    }
                     GoogleInterstitialAdsPool.showAd("gameover");
                 }
             });
@@ -152,8 +151,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void removeAd(Table table, SoftButton softButton) {
+        Bundle bundleEvent = new Bundle();
+        bundleEvent.putString("msg", "clickAdRemove");
+        FirebaseAnalytics.getInstance(this).logEvent("adRemove", bundleEvent);
         this.table = table;
         this.softButton = softButton;
+        Log.e("billing", "removeAd: ");
         if (readyToPurchase)
             bp.purchase(this, PRODUCT_ID);
 
@@ -162,38 +165,44 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     public boolean isAdAvaliable() {
         if (bp.isPurchased(PRODUCT_ID)) {
-            game.setRemoveAd(true);
+            Klooni.setRemoveAd(true);
             return false;
         } else {
-            game.setRemoveAd(false);
+            Klooni.setRemoveAd(false);
             return true;
         }
     }
 
     @Override
     public void inAppReview() {
-//        final ReviewManager manager = new FakeReviewManager(this);
-        final ReviewManager manager = ReviewManagerFactory.create(this);
-        Task<ReviewInfo> request = manager.requestReviewFlow();
-        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
-            @Override
-            public void onComplete(Task<ReviewInfo> task) {
-                if (task.isSuccessful()) {
-                    ReviewInfo reviewInfo = task.getResult();
-                    Task<Void> flow = manager.launchReviewFlow(AndroidLauncher.this, reviewInfo);
-                    flow.addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(Task<Void> task) {
-                            if (task != null && task.getResult() != null)
-                                Log.e("inAppReview", "onComplete: " + task.getResult().toString());
-                        }
-                    });
-                } else {
-                    Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
-                    Log.e("inAppReview", "onComplete: error");
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        manager = ReviewManagerFactory.create(AndroidLauncher.this);
+                        Task<ReviewInfo> request = manager.requestReviewFlow();
+                        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+                            @Override
+                            public void onComplete(Task<ReviewInfo> task) {
+                                if (task.isSuccessful()) {
+                                    ReviewInfo reviewInfo = task.getResult();
+                                    Task<Void> flow = manager.launchReviewFlow(AndroidLauncher.this, reviewInfo);
+                                    flow.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(Task<Void> task) {
+                                            if (task != null && task.getResult() != null)
+                                                Log.e("inAppReview", "onComplete: " + task.getResult().toString());
+                                        }
+                                    });
+                                } else {
+                                    Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
+                                    Log.e("inAppReview", "onComplete: error");
+                                }
+                            }
+                        });
+                    }
                 }
-            }
-        });
+        );
     }
 
     @Override
@@ -206,10 +215,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("billing", "onResume: " + bp.isPurchased(PRODUCT_ID));
         if (bp.isPurchased(PRODUCT_ID)) {
-            game.setRemoveAd(true);
+            Klooni.setRemoveAd(true);
         } else
-            game.setRemoveAd(false);
+            Klooni.setRemoveAd(false);
     }
 
     @Override

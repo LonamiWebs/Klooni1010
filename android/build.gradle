@@ -26,17 +26,8 @@ android {
         //noinspection MinSdkTooLow
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 989
-        versionName "9.8.9"
-//        externalNativeBuild {
-//            cmake {
-//                arguments "-DANDROID_STL=c++_static",
-//                        "-DPLAYCORE_LOCATION=$playcoreDir"
-//            }
-//        }
-//        ndk {
-//            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-//        }
+        versionCode 991
+        versionName "9.9.1"
     }
     signingConfigs {
         release {
@@ -49,7 +40,6 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-//            proguardFile "$playcoreDir/proguard/common.pgcfg"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             matchingFallbacks = ['release']
@@ -62,17 +52,9 @@ android {
             matchingFallbacks = ['debug']
         }
     }
-//    externalNativeBuild {
-//        cmake {
-//            path 'src/CMakeLists.txt'
-//        }
-//    }
 }
 
 
-// called every time gradle gets executed, takes the native dependencies of
-// the natives configuration, and extracts them to the proper libs/ folders
-// so they get packed with the APK.
 task copyAndroidNatives {
     doFirst {
         file("libs/armeabi/").mkdirs()
@@ -128,7 +110,5 @@ task run(type: Exec) {
 }
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.2'
-//    implementation files("$playcoreDir/playcore.aar")
 }
-
 eclipse.project.name = appName + "-android"

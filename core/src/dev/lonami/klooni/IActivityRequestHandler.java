@@ -10,7 +10,7 @@ public interface IActivityRequestHandler {
     void showInterstitial();
 
 
-    void removeAd(Table table, SoftButton softButton);
+     void  removeAd(Table table, SoftButton softButton);
 
     boolean isAdAvaliable();
 

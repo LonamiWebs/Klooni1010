@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_id">878172018063</string>
+
+    <string name="achievement_prime">YOUR_ACHIEVEMENT_PRIME_ID</string>
+    <string name="achievement_really_bored">YOUR_ACHIEVEMENT_REALLY_BORED_ID</string>
+    <string name="achievement_bored">YOUR_ACHIEVEMENT_BORED_ID</string>
+    <string name="achievement_humble">YOUR_ACHIEVEMENT_HUMBLE_ID</string>
+    <string name="achievement_arrogant">YOUR_ACHIEVEMENT_ARROGANT_ID</string>
+    <string name="achievement_leet">YOUR_ACHIEVEMENT_LEET_ID</string>
+
+    <string name="leaderboard_easy">YOUR_LEADERBOARD_EASY_ID</string>
+    <string name="leaderboard_hard">YOUR_LEADERBOARD_HARD_ID</string>
+
+    <string name="event_start">YOUR_EVENT_START</string>
+    <string name="event_number_chosen">YOUR_EVENT_NUMBER_CHOSEN</string>
+</resources>

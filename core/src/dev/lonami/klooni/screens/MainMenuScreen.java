@@ -151,7 +151,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(paletteButton).minWidth(width / 3).space(16);
         table.row();
-        if (game.iActivityRequestHandler.isAdAvaliable() & !game.getIsRemove()) {
+        if (game.iActivityRequestHandler.isAdAvaliable() & !Klooni.getIsRemove()) {
             final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
             adButton.addListener(new ChangeListener() {
                 @Override
