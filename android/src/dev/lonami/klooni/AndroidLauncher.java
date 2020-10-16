@@ -36,7 +36,9 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.games.EventsClient;
 import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.games.PlayersClient;
@@ -73,6 +75,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private PlayersClient mPlayersClient;
     private static final int RC_UNUSED = 5001;
     private static final int RC_SIGN_IN = 9001;
+    private String mDisplayName = "";
+    private final AccomplishmentsOutbox mOutbox = new AccomplishmentsOutbox();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,5 +237,21 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         if (bp != null)
             bp.release();
         super.onDestroy();
+    }
+
+    private class AccomplishmentsOutbox {
+        boolean m1Achievement = false;
+        boolean m2Achievement = false;
+        boolean m3Achievement = false;
+        boolean m4Achievement = false;
+        boolean m5Achievement = false;
+        int mBoredSteps = 0;
+        int mEasyModeScore = -1;
+
+        boolean isEmpty() {
+            return !m1Achievement && !m2Achievement && !m3Achievement &&
+                    !m4Achievement && m5Achievement && mBoredSteps == 0 && mEasyModeScore < 0;
+        }
+
     }
 }
