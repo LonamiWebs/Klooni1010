@@ -222,4 +222,20 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             bp.release();
         super.onDestroy();
     }
+
+    private class AccomplishmentsOutbox {
+        boolean m1Achievement = false;
+        boolean m2Achievement = false;
+        boolean m3Achievement = false;
+        boolean m4Achievement = false;
+        boolean m5Achievement = false;
+        int mBoredSteps = 0;
+        int mEasyModeScore = -1;
+
+        boolean isEmpty() {
+            return !m1Achievement && !m2Achievement && !m3Achievement &&
+                    !m4Achievement && m5Achievement && mBoredSteps == 0 && mEasyModeScore < 0;
+        }
+
+    }
 }
