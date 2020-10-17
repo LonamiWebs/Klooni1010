@@ -63,9 +63,8 @@ class PauseMenuStage extends Stage {
     PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode) {
         this.game = game;
         this.scorer = scorer;
-
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
-
+        game.iActivityRequestHandler.showInterstitial();
         Table table = new Table();
         table.setFillParent(true);
         addActor(table);

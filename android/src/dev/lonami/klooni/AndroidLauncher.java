@@ -163,27 +163,31 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 new Runnable() {
                     @Override
                     public void run() {
-                        manager = ReviewManagerFactory.create(AndroidLauncher.this);
-                        Task<ReviewInfo> request = manager.requestReviewFlow();
-                        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
-                            @Override
-                            public void onComplete(Task<ReviewInfo> task) {
-                                if (task.isSuccessful()) {
-                                    ReviewInfo reviewInfo = task.getResult();
-                                    Task<Void> flow = manager.launchReviewFlow(AndroidLauncher.this, reviewInfo);
-                                    flow.addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(Task<Void> task) {
-                                            if (task != null && task.getResult() != null)
-                                                Log.e("inAppReview", "onComplete: " + task.getResult().toString());
-                                        }
-                                    });
-                                } else {
-                                    Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
-                                    Log.e("inAppReview", "onComplete: error");
+                        if (Klooni.getInAppReview()) {
+                            manager = ReviewManagerFactory.create(AndroidLauncher.this);
+                            Task<ReviewInfo> request = manager.requestReviewFlow();
+                            request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+                                @Override
+                                public void onComplete(Task<ReviewInfo> task) {
+                                    if (task.isSuccessful()) {
+                                        ReviewInfo reviewInfo = task.getResult();
+                                        Task<Void> flow = manager.launchReviewFlow(AndroidLauncher.this, reviewInfo);
+                                        Log.e("review", "onComplete: " + flow.isComplete());
+                                        flow.addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(Task<Void> task) {
+                                                if (task != null && task.getResult() != null)
+                                                    Log.e("inAppReview", "onComplete: " + task.getResult().toString());
+                                            }
+                                        });
+                                    } else {
+                                        Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
+                                        Log.e("inAppReview", "onComplete: error");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else
+                            Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
                     }
                 }
         );

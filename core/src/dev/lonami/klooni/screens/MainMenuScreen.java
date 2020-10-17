@@ -82,7 +82,7 @@ public class MainMenuScreen extends InputListener implements Screen {
         highScoreLabel.setColor(colorScore);
         cupTexture = SkinLoader.loadPng("cup.png");
         cupImage = new Image(cupTexture);
-        Color color =  new Color(0xEBB53Eff);
+        Color color = new Color(0xEBB53Eff);
         cupImage.setColor(color);
         table.add(cupImage).align(Align.top).colspan(2).space(0, 0, 16, 0).center();
         table.row();
@@ -132,16 +132,16 @@ public class MainMenuScreen extends InputListener implements Screen {
         });
         table.add(statsButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
         table.row();
-        // Star button (on GitHub)
+        final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         final SoftButton starButton = new SoftButton(1, "star_texture");
         starButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.iActivityRequestHandler.inAppReview();
+                Klooni.setInAppReview(true);
             }
         });
         table.add(starButton).minWidth(width / 3).space(16);
-        final SoftButton paletteButton = new SoftButton(3, "palette_texture");
         paletteButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 MainMenuScreen.this.game.transitionTo(new CustomizeScreen(

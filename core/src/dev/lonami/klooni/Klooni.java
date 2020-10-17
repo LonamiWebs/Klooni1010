@@ -72,6 +72,7 @@ public class Klooni extends Game {
     public static final int GAME_HEIGHT = 680;
     public static final int GAME_WIDTH = 408;
     private static final long SPLASH_MINIMUM_MILLIS = 4000L;
+
     //endregion
     //region Creation
     // TODO Possibly implement a 'ShareChallenge'
@@ -80,6 +81,7 @@ public class Klooni extends Game {
         this.shareChallenge = shareChallenge;
         this.iActivityRequestHandler = activityRequestHandler;
     }
+
     public Klooni(final ShareChallenge shareChallenge) {
         this.shareChallenge = shareChallenge;
         this.iActivityRequestHandler = null;
@@ -352,6 +354,14 @@ public class Klooni extends Game {
 
     public static boolean getIsRemove() {
         return Gdx.app.getPreferences("dev.lonami.klooni.game").getBoolean("adIsRemove");
+    }
+
+    public static void setInAppReview(boolean isReview) {
+        Gdx.app.getPreferences("dev.lonami.klooni.game").putBoolean("isReview", isReview);
+    }
+
+    public static boolean getInAppReview() {
+        return Gdx.app.getPreferences("dev.lonami.klooni.game").getBoolean("isReview");
     }
     //endregion
 }
