@@ -211,7 +211,6 @@ public class PieceHolder implements BinSerializable {
                     float pitch = 1.104f - pieces[heldPiece].calculateArea() * 0.04f;
                     pieceDropSound.play(1, pitch, 0);
                 }
-
                 result = new DropResult(calculateHeldPieceArea(), calculateHeldPieceCenter());
                 pieces[heldPiece] = null;
             } else {

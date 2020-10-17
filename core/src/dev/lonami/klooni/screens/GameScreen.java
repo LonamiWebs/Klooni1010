@@ -43,7 +43,7 @@ import dev.lonami.klooni.serializer.BinSerializable;
 import dev.lonami.klooni.serializer.BinSerializer;
 
 // Main game screen. Here the board, piece holder and score are shown
-class GameScreen implements Screen, InputProcessor, BinSerializable {
+public class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     //region Members
 
@@ -54,7 +54,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     private final BonusParticleHandler bonusParticleHandler;
 
     private final Board board;
-    private final PieceHolder holder;
+    public final PieceHolder holder;
 
     private final SpriteBatch batch;
     private final Sound gameOverSound;
@@ -65,7 +65,7 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     // by implementing different "isGameOver" etc. logic instead using an integer?
     private final int gameMode;
 
-    private boolean gameOverDone;
+    public boolean gameOverDone;
 
     // The last score that was saved when adding the money.
     // We use this so we don't add the same old score to the money twice,
@@ -126,13 +126,13 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         holder = new PieceHolder(layout, board, HOLDER_PIECE_COUNT, board.cellSize);
         switch (BOARD_SIZE) {
             case 15:
-                pauseMenu = new PauseMenuStage(layout, game, scorer15, gameMode);
+                pauseMenu = new PauseMenuStage(layout, game, scorer15, gameMode,board,this);
                 break;
             case 20:
-                pauseMenu = new PauseMenuStage(layout, game, scorer20, gameMode);
+                pauseMenu = new PauseMenuStage(layout, game, scorer20, gameMode,board,this);
                 break;
             default:
-                pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
+                pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode,board,this);
         }
         bonusParticleHandler = new BonusParticleHandler(game);
 
@@ -165,7 +165,6 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     private void doGameOver(final String gameOverReason) {
-
         if (!gameOverDone) {
             gameOverDone = true;
             saveMoney();

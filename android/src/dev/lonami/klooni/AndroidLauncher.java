@@ -17,6 +17,7 @@
 */
 package dev.lonami.klooni;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +35,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
@@ -48,6 +61,8 @@ import java.util.Arrays;
 import dev.lonami.klooni.actors.SoftButton;
 import dev.lonami.klooni.adcache.GoogleInterstitialAdsPool;
 import dev.lonami.klooni.adcache.InterstitialAdsManager;
+import dev.lonami.klooni.game.Board;
+import dev.lonami.klooni.screens.GameScreen;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler {
     public RelativeLayout layout;
@@ -59,6 +74,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private BillingProcessor bp;
     private boolean readyToPurchase = false;
     private ReviewManager manager;
+    private RewardedAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +132,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         Klooni game = new Klooni(shareChallenge, this);
+        loadRewardAd(game);
         View gameView = initializeForView(game, config);
         new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E189A701CB7ADBE9C09BCB9754032F2A"));
         InterstitialAdsManager.getInstance().init(this);
@@ -194,6 +211,75 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
+    public void loadRewardAd(final Klooni game) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRewardedVideoAd = new RewardedAd(AndroidLauncher.this,
+                        "ca-app-pub-3241270777052923/7659770111");
+                loadRewardedVideoAd(game);
+            }
+        });
+    }
+
+    @Override
+    public void showRewardAd(final SoftButton customButton, final Board board, final GameScreen gameScreen, final ChangeListener customChangeListener, final Klooni game) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mRewardedVideoAd.isLoaded()) {
+                    Activity activityContext = AndroidLauncher.this;
+                    RewardedAdCallback adCallback = new RewardedAdCallback() {
+                        @Override
+                        public void onRewardedAdOpened() {
+                            // Ad opened.
+                        }
+
+                        @Override
+                        public void onRewardedAdClosed() {
+                            // Ad closed.
+                        }
+
+                        @Override
+                        public void onUserEarnedReward(@NonNull com.google.android.gms.ads.rewarded.RewardItem rewardItem) {
+                            customButton.updateImage("palette_texture");
+                            customButton.addListener(customChangeListener);
+                            board.clearCompleteToRandom(game.effect);
+                            gameScreen.gameOverDone = false;
+                            gameScreen.holder.enabled = true;
+                        }
+
+                        @Override
+                        public void onRewardedAdFailedToShow(AdError adError) {
+                            // Ad failed to display.
+                            Log.e("ads", "onRewardedAdFailedToShow: " + adError.toString());
+                        }
+                    };
+                    mRewardedVideoAd.show(activityContext, adCallback);
+                } else {
+                    Log.d("TAG", "The rewarded ad wasn't loaded yet.");
+                }
+            }
+        });
+    }
+
+    private void loadRewardedVideoAd(final Klooni game) {
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                Log.e("ads", "onRewardedAdFailedToLoad: " + adError.toString());
+
+            }
+        };
+        mRewardedVideoAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.e("TAG", "onStart: ");
@@ -208,6 +294,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             Klooni.setRemoveAd(true);
         } else
             Klooni.setRemoveAd(false);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -223,19 +315,5 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         super.onDestroy();
     }
 
-    private class AccomplishmentsOutbox {
-        boolean m1Achievement = false;
-        boolean m2Achievement = false;
-        boolean m3Achievement = false;
-        boolean m4Achievement = false;
-        boolean m5Achievement = false;
-        int mBoredSteps = 0;
-        int mEasyModeScore = -1;
 
-        boolean isEmpty() {
-            return !m1Achievement && !m2Achievement && !m3Achievement &&
-                    !m4Achievement && m5Achievement && mBoredSteps == 0 && mEasyModeScore < 0;
-        }
-
-    }
 }

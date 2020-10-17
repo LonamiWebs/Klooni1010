@@ -35,6 +35,7 @@ import dev.lonami.klooni.Klooni;
 import dev.lonami.klooni.actors.Band;
 import dev.lonami.klooni.actors.SoftButton;
 import dev.lonami.klooni.game.BaseScorer;
+import dev.lonami.klooni.game.Board;
 import dev.lonami.klooni.game.GameLayout;
 
 // The pause stage is not a whole screen but rather a menu
@@ -54,15 +55,18 @@ class PauseMenuStage extends Stage {
     private final BaseScorer scorer;
     private final SoftButton playButton;
     private final SoftButton customButton; // Customize & "Shut down"
-
+    private final GameScreen gameScreen;
+    private final Board board;
     //endregion
 
     //region Constructor
 
     // We need the score to save the maximum score if a new record was beaten
-    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode) {
+    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode, final Board board, final GameScreen gameScreen) {
         this.game = game;
         this.scorer = scorer;
+        this.board = board;
+        this.gameScreen = gameScreen;
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
         game.iActivityRequestHandler.showInterstitial();
         Table table = new Table();
@@ -107,6 +111,7 @@ class PauseMenuStage extends Stage {
         playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
         playButton.addListener(playChangeListener);
+        game.iActivityRequestHandler.loadRewardAd(game);
     }
 
     //endregion
@@ -153,6 +158,7 @@ class PauseMenuStage extends Stage {
 
     // Shows the pause menu, indicating whether it's game over or not
     void show() {
+
         scorer.pause();
         scorer.saveScore();
 
@@ -169,15 +175,16 @@ class PauseMenuStage extends Stage {
     void showGameOver(final String gameOverReason, final boolean timeMode) {
         // Allow the players to exit the game (issue #23)
         customButton.removeListener(customChangeListener);
-        customButton.updateImage("power_off_texture");
+        customButton.updateImage("resurrection_texture");
         customButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
+//                Gdx.app.exit();
+                game.iActivityRequestHandler.showRewardAd(customButton, board, gameScreen, customChangeListener, game);
+                hide();
             }
         });
-
-        if (game.shareChallenge != null) {
+        if (game.shareChallenge != null && gameScreen.holder.enabled && !gameScreen.gameOverDone) {
             playButton.removeListener(playChangeListener);
             playButton.updateImage("share_texture");
             playButton.addListener(new ChangeListener() {

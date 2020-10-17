@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import dev.lonami.klooni.interfaces.IEffect;
 import dev.lonami.klooni.interfaces.IEffectFactory;
@@ -225,6 +226,60 @@ public class Board implements BinSerializable {
             for (int j = 0; j < cellCount; ++j) {
                 if (clearedCols[j]) {
                     for (int i = 0; i < cellCount; ++i) {
+                        effects.add(effect.create(cells[i][j], lastPutPiecePos));
+                        cells[i][j].set(-1);
+                    }
+                }
+            }
+        }
+
+        return clearCount;
+    }
+
+    public int clearCompleteToRandom(final IEffectFactory effect) {
+        int clearCount = 0;
+//        Random random = new Random();
+//        int cellCount = random.nextInt(3);
+        boolean[] clearedRows = new boolean[5];
+        boolean[] clearedCols = new boolean[5];
+
+        // Analyze rows and columns that will be cleared
+        for (int i = 0; i < 5; ++i) {
+            clearedRows[i] = true;
+//            for (int j = 0; j < 5; ++j) {
+//                if (cells[i][j].isEmpty()) {
+//                    clearedRows[i] = true;
+////                    break;
+//                }
+//            }
+            if (clearedRows[i])
+                clearCount++;
+        }
+        for (int j = 0; j < 5; ++j) {
+            clearedCols[j] = true;
+//            for (int i = 0; i < 5; ++i) {
+//                if (cells[i][j].isEmpty()) {
+//                    clearedCols[j] = false;
+//                    break;
+//                }
+//            }
+            if (clearedCols[j])
+                clearCount++;
+        }
+        if (clearCount > 0) {
+            // Do clear those rows and columns
+            for (int i = 0; i < 5; ++i) {
+                if (clearedRows[i]) {
+                    for (int j = 0; j < 5; ++j) {
+                        effects.add(effect.create(cells[i][j], lastPutPiecePos));
+                        cells[i][j].set(-1);
+                    }
+                }
+            }
+
+            for (int j = 0; j < 5; ++j) {
+                if (clearedCols[j]) {
+                    for (int i = 0; i < 5; ++i) {
                         effects.add(effect.create(cells[i][j], lastPutPiecePos));
                         cells[i][j].set(-1);
                     }
