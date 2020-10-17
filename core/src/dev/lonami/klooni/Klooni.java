@@ -26,6 +26,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,7 @@ import dev.lonami.klooni.effects.VanishEffectFactory;
 import dev.lonami.klooni.effects.WaterdropEffectFactory;
 import dev.lonami.klooni.interfaces.IEffectFactory;
 import dev.lonami.klooni.screens.MainMenuScreen;
+import dev.lonami.klooni.screens.SplashScreen;
 import dev.lonami.klooni.screens.TransitionScreen;
 
 public class Klooni extends Game {
@@ -69,18 +71,15 @@ public class Klooni extends Game {
 
     public static final int GAME_HEIGHT = 680;
     public static final int GAME_WIDTH = 408;
-
+    private static final long SPLASH_MINIMUM_MILLIS = 4000L;
     //endregion
-
     //region Creation
-
     // TODO Possibly implement a 'ShareChallenge'
     //      for other platforms instead passing null
     public Klooni(final ShareChallenge shareChallenge, final IActivityRequestHandler activityRequestHandler) {
         this.shareChallenge = shareChallenge;
         this.iActivityRequestHandler = activityRequestHandler;
     }
-
     public Klooni(final ShareChallenge shareChallenge) {
         this.shareChallenge = shareChallenge;
         this.iActivityRequestHandler = null;
@@ -102,7 +101,33 @@ public class Klooni extends Game {
             theme = Theme.getTheme("default");
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
-        setScreen(new MainMenuScreen(this));
+//        setScreen(new MainMenuScreen(this));
+        setScreen(new SplashScreen());
+
+        final long splash_start_time = System.currentTimeMillis();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        long splash_elapsed_time = System.currentTimeMillis() - splash_start_time;
+                        if (splash_elapsed_time < Klooni.SPLASH_MINIMUM_MILLIS) {
+                            Timer.schedule(
+                                    new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            Klooni.this.setScreen(new MainMenuScreen(Klooni.this));
+                                        }
+                                    }, (float) (Klooni.SPLASH_MINIMUM_MILLIS - splash_elapsed_time) / 1000f);
+                        } else {
+                            Klooni.this.setScreen(new MainMenuScreen(Klooni.this));
+                        }
+                    }
+                });
+            }
+        }).start();
         String effectName = prefs.getString("effectName", "Explode");
         effectSounds = new HashMap<String, Sound>(EFFECTS.length);
         effect = EFFECTS[0];
@@ -142,6 +167,8 @@ public class Klooni extends Game {
             }
             effectSounds = null;
         }
+        getScreen().dispose();
+        Gdx.app.exit();
     }
 
     //endregion
@@ -290,6 +317,8 @@ public class Klooni extends Game {
         prefs.putString("effectName", newEffect.getName()).flush();
         // Create a new effect, since the one passed through the parameter may dispose later
         effect = newEffect;
+
+
     }
 
     // Money related

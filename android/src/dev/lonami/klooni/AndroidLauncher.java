@@ -34,12 +34,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.games.EventsClient;
-import com.google.android.gms.games.LeaderboardsClient;
-import com.google.android.gms.games.PlayersClient;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
@@ -55,7 +50,6 @@ import dev.lonami.klooni.adcache.GoogleInterstitialAdsPool;
 import dev.lonami.klooni.adcache.InterstitialAdsManager;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler {
-    private InterstitialAd mInterstitialAd;
     public RelativeLayout layout;
     private static final String PRODUCT_ID = "com.vision.remove.ad";
     private static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+M7RqVtF6DObnwCFBnW9Stb+RbL63M1zOb+UeFmbcfLSB+zy2oOUO0aiak3JIZHZ5Lr7Efg2kB2kxUEEYI8uvcf9CafMSLA/Rb6pB7yqVIK4MzsNFPbPQE/NL5shRqIRmN4PXdFGGo6UpgwbUyKjNDZKtGqZ8aqVeW5fOoBkbZPzpqpr9BA8kvU3+WLcazIDtjOWkHgI1kaH1/J+aXrm+andy9HB+EYS+z5lHmfjLaJx9AATxdsFFa9xa/GKCFDr8CBmhzey68KLELrRiDLgRxNcXsg5EbD5R54UyKPgb3u/Tua9hDnvIqJMkB6p+CSimhe7Cp0Ew1ZPj5PHGUTlQIDAQAB";
@@ -64,15 +58,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private SoftButton softButton;
     private BillingProcessor bp;
     private boolean readyToPurchase = false;
-    private View gameView;
-    private Klooni game;
     private ReviewManager manager;
-    private GoogleSignInClient mGoogleSignInClient;
-    private LeaderboardsClient mLeaderboardsClient;
-    private EventsClient mEventsClient;
-    private PlayersClient mPlayersClient;
-    private static final int RC_UNUSED = 5001;
-    private static final int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +72,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 e.printStackTrace();
             }
         }
-        mGoogleSignInClient = GoogleSignIn.getClient(this,
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
         if (!BillingProcessor.isIabServiceAvailable(this)) {
             Log.e("billing", "onCreate: serviceisAvailable");
         }
@@ -102,6 +86,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             @Override
             public void onBillingError(int errorCode, @Nullable Throwable error) {
                 Log.e("billing", "onBillingError: " + errorCode);
+                Bundle bundleEvent = new Bundle();
+                bundleEvent.putString("billingerror", errorCode + "");
+                FirebaseAnalytics.getInstance(AndroidLauncher.this).logEvent("billingerror", bundleEvent);
             }
 
             @Override
@@ -128,8 +115,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         layout.setLayoutParams(params);
         final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
-        game = new Klooni(shareChallenge, this);
-        gameView = initializeForView(game, config);
+        Klooni game = new Klooni(shareChallenge, this);
+        View gameView = initializeForView(game, config);
         new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E189A701CB7ADBE9C09BCB9754032F2A"));
         InterstitialAdsManager.getInstance().init(this);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -151,9 +138,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void removeAd(Table table, SoftButton softButton) {
-        Bundle bundleEvent = new Bundle();
-        bundleEvent.putString("msg", "clickAdRemove");
-        FirebaseAnalytics.getInstance(this).logEvent("adRemove", bundleEvent);
         this.table = table;
         this.softButton = softButton;
         Log.e("billing", "removeAd: ");

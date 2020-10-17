@@ -77,12 +77,12 @@ public class MainMenuScreen extends InputListener implements Screen {
         stage.addActor(table);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.skin.getFont("font");
-        Color colorScore = new Color(Color.RED);
+        Color colorScore = new Color(0xEBB53Eff);
         highScoreLabel = new Label(Integer.toString(Klooni.getMaxScore()), labelStyle);
         highScoreLabel.setColor(colorScore);
         cupTexture = SkinLoader.loadPng("cup.png");
         cupImage = new Image(cupTexture);
-        Color color = new Color(Color.RED);
+        Color color =  new Color(0xEBB53Eff);
         cupImage.setColor(color);
         table.add(cupImage).align(Align.top).colspan(2).space(0, 0, 16, 0).center();
         table.row();
