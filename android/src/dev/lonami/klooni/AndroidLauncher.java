@@ -125,7 +125,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                     Klooni.setRemoveAd(false);
             }
         });
-
         layout = new RelativeLayout(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         layout.setLayoutParams(params);
@@ -216,7 +215,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 mRewardedVideoAd = new RewardedAd(AndroidLauncher.this,
 //ca-app-pub-3241270777052923/7659770111
 // test ca-app-pub-3940256099942544/5224354917
-                        "ca-app-pub-3940256099942544/5224354917");
+                        "ca-app-pub-3241270777052923/7659770111");
                 loadRewardedVideoAd();
             }
         });
@@ -245,8 +244,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
                         @Override
                         public void onUserEarnedReward(@NonNull com.google.android.gms.ads.rewarded.RewardItem rewardItem) {
-                            customButton.updateImage("palette_texture");
-                            customButton.addListener(customChangeListener);
+//                            customButton.updateImage("palette_texture");
+//                            customButton.addListener(customChangeListener);
                             board.clearCompleteToRandom(game.effect);
                             gameScreen.gameOverDone = false;
                             gameScreen.holder.enabled = true;
@@ -283,6 +282,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             public void onRewardedAdFailedToLoad(LoadAdError adError) {
                 Log.e("ads", "onRewardedAdFailedToLoad: " + adError.toString());
                 showToast(adError.getMessage());
+//                gameScreen.doRealGameOver(reason);
 
             }
         };

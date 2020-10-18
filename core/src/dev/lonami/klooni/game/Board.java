@@ -238,36 +238,21 @@ public class Board implements BinSerializable {
 
     public int clearCompleteToRandom(final IEffectFactory effect) {
         int clearCount = 0;
-//        Random random = new Random();
-//        int cellCount = random.nextInt(3);
         boolean[] clearedRows = new boolean[5];
         boolean[] clearedCols = new boolean[5];
 
         // Analyze rows and columns that will be cleared
         for (int i = 0; i < 5; ++i) {
             clearedRows[i] = true;
-//            for (int j = 0; j < 5; ++j) {
-//                if (cells[i][j].isEmpty()) {
-//                    clearedRows[i] = true;
-////                    break;
-//                }
-//            }
             if (clearedRows[i])
                 clearCount++;
         }
         for (int j = 0; j < 5; ++j) {
             clearedCols[j] = true;
-//            for (int i = 0; i < 5; ++i) {
-//                if (cells[i][j].isEmpty()) {
-//                    clearedCols[j] = false;
-//                    break;
-//                }
-//            }
             if (clearedCols[j])
                 clearCount++;
         }
         if (clearCount > 0) {
-            // Do clear those rows and columns
             for (int i = 0; i < 5; ++i) {
                 if (clearedRows[i]) {
                     for (int j = 0; j < 5; ++j) {
