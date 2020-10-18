@@ -133,7 +133,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         Klooni game = new Klooni(shareChallenge, this);
         View gameView = initializeForView(game, config);
-        new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E189A701CB7ADBE9C09BCB9754032F2A"));
         InterstitialAdsManager.getInstance().init(this);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         gameView.setLayoutParams(gameViewParams);
@@ -217,7 +216,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                 mRewardedVideoAd = new RewardedAd(AndroidLauncher.this,
 //ca-app-pub-3241270777052923/7659770111
 // test ca-app-pub-3940256099942544/5224354917
-                        "ca-app-pub-3241270777052923/7659770111");
+                        "ca-app-pub-3940256099942544/5224354917");
                 loadRewardedVideoAd();
             }
         });

@@ -8,6 +8,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.Arrays;
+import java.util.List;
 
 import dev.lonami.klooni.adcache.InterstitialAdsManager;
 
@@ -20,6 +21,9 @@ public class App extends Application {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
-        AppOpenManager appOpenManager=new AppOpenManager(this);
+        List<String> testDeviceIds = Arrays.asList("FE00CDBCC843BF9F60D1DDFD1680370A");
+        RequestConfiguration requestConfiguration =  new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(requestConfiguration);
+        AppOpenManager appOpenManager = new AppOpenManager(this);
     }
 }

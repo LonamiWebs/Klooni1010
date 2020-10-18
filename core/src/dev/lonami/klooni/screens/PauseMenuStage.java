@@ -175,7 +175,7 @@ class PauseMenuStage extends Stage {
 
     void showGameOver(final String gameOverReason, final boolean timeMode) {
         // Allow the players to exit the game (issue #23)
-        SoftButton resurrectionBtn = new SoftButton(1, "resurrection_texture");
+        SoftButton resurrectionBtn = new SoftButton(1, "bg_r_texture");
         resurrectionBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

@@ -26,8 +26,8 @@ android {
         //noinspection MinSdkTooLow
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 995
-        versionName "9.9.5"
+        versionCode 996
+        versionName "9.9.6"
     }
     signingConfigs {
         release {
