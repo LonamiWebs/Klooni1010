@@ -79,7 +79,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // https://stackoverflow.com/a/42437379/
+        loadRewardAd();
         if (Build.VERSION.SDK_INT >= 24) {
             try {
                 Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
@@ -132,7 +132,6 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         final AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         Klooni game = new Klooni(shareChallenge, this);
-        loadRewardAd(game);
         View gameView = initializeForView(game, config);
         new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E189A701CB7ADBE9C09BCB9754032F2A"));
         InterstitialAdsManager.getInstance().init(this);
@@ -211,19 +210,21 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     }
 
     @Override
-    public void loadRewardAd(final Klooni game) {
+    public void loadRewardAd() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mRewardedVideoAd = new RewardedAd(AndroidLauncher.this,
+//ca-app-pub-3241270777052923/7659770111
+// test ca-app-pub-3940256099942544/5224354917
                         "ca-app-pub-3241270777052923/7659770111");
-                loadRewardedVideoAd(game);
+                loadRewardedVideoAd();
             }
         });
     }
 
     @Override
-    public void showRewardAd(final SoftButton customButton, final Board board, final GameScreen gameScreen, final ChangeListener customChangeListener, final Klooni game) {
+    public void showRewardAd(final SoftButton customButton, final Board board, final GameScreen gameScreen, final ChangeListener customChangeListener, final Klooni game, final String reason) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -238,6 +239,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                         @Override
                         public void onRewardedAdClosed() {
                             // Ad closed.
+                            mRewardedVideoAd = new RewardedAd(AndroidLauncher.this,
+                                    "ca-app-pub-3241270777052923/7659770111");
+                            loadRewardedVideoAd();
                         }
 
                         @Override
@@ -253,6 +257,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                         public void onRewardedAdFailedToShow(AdError adError) {
                             // Ad failed to display.
                             Log.e("ads", "onRewardedAdFailedToShow: " + adError.toString());
+                            gameScreen.doRealGameOver(reason);
                         }
                     };
                     mRewardedVideoAd.show(activityContext, adCallback);
@@ -263,7 +268,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         });
     }
 
-    private void loadRewardedVideoAd(final Klooni game) {
+    @Override
+    public void showToast(String msg) {
+        android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_LONG).show();
+    }
+
+    private void loadRewardedVideoAd() {
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
@@ -273,10 +283,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
             @Override
             public void onRewardedAdFailedToLoad(LoadAdError adError) {
                 Log.e("ads", "onRewardedAdFailedToLoad: " + adError.toString());
+                showToast(adError.getMessage());
 
             }
         };
         mRewardedVideoAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+
     }
 
     @Override

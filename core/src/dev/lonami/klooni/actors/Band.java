@@ -17,8 +17,10 @@
 */
 package dev.lonami.klooni.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,7 +34,24 @@ import dev.lonami.klooni.game.GameLayout;
 
 // Horizontal band, used to show the score on the pause menu
 public class Band extends Actor {
+    private final static float[] multipliers = {0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 4.0f};
+    private final static float bestMultiplier;
 
+    static {
+        // Use the height to determine the best match
+        // We cannot use a size which is over the device height,
+        // so use the closest smaller one
+        int i;
+        float desired = (float) Gdx.graphics.getHeight() / (float) Klooni.GAME_HEIGHT;
+        for (i = multipliers.length - 1; i > 0; --i) {
+            if (multipliers[i] < desired)
+                break;
+        }
+
+        // Now that we have the right multiplier, load the skin
+        Gdx.app.log("SkinLoader", "Using assets multiplier x" + multipliers[i]);
+        bestMultiplier = multipliers[i];
+    }
     //region Members
 
     private final BaseScorer scorer;
@@ -84,7 +103,12 @@ public class Band extends Actor {
         scoreLabel.setText(Integer.toString(scorer.getCurrentScore()));
         scoreLabel.setColor(Klooni.theme.textColor);
         scoreLabel.draw(batch, parentAlpha);
-
+        BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font/x" + bestMultiplier + "/" + "geosans-light32.fnt"),
+                Gdx.files.internal("font/x" + bestMultiplier + "/" + "geosans-light32.png"), false);
+        bitmapFont.getData().scale((float) 0.25);
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font=bitmapFont;
+        infoLabel.setStyle(labelStyle);
         infoLabel.setBounds(x + infoBounds.x, y + infoBounds.y, infoBounds.width, infoBounds.height);
         infoLabel.setColor(Klooni.theme.textColor);
         infoLabel.draw(batch, parentAlpha);

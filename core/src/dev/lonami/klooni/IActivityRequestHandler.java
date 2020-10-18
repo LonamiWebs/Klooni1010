@@ -18,7 +18,9 @@ public interface IActivityRequestHandler {
 
     void inAppReview();
 
-    void loadRewardAd(final Klooni game);
+    void loadRewardAd();
 
-    void showRewardAd(final SoftButton customButton, final Board board, final GameScreen gameScreen, final ChangeListener customChangeListener, final Klooni game);
+    void showRewardAd(final SoftButton customButton, final Board board, final GameScreen gameScreen, final ChangeListener customChangeListener, final Klooni game, final String reason);
+
+    void showToast(String msg);
 }

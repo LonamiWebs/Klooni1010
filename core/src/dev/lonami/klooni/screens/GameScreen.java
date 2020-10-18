@@ -59,14 +59,14 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
     private final SpriteBatch batch;
     private final Sound gameOverSound;
 
-    private final PauseMenuStage pauseMenu;
+    public final PauseMenuStage pauseMenu;
 
     // TODO Perhaps make an abstract base class for the game screen and game modes
     // by implementing different "isGameOver" etc. logic instead using an integer?
     private final int gameMode;
 
     public boolean gameOverDone;
-
+    public String reason;
     // The last score that was saved when adding the money.
     // We use this so we don't add the same old score to the money twice,
     // but rather subtract it from the current score and then update it
@@ -126,13 +126,13 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
         holder = new PieceHolder(layout, board, HOLDER_PIECE_COUNT, board.cellSize);
         switch (BOARD_SIZE) {
             case 15:
-                pauseMenu = new PauseMenuStage(layout, game, scorer15, gameMode,board,this);
+                pauseMenu = new PauseMenuStage(layout, game, scorer15, gameMode, board, this);
                 break;
             case 20:
-                pauseMenu = new PauseMenuStage(layout, game, scorer20, gameMode,board,this);
+                pauseMenu = new PauseMenuStage(layout, game, scorer20, gameMode, board, this);
                 break;
             default:
-                pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode,board,this);
+                pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode, board, this);
         }
         bonusParticleHandler = new BonusParticleHandler(game);
 
@@ -164,26 +164,50 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
         return true;
     }
 
-    private void doGameOver(final String gameOverReason) {
+    public void doGameOver(final String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
             saveMoney();
             holder.enabled = false;
             switch (BOARD_SIZE) {
                 case 15:
-                    pauseMenu.showGameOver(gameOverReason, scorer15 instanceof TimeScorer);
+                    pauseMenu.showGameOver("Watch the ad and blow up 25 cells", scorer15 instanceof TimeScorer);
                     break;
                 case 20:
-                    pauseMenu.showGameOver(gameOverReason, scorer20 instanceof TimeScorer);
+                    pauseMenu.showGameOver("Watch the ad and blow up 25 cells", scorer20 instanceof TimeScorer);
                     break;
                 default:
-                    pauseMenu.showGameOver(gameOverReason, scorer instanceof TimeScorer);
+                    if (scorer instanceof TimeScorer)
+                        pauseMenu.showRealGameOver(gameOverReason, true);
+                    else
+                        pauseMenu.showGameOver("Watch the ad and blow up 25 cells", false);
 
             }
             if (Klooni.soundsEnabled())
                 gameOverSound.play();
+            if (gameMode == GAME_MODE_SCORE)
+                deleteSave();
+        }
+    }
 
-            // The user should not be able to return to the game if its game over
+    public void doRealGameOver(final String gameOverReason) {
+        if (!gameOverDone) {
+            gameOverDone = true;
+            saveMoney();
+            holder.enabled = false;
+            switch (BOARD_SIZE) {
+                case 15:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer15 instanceof TimeScorer);
+                    break;
+                case 20:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer20 instanceof TimeScorer);
+                    break;
+                default:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer instanceof TimeScorer);
+
+            }
+            if (Klooni.soundsEnabled())
+                gameOverSound.play();
             if (gameMode == GAME_MODE_SCORE)
                 deleteSave();
         }
@@ -222,7 +246,8 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
                 if (scorer15.isGameOver() && !pauseMenu.isShown()) {
                     // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
                     // Perhaps have a better mode to pass the required texture to overlay
-                    doGameOver(scorer.gameOverReason());
+                    reason = scorer15.gameOverReason();
+                    doGameOver(reason);
                 }
                 batch.begin();
                 scorer15.draw(batch);
@@ -231,7 +256,8 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
                 if (scorer20.isGameOver() && !pauseMenu.isShown()) {
                     // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
                     // Perhaps have a better mode to pass the required texture to overlay
-                    doGameOver(scorer.gameOverReason());
+                    reason = scorer20.gameOverReason();
+                    doGameOver(reason);
                 }
                 batch.begin();
                 scorer20.draw(batch);
@@ -240,7 +266,8 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
                 if (scorer.isGameOver() && !pauseMenu.isShown()) {
                     // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
                     // Perhaps have a better mode to pass the required texture to overlay
-                    doGameOver(scorer.gameOverReason());
+                    reason = scorer.gameOverReason();
+                    doGameOver(reason);
                 }
                 batch.begin();
                 scorer.draw(batch);
@@ -311,7 +338,8 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
-                doGameOver("no moves left");
+                reason = "no moves left";
+                doGameOver(reason);
             }
         }
         return true;
