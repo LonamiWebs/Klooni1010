@@ -25,6 +25,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,6 +64,7 @@ import dev.lonami.klooni.adcache.GoogleInterstitialAdsPool;
 import dev.lonami.klooni.adcache.InterstitialAdsManager;
 import dev.lonami.klooni.game.Board;
 import dev.lonami.klooni.screens.GameScreen;
+import es.dmoral.toasty.Toasty;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler {
     public RelativeLayout layout;
@@ -268,7 +270,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
     @Override
     public void showToast(String msg) {
-        android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_LONG).show();
+        Toasty.error(this, msg, Toast.LENGTH_LONG, true).show();
     }
 
     private void loadRewardedVideoAd() {

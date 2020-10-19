@@ -58,6 +58,7 @@ class PauseMenuStage extends Stage {
     private final GameScreen gameScreen;
     private final Board board;
     private final Table table;
+    private SoftButton resurrectionBtn;
     //endregion
 
     //region Constructor
@@ -175,16 +176,18 @@ class PauseMenuStage extends Stage {
 
     void showGameOver(final String gameOverReason, final boolean timeMode) {
         // Allow the players to exit the game (issue #23)
-        SoftButton resurrectionBtn = new SoftButton(1, "bg_r_texture");
-        resurrectionBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.iActivityRequestHandler.showRewardAd(customButton, board, gameScreen, customChangeListener, game, gameOverReason);
-                game.iActivityRequestHandler.loadRewardAd();
-                hide();
-            }
-        });
-        table.add(resurrectionBtn).colspan(2).fill().space(16);
+        if (resurrectionBtn == null) {
+            resurrectionBtn = new SoftButton(1, "bg_r_texture");
+            resurrectionBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.iActivityRequestHandler.showRewardAd(customButton, board, gameScreen, customChangeListener, game, gameOverReason);
+                    game.iActivityRequestHandler.loadRewardAd();
+                    hide();
+                }
+            });
+            table.add(resurrectionBtn).colspan(2).fill().space(16);
+        }
         customButton.removeListener(customChangeListener);
         customButton.updateImage("power_off_texture");
         customButton.addListener(new ChangeListener() {
