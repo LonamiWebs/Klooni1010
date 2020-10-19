@@ -110,7 +110,6 @@ public class Klooni extends Game {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
