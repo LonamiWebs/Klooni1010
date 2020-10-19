@@ -1,0 +1,10 @@
+CMake Error at CMakeLists.txt:5 (include):
+  include could not find load file:
+
+    ../playcore-native-sdk/playcore.cmake
+
+
+CMake Error at CMakeLists.txt:6 (add_playcore_static_library):
+  Unknown CMake command "add_playcore_static_library".
+
+

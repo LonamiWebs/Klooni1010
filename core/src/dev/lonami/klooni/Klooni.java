@@ -26,6 +26,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,7 @@ import dev.lonami.klooni.effects.VanishEffectFactory;
 import dev.lonami.klooni.effects.WaterdropEffectFactory;
 import dev.lonami.klooni.interfaces.IEffectFactory;
 import dev.lonami.klooni.screens.MainMenuScreen;
+import dev.lonami.klooni.screens.SplashScreen;
 import dev.lonami.klooni.screens.TransitionScreen;
 
 public class Klooni extends Game {
@@ -46,20 +48,22 @@ public class Klooni extends Game {
     // FIXME theme should NOT be static as it might load textures which will expose it to the race condition iff GDX got initialized before or not
     public static Theme theme;
     public IEffectFactory effect;
-
+    public boolean isRemove = false;
     // ordered list of effects. index 0 will get default if VanishEffectFactory is removed from list
     public final static IEffectFactory[] EFFECTS = {
+            new ExplodeEffectFactory(),
             new VanishEffectFactory(),
             new WaterdropEffectFactory(),
             new EvaporateEffectFactory(),
             new SpinEffectFactory(),
-            new ExplodeEffectFactory(),
+
     };
 
     private Map<String, Sound> effectSounds;
     public Skin skin;
 
     public final ShareChallenge shareChallenge;
+    public final IActivityRequestHandler iActivityRequestHandler;
 
     public static boolean onDesktop;
 
@@ -67,22 +71,26 @@ public class Klooni extends Game {
 
     public static final int GAME_HEIGHT = 680;
     public static final int GAME_WIDTH = 408;
+    private static final long SPLASH_MINIMUM_MILLIS = 4000L;
 
     //endregion
-
     //region Creation
-
     // TODO Possibly implement a 'ShareChallenge'
     //      for other platforms instead passing null
+    public Klooni(final ShareChallenge shareChallenge, final IActivityRequestHandler activityRequestHandler) {
+        this.shareChallenge = shareChallenge;
+        this.iActivityRequestHandler = activityRequestHandler;
+    }
+
     public Klooni(final ShareChallenge shareChallenge) {
         this.shareChallenge = shareChallenge;
+        this.iActivityRequestHandler = null;
     }
 
     @Override
     public void create() {
         onDesktop = Gdx.app.getType().equals(Application.ApplicationType.Desktop);
         prefs = Gdx.app.getPreferences("dev.lonami.klooni.game");
-
         // Load the best match for the skin (depending on the device screen dimensions)
         skin = SkinLoader.loadSkin();
 
@@ -95,8 +103,33 @@ public class Klooni extends Game {
             theme = Theme.getTheme("default");
 
         Gdx.input.setCatchBackKey(true); // To show the pause menu
-        setScreen(new MainMenuScreen(this));
-        String effectName = prefs.getString("effectName", "vanish");
+//        setScreen(new MainMenuScreen(this));
+        setScreen(new SplashScreen());
+
+        final long splash_start_time = System.currentTimeMillis();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        long splash_elapsed_time = System.currentTimeMillis() - splash_start_time;
+                        if (splash_elapsed_time < Klooni.SPLASH_MINIMUM_MILLIS) {
+                            Timer.schedule(
+                                    new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            Klooni.this.setScreen(new MainMenuScreen(Klooni.this));
+                                        }
+                                    }, (float) (Klooni.SPLASH_MINIMUM_MILLIS - splash_elapsed_time) / 1000f);
+                        } else {
+                            Klooni.this.setScreen(new MainMenuScreen(Klooni.this));
+                        }
+                    }
+                });
+            }
+        }).start();
+        String effectName = prefs.getString("effectName", "Explode");
         effectSounds = new HashMap<String, Sound>(EFFECTS.length);
         effect = EFFECTS[0];
         for (IEffectFactory e : EFFECTS) {
@@ -135,6 +168,8 @@ public class Klooni extends Game {
             }
             effectSounds = null;
         }
+        getScreen().dispose();
+        Gdx.app.exit();
     }
 
     //endregion
@@ -234,6 +269,20 @@ public class Klooni extends Game {
         theme.update(newTheme.getName());
     }
 
+    public static void switchTheme() {
+        Theme newTheme;
+        int position = prefs.getInteger("ThemePosition", 0);
+        if (position == 0) {
+            newTheme = Theme.getThemes().get(1);
+            prefs.putInteger("ThemePosition", 1);
+        } else {
+            newTheme = Theme.getThemes().get(0);
+            prefs.putInteger("ThemePosition", 0);
+        }
+        prefs.putString("themeName", newTheme.getName()).flush();
+        theme.update(newTheme.getName());
+    }
+
     // Effects related
     public static boolean isEffectBought(IEffectFactory effect) {
         if (effect.getPrice() == 0)
@@ -269,6 +318,8 @@ public class Klooni extends Game {
         prefs.putString("effectName", newEffect.getName()).flush();
         // Create a new effect, since the one passed through the parameter may dispose later
         effect = newEffect;
+
+
     }
 
     // Money related
@@ -280,6 +331,14 @@ public class Klooni extends Game {
         prefs.putFloat("money", money).flush();
     }
 
+    public static void setBoardSize(float boardSize) {
+        prefs.putFloat("BoardSize", boardSize).flush();
+    }
+
+    public static float getBoardSize() {
+        return prefs.getFloat("BoardSize");
+    }
+
     public static int getMoney() {
         return (int) getRealMoney();
     }
@@ -288,5 +347,20 @@ public class Klooni extends Game {
         return prefs.getFloat("money");
     }
 
+    public static void setRemoveAd(boolean isRemove) {
+        Gdx.app.getPreferences("dev.lonami.klooni.game").putBoolean("adIsRemove", isRemove).flush();
+    }
+
+    public static boolean getIsRemove() {
+        return Gdx.app.getPreferences("dev.lonami.klooni.game").getBoolean("adIsRemove");
+    }
+
+    public static void setInAppReview(boolean isReview) {
+        Gdx.app.getPreferences("dev.lonami.klooni.game").putBoolean("isReview", isReview);
+    }
+
+    public static boolean getInAppReview() {
+        return Gdx.app.getPreferences("dev.lonami.klooni.game").getBoolean("isReview");
+    }
     //endregion
 }

@@ -1,5 +1,9 @@
+ext.myStoreFile = file("sample.jks")
+ext.myStorePassword = 'sample'
+ext.myKeyAlias = 'sample'
+ext.myKeyPassword = 'sample'
+//def playcoreDir = file('../play-core-native-sdk/playcore.cmake')
 android {
-    buildToolsVersion "29.0.3"
     compileSdkVersion 29
     sourceSets {
         main {
@@ -17,25 +21,39 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "dev.lonami.klooni"
+        applicationId "com.vision.elimination"
         //noinspection MinSdkTooLow
-        minSdkVersion 8
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 860
-        versionName "0.8.6"
+        versionCode 999
+        versionName "9.9.9"
+    }
+    signingConfigs {
+        release {
+            storeFile myStoreFile
+            storePassword myStorePassword
+            keyAlias myKeyAlias
+            keyPassword myKeyPassword
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            matchingFallbacks = ['release']
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            matchingFallbacks = ['debug']
         }
     }
 }
 
 
-// called every time gradle gets executed, takes the native dependencies of
-// the natives configuration, and extracts them to the proper libs/ folders
-// so they get packed with the APK.
 task copyAndroidNatives {
     doFirst {
         file("libs/armeabi/").mkdirs()
@@ -89,5 +107,7 @@ task run(type: Exec) {
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'dev.lonami.klooni/dev.lonami.klooni.AndroidLauncher'
 }
-
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:2.0.2'
+}
 eclipse.project.name = appName + "-android"

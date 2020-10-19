@@ -42,7 +42,7 @@ public class SpinEffectFactory implements IEffectFactory {
 
     @Override
     public int getPrice() {
-        return 200;
+        return 0;
     }
 
     @Override

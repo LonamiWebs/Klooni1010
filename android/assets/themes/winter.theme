@@ -1,6 +1,6 @@
 {
   "name": "Winter",
-  "price": 50,
+  "price": 0,
   "colors": {
     "background": "81b9b7ff",
     "foreground": "ffffffff",

@@ -20,14 +20,32 @@ package dev.lonami.klooni.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import dev.lonami.klooni.Klooni;
+import dev.lonami.klooni.SkinLoader;
+import dev.lonami.klooni.Theme;
 import dev.lonami.klooni.actors.SoftButton;
 
 // Main menu screen, presenting some options (play, customize…)
@@ -37,76 +55,114 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     private final Klooni game;
     private final Stage stage;
-
     //endregion
 
     //region Static members
 
     // As the examples show on the LibGdx wiki
     private static final float minDelta = 1 / 30f;
-
+    final Texture cupTexture;
+    final Image cupImage;
+    final Label highScoreLabel;
     //endregion
 
-    //region Constructor
 
-    public MainMenuScreen(Klooni game) {
+    public MainMenuScreen(final Klooni game) {
         this.game = game;
-
         stage = new Stage();
-
-        Table table = new Table();
+        final Table table = new Table();
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
         table.setFillParent(true);
         stage.addActor(table);
-
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.skin.getFont("font");
+        Color colorScore = new Color(0xEBB53Eff);
+        highScoreLabel = new Label(Integer.toString(Klooni.getMaxScore()), labelStyle);
+        highScoreLabel.setColor(colorScore);
+        cupTexture = SkinLoader.loadPng("cup.png");
+        cupImage = new Image(cupTexture);
+        Color color = new Color(0xEBB53Eff);
+        cupImage.setColor(color);
+        table.add(cupImage).align(Align.top).colspan(2).space(0, 0, 16, 0).center();
+        table.row();
+        table.add(highScoreLabel).colspan(2).space(0, 0, height / 30, 0).center();
+        table.row();
         // Play button
         final SoftButton playButton = new SoftButton(
-                0, GameScreen.hasSavedData() ? "play_saved_texture" : "play_texture");
+                0, GameScreen.hasSavedData(10) ? "bg_10X10_s_texture" : "bg_10X10_texture");
         playButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(10);
                 MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(playButton).colspan(3).fill().space(16);
-
+        table.add(playButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
         table.row();
-
-        // Star button (on GitHub)
-        final SoftButton starButton = new SoftButton(1, "star_texture");
-        starButton.addListener(new ChangeListener() {
-            @Override
+        final SoftButton playButton15 = new SoftButton(
+                1, GameScreen.hasSavedData(15) ? "bg_15X15_s_texture" : "bg_15X15_texture");
+        playButton15.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/stargazers");
+                Klooni.setBoardSize(15);
+                MainMenuScreen.this.game.transitionTo(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
             }
         });
-        table.add(starButton).space(16);
-
-        // Time mode
+        table.add(playButton15).minWidth(width / 3).space(16);
+        final SoftButton playButton20 = new SoftButton(
+                2, GameScreen.hasSavedData(20) ? "bg_20X20_s_texture" : "bg_20X20_texture");
+        playButton20.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(20);
+                MainMenuScreen.this.game.transitionTo(
+                        new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_SCORE));
+            }
+        });
+        table.add(playButton20).minWidth(width / 3).space(16);
+        table.row();
         final SoftButton statsButton = new SoftButton(2, "stopwatch_texture");
         statsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Klooni.setBoardSize(10);
                 MainMenuScreen.this.game.transitionTo(
                         new GameScreen(MainMenuScreen.this.game, GameScreen.GAME_MODE_TIME));
             }
         });
-        table.add(statsButton).space(16);
-
-        // Palette button (buy colors)
+        table.add(statsButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
+        table.row();
         final SoftButton paletteButton = new SoftButton(3, "palette_texture");
-        paletteButton.addListener(new ChangeListener() {
+        final SoftButton starButton = new SoftButton(1, "star_texture");
+        starButton.addListener(new ChangeListener() {
+            @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // Don't dispose because then it needs to take us to the previous screen
-                MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
-                        MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
+                game.iActivityRequestHandler.inAppReview();
+                Klooni.setInAppReview(true);
             }
         });
-        table.add(paletteButton).space(16);
+        table.add(starButton).minWidth(width / 3).space(16);
+        paletteButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                MainMenuScreen.this.game.transitionTo(new CustomizeScreen(
+                        MainMenuScreen.this.game, MainMenuScreen.this.game.getScreen()), false);
+
+            }
+        });
+        table.add(paletteButton).minWidth(width / 3).space(16);
+        table.row();
+        if (game.iActivityRequestHandler.isAdAvaliable() & !Klooni.getIsRemove()) {
+            final SoftButton adButton = new SoftButton(2, "bg_ad_texture");
+            adButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.iActivityRequestHandler.removeAd(table, adButton);
+                }
+            });
+            table.add(adButton).minWidth((float) (width / 1.5)).colspan(2).fill().space(16);
+        }
     }
 
-    //endregion
-
-    //region Screen
 
     @Override
     public void show() {
@@ -145,10 +201,12 @@ public class MainMenuScreen extends InputListener implements Screen {
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+//        game.iActivityRequestHandler.hideBanner();
     }
 
     //endregion

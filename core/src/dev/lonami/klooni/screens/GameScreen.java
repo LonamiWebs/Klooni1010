@@ -43,28 +43,30 @@ import dev.lonami.klooni.serializer.BinSerializable;
 import dev.lonami.klooni.serializer.BinSerializer;
 
 // Main game screen. Here the board, piece holder and score are shown
-class GameScreen implements Screen, InputProcessor, BinSerializable {
+public class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     //region Members
 
     private final Klooni game;
     private final BaseScorer scorer;
+    private final BaseScorer scorer15;
+    private final BaseScorer scorer20;
     private final BonusParticleHandler bonusParticleHandler;
 
     private final Board board;
-    private final PieceHolder holder;
+    public final PieceHolder holder;
 
     private final SpriteBatch batch;
     private final Sound gameOverSound;
 
-    private final PauseMenuStage pauseMenu;
+    public final PauseMenuStage pauseMenu;
 
     // TODO Perhaps make an abstract base class for the game screen and game modes
     // by implementing different "isGameOver" etc. logic instead using an integer?
     private final int gameMode;
 
-    private boolean gameOverDone;
-
+    public boolean gameOverDone;
+    public String reason;
     // The last score that was saved when adding the money.
     // We use this so we don't add the same old score to the money twice,
     // but rather subtract it from the current score and then update it
@@ -75,14 +77,15 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     //region Static members
 
-    private final static int BOARD_SIZE = 10;
-    private final static int HOLDER_PIECE_COUNT = 3;
+    private static int BOARD_SIZE = 10;
+    private static int HOLDER_PIECE_COUNT = 3;
 
     final static int GAME_MODE_SCORE = 0;
     final static int GAME_MODE_TIME = 1;
 
     private final static String SAVE_DAT_FILENAME = ".klooni.sav";
-
+    private final static String SAVE_DAT_FILENAME15 = ".klooni15.sav";
+    private final static String SAVE_DAT_FILENAME20 = ".klooni20.sav";
     //endregion
 
     //region Constructor
@@ -93,25 +96,42 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     GameScreen(final Klooni game, final int gameMode, final boolean loadSave) {
+        BOARD_SIZE = (int) Klooni.getBoardSize();
+        if (BOARD_SIZE == 20) {
+            HOLDER_PIECE_COUNT = 4;
+        } else {
+            HOLDER_PIECE_COUNT = 3;
+        }
         batch = new SpriteBatch();
         this.game = game;
         this.gameMode = gameMode;
-
         final GameLayout layout = new GameLayout();
         switch (gameMode) {
             case GAME_MODE_SCORE:
                 scorer = new Scorer(game, layout);
+                scorer15 = new Scorer(game, layout);
+                scorer20 = new Scorer(game, layout);
                 break;
             case GAME_MODE_TIME:
                 scorer = new TimeScorer(game, layout);
+                scorer15 = new TimeScorer(game, layout);
+                scorer20 = new TimeScorer(game, layout);
                 break;
             default:
                 throw new RuntimeException("Unknown game mode given: " + gameMode);
         }
-
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, board, HOLDER_PIECE_COUNT, board.cellSize);
-        pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode);
+        switch (BOARD_SIZE) {
+            case 15:
+                pauseMenu = new PauseMenuStage(layout, game, scorer15, gameMode, board, this);
+                break;
+            case 20:
+                pauseMenu = new PauseMenuStage(layout, game, scorer20, gameMode, board, this);
+                break;
+            default:
+                pauseMenu = new PauseMenuStage(layout, game, scorer, gameMode, board, this);
+        }
         bonusParticleHandler = new BonusParticleHandler(game);
 
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.mp3"));
@@ -127,8 +147,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
                 deleteSave();
             }
         }
+        game.iActivityRequestHandler.showBanner();
     }
-
     //endregion
 
     //region Private methods
@@ -138,21 +158,54 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         for (Piece piece : holder.getAvailablePieces())
             if (board.canPutPiece(piece))
                 return false;
-
+        game.iActivityRequestHandler.showInterstitial();
         return true;
     }
 
-    private void doGameOver(final String gameOverReason) {
+    public void doGameOver(final String gameOverReason) {
         if (!gameOverDone) {
             gameOverDone = true;
-
             saveMoney();
             holder.enabled = false;
-            pauseMenu.showGameOver(gameOverReason, scorer instanceof TimeScorer);
+            switch (BOARD_SIZE) {
+                case 15:
+                    pauseMenu.showGameOver("Watch the ad and blow up 25 cells", scorer15 instanceof TimeScorer);
+                    break;
+                case 20:
+                    pauseMenu.showGameOver("Watch the ad and blow up 25 cells", scorer20 instanceof TimeScorer);
+                    break;
+                default:
+                    if (scorer instanceof TimeScorer)
+                        pauseMenu.showRealGameOver(gameOverReason, true);
+                    else
+                        pauseMenu.showGameOver("Watch the ad and blow up 25 cells", false);
+
+            }
             if (Klooni.soundsEnabled())
                 gameOverSound.play();
+            if (gameMode == GAME_MODE_SCORE)
+                deleteSave();
+        }
+    }
 
-            // The user should not be able to return to the game if its game over
+    public void doRealGameOver(final String gameOverReason) {
+        if (!gameOverDone) {
+            gameOverDone = true;
+            saveMoney();
+            holder.enabled = false;
+            switch (BOARD_SIZE) {
+                case 15:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer15 instanceof TimeScorer);
+                    break;
+                case 20:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer20 instanceof TimeScorer);
+                    break;
+                default:
+                    pauseMenu.showRealGameOver(gameOverReason, scorer instanceof TimeScorer);
+
+            }
+            if (Klooni.soundsEnabled())
+                gameOverSound.play();
             if (gameMode == GAME_MODE_SCORE)
                 deleteSave();
         }
@@ -186,16 +239,37 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     public void render(float delta) {
         Klooni.theme.glClearBackground();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if (scorer.isGameOver() && !pauseMenu.isShown()) {
-            // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
-            // Perhaps have a better mode to pass the required texture to overlay
-            doGameOver(scorer.gameOverReason());
+        switch (BOARD_SIZE) {
+            case 15:
+                if (scorer15.isGameOver() && !pauseMenu.isShown()) {
+                    // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
+                    // Perhaps have a better mode to pass the required texture to overlay
+                    reason = scorer15.gameOverReason();
+                    doGameOver(reason);
+                }
+                batch.begin();
+                scorer15.draw(batch);
+                break;
+            case 20:
+                if (scorer20.isGameOver() && !pauseMenu.isShown()) {
+                    // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
+                    // Perhaps have a better mode to pass the required texture to overlay
+                    reason = scorer20.gameOverReason();
+                    doGameOver(reason);
+                }
+                batch.begin();
+                scorer20.draw(batch);
+                break;
+            default:
+                if (scorer.isGameOver() && !pauseMenu.isShown()) {
+                    // TODO A bit hardcoded (timeOver = scorer instanceof TimeScorer)
+                    // Perhaps have a better mode to pass the required texture to overlay
+                    reason = scorer.gameOverReason();
+                    doGameOver(reason);
+                }
+                batch.begin();
+                scorer.draw(batch);
         }
-
-        batch.begin();
-
-        scorer.draw(batch);
         board.draw(batch);
         holder.update();
         holder.draw(batch);
@@ -238,8 +312,21 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
             return false;
 
         if (result.onBoard) {
-            scorer.addPieceScore(result.area);
-            int bonus = scorer.addBoardScore(board.clearComplete(game.effect), board.cellCount);
+            int bonus;
+            switch (BOARD_SIZE) {
+                case 15:
+                    scorer15.addPieceScore(result.area);
+                    bonus = scorer15.addBoardScore(board.clearComplete(game.effect), board.cellCount);
+                    break;
+                case 20:
+                    scorer20.addPieceScore(result.area);
+                    bonus = scorer20.addBoardScore(board.clearComplete(game.effect), board.cellCount);
+                    break;
+                default:
+                    scorer.addPieceScore(result.area);
+                    bonus = scorer.addBoardScore(board.clearComplete(game.effect), board.cellCount);
+            }
+
             if (bonus > 0) {
                 bonusParticleHandler.addBonus(result.pieceCenter, bonus);
                 if (Klooni.soundsEnabled()) {
@@ -249,7 +336,8 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
             // After the piece was put, check if it's game over
             if (isGameOver()) {
-                doGameOver("no moves left");
+                reason = "no moves left";
+                doGameOver(reason);
             }
         }
         return true;
@@ -268,7 +356,10 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     @Override
-    public void hide() { /* Hide can only be called if the menu was shown. Place logic there. */ }
+    public void hide() {
+        /* Hide can only be called if the menu was shown. Place logic there. */
+        game.iActivityRequestHandler.hideBanner();
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -301,7 +392,17 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
     private void saveMoney() {
         // Calculate new money since the previous saving
-        int nowScore = scorer.getCurrentScore();
+        int nowScore;
+        switch (BOARD_SIZE) {
+            case 15:
+                nowScore = scorer15.getCurrentScore();
+                break;
+            case 20:
+                nowScore = scorer20.getCurrentScore();
+                break;
+            default:
+                nowScore = scorer.getCurrentScore();
+        }
         int newMoneyScore = nowScore - savedMoneyScore;
         savedMoneyScore = nowScore;
         Klooni.addMoneyFromScore(newMoneyScore);
@@ -311,10 +412,23 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         // Only save if the game is not over and the game mode is not the time mode. It
         // makes no sense to save the time game mode since it's supposed to be something quick.
         // Don't save either if the score is 0, which means the player did nothing.
-        if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer.getCurrentScore() == 0)
-            return;
-
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        final FileHandle handle;
+        switch (BOARD_SIZE) {
+            case 15:
+                if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer15.getCurrentScore() == 0)
+                    return;
+                handle = Gdx.files.local(SAVE_DAT_FILENAME15);
+                break;
+            case 20:
+                if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer20.getCurrentScore() == 0)
+                    return;
+                handle = Gdx.files.local(SAVE_DAT_FILENAME20);
+                break;
+            default:
+                if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer.getCurrentScore() == 0)
+                    return;
+                handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        }
         try {
             BinSerializer.serialize(this, handle.write(false));
         } catch (IOException e) {
@@ -324,24 +438,59 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     private static void deleteSave() {
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        final FileHandle handle;
+        switch (BOARD_SIZE) {
+            case 15:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME15);
+                break;
+            case 20:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME20);
+                break;
+            default:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        }
         if (handle.exists())
             handle.delete();
     }
 
-    static boolean hasSavedData() {
-        return Gdx.files.local(SAVE_DAT_FILENAME).exists();
+    static boolean hasSavedData(int boardSize) {
+        switch (boardSize) {
+            case 15:
+                return Gdx.files.local(SAVE_DAT_FILENAME15).exists();
+            case 20:
+                return Gdx.files.local(SAVE_DAT_FILENAME20).exists();
+            default:
+                return Gdx.files.local(SAVE_DAT_FILENAME).exists();
+        }
     }
 
     private boolean tryLoad() {
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        final FileHandle handle;
+        switch (BOARD_SIZE) {
+            case 15:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME15);
+                break;
+            case 20:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME20);
+                break;
+            default:
+                handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        }
         if (handle.exists()) {
             try {
                 BinSerializer.deserialize(this, handle.read());
                 // No cheating! We need to load the previous money
                 // or it would seem like we earned it on this game
-                savedMoneyScore = scorer.getCurrentScore();
-
+                switch (BOARD_SIZE) {
+                    case 15:
+                        savedMoneyScore = scorer15.getCurrentScore();
+                        break;
+                    case 20:
+                        savedMoneyScore = scorer20.getCurrentScore();
+                        break;
+                    default:
+                        savedMoneyScore = scorer.getCurrentScore();
+                }
                 // After it's been loaded, delete the save file
                 deleteSave();
                 return true;
@@ -357,7 +506,17 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
         out.writeInt(gameMode);
         board.write(out);
         holder.write(out);
-        scorer.write(out);
+        switch (BOARD_SIZE) {
+            case 15:
+                scorer15.write(out);
+                break;
+            case 20:
+                scorer20.write(out);
+                break;
+            default:
+                scorer.write(out);
+        }
+
     }
 
     @Override
@@ -368,7 +527,16 @@ class GameScreen implements Screen, InputProcessor, BinSerializable {
 
         board.read(in);
         holder.read(in);
-        scorer.read(in);
+        switch (BOARD_SIZE) {
+            case 15:
+                scorer15.read(in);
+                break;
+            case 20:
+                scorer20.read(in);
+                break;
+            default:
+                scorer.read(in);
+        }
     }
 
     //endregion

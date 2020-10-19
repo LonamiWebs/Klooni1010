@@ -1,6 +1,6 @@
 {
   "name": "Autumn",
-  "price": 50,
+  "price": 0,
   "colors": {
     "background": "f5e7cbff",
     "foreground": "ffffffff",

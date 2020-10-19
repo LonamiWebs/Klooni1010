@@ -5,10 +5,10 @@
         "background": "ffffffff",
         "foreground": "ffffffff",
         "buttons": [
-            "00ff33ff",
-            "ffd700ff",
-            "2389fcff",
-            "d94848ff"
+            "66BB6Aff",
+            "EB8E3Eff",
+            "4090C4ff",
+            "DE6656ff"
         ],
         "empty_cell": "e6e6e6ff",
         "cells": [

@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class SkinLoader {
     private final static float[] multipliers = {0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 4.0f};
     private final static String[] ids = {
-            "play", "play_saved", "star", "stopwatch", "palette", "home", "replay",
+            "bg_r", "resurrection", "splash", "bg_ad", "bg_10X10", "bg_10X10_s", "bg_15X15", "bg_15X15_s", "bg_20X20", "bg_20X20_s", "play", "play_saved", "star", "stopwatch", "palette", "home", "replay",
             "share", "sound_on", "sound_off", "snap_on", "snap_off", "issues", "credits",
             "web", "back", "ok", "cancel", "power_off", "effects"
     };

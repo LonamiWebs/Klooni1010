@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -15,10 +13,16 @@
    viewBox="0 0 500.00001 500.00001"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    sodipodi:docname="buttons.svg">
   <defs
      id="defs4">
+    <rect
+       x="129.37501"
+       y="749.23717"
+       width="83.437505"
+       height="42.187502"
+       id="rect976" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient1090">
@@ -175,20 +179,21 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="232.7201"
-     inkscape:cy="408.36092"
+     inkscape:cx="325.7201"
+     inkscape:cy="309.36092"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="739"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1440"
+     inkscape:window-height="855"
+     inkscape:window-x="-1"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
      units="px"
-     inkscape:lockguides="true">
+     inkscape:lockguides="true"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid4248"
@@ -1447,5 +1452,9 @@
          d="m 211.20659,649.016 c 0,0 -4.33765,0.58026 -6.43342,1.18165 -3.1976,0.91757 -6.49795,1.84949 -9.27813,3.67624 -2.36215,1.55208 -5.99577,5.99578 -5.99577,5.99578 0,0 -0.29105,-4.85888 -0.96283,-7.17743 -0.82656,-2.85272 -3.72,-8.09648 -3.72,-8.09648 0,0 -2.85841,3.56094 -4.02636,5.51436 -1.8182,3.04095 -3.63987,6.17269 -4.59529,9.58448 -0.59696,2.13167 -0.65649,6.60848 -0.65649,6.60848 0,0 -1.78704,-1.18846 -2.80093,-1.488 -1.13745,-0.33606 -3.54495,-0.30635 -3.54495,-0.30635 0,0 0.7069,3.58799 1.57552,5.16424 1.47775,2.68159 3.46353,5.23747 5.99578,6.9586 0.63244,0.42985 1.72045,0.79749 2.63136,1.05719 l -8.10195,7.30187 c -1.37928,1.24308 2.69575,5.31811 3.93883,3.93883 l 7.30187,-8.10195 c 0.2597,0.91091 0.62734,1.99892 1.05719,2.63136 1.72113,2.53225 4.27701,4.51803 6.9586,5.99578 1.57625,0.86862 5.16424,1.57552 5.16424,1.57552 0,0 0.0296,-2.4075 -0.30635,-3.54495 -0.29954,-1.01389 -1.488,-2.80093 -1.488,-2.80093 0,0 4.47681,-0.0595 6.60848,-0.65649 3.41179,-0.95542 6.54353,-2.77709 9.58448,-4.59529 1.95342,-1.16795 5.51436,-4.02636 5.51436,-4.02636 0,0 -5.24376,-2.89343 -8.09648,-3.72 -2.31855,-0.67178 -7.17742,-0.96283 -7.17742,-0.96283 0,0 4.44369,-3.63362 5.99577,-5.99577 1.82675,-2.78018 2.75867,-6.08053 3.67624,-9.27813 0.60139,-2.09577 1.18165,-6.43342 1.18165,-6.43342 z"
          style="fill:#ffffff;stroke:none;stroke-width:0.49514174px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
+    <text
+       xml:space="preserve"
+       id="text974"
+       style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:37.50000218000000274px;white-space:pre;shape-inside:url(#rect976);" />
   </g>
 </svg>

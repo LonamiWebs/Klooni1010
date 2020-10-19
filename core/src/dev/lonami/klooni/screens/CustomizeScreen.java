@@ -77,11 +77,10 @@ class CustomizeScreen implements Screen {
 
     //region Constructor
 
-    CustomizeScreen(Klooni game, final Screen lastScreen) {
+    CustomizeScreen(final Klooni game, final Screen lastScreen) {
         this.game = game;
         this.lastScreen = lastScreen;
         stage = new Stage();
-
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -95,6 +94,7 @@ class CustomizeScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 goBack();
+
             }
         });
         optionsGroup.addActor(backButton);
@@ -147,22 +147,22 @@ class CustomizeScreen implements Screen {
         });
         optionsGroup.addActor(snapButton);
 
-        // Issues
-        final SoftButton issuesButton = new SoftButton(3, "issues_texture");
-        issuesButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/issues");
-            }
-        });
-        optionsGroup.addActor(issuesButton);
+//        // Issues
+//        final SoftButton issuesButton = new SoftButton(3, "issues_texture");
+//        issuesButton.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Gdx.net.openURI("https://github.com/LonamiWebs/Klooni1010/issues");
+//            }
+//        });
+//        optionsGroup.addActor(issuesButton);
 
         // Website
         final SoftButton webButton = new SoftButton(2, "web_texture");
         webButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.net.openURI("https://lonamiwebs.github.io");
+                Gdx.net.openURI("https://play.google.com/store/apps/details?id=com.vision.elimination");
             }
         });
         optionsGroup.addActor(webButton);
@@ -191,6 +191,7 @@ class CustomizeScreen implements Screen {
 
     private void goBack() {
         CustomizeScreen.this.game.transitionTo(lastScreen);
+        game.iActivityRequestHandler.showInterstitial();
     }
 
     private void loadShop() {
@@ -229,23 +230,17 @@ class CustomizeScreen implements Screen {
                 shopDragStartY = y;
                 return true;
             }
-
-            // We could actually rely on touchDragged not being called,
-            // but perhaps it would be hard for some people not to move
-            // their fingers even the slightest bit, so we use a custom
-            // drag limit
-
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 x -= shopDragStartX;
                 y -= shopDragStartY;
                 float distSq = x * x + y * y;
                 if (distSq < DRAG_LIMIT_SQ) {
-                    if (card.isBought())
+                    if (card.isBought()) {
                         card.use();
-                    else
+                        game.iActivityRequestHandler.showInterstitial();
+                    } else
                         buyBand.askBuy(card);
-
                     for (Actor a : shopGroup.getChildren()) {
                         ((ShopCard) a).usedItemUpdated();
                     }

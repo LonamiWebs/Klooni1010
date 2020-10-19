@@ -35,6 +35,7 @@ import dev.lonami.klooni.Klooni;
 import dev.lonami.klooni.actors.Band;
 import dev.lonami.klooni.actors.SoftButton;
 import dev.lonami.klooni.game.BaseScorer;
+import dev.lonami.klooni.game.Board;
 import dev.lonami.klooni.game.GameLayout;
 
 // The pause stage is not a whole screen but rather a menu
@@ -54,19 +55,23 @@ class PauseMenuStage extends Stage {
     private final BaseScorer scorer;
     private final SoftButton playButton;
     private final SoftButton customButton; // Customize & "Shut down"
-
+    private final GameScreen gameScreen;
+    private final Board board;
+    private final Table table;
+    private SoftButton resurrectionBtn;
     //endregion
 
     //region Constructor
 
     // We need the score to save the maximum score if a new record was beaten
-    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode) {
+    PauseMenuStage(final GameLayout layout, final Klooni game, final BaseScorer scorer, final int gameMode, final Board board, final GameScreen gameScreen) {
         this.game = game;
         this.scorer = scorer;
-
+        this.board = board;
+        this.gameScreen = gameScreen;
         shapeRenderer = new ShapeRenderer(20); // 20 vertex seems to be enough for a rectangle
-
-        Table table = new Table();
+        game.iActivityRequestHandler.showInterstitial();
+        table = new Table();
         table.setFillParent(true);
         addActor(table);
 
@@ -107,6 +112,7 @@ class PauseMenuStage extends Stage {
         // Continue playing OR share (if game over) button
         playButton = new SoftButton(2, "play_texture");
         table.add(playButton).space(16);
+        table.row();
         playButton.addListener(playChangeListener);
     }
 
@@ -136,6 +142,7 @@ class PauseMenuStage extends Stage {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             // Don't dispose because then it needs to take us to the previous screen
+//            game.iActivityRequestHandler.loadInterstitial();
             game.transitionTo(new CustomizeScreen(game, game.getScreen()), false);
         }
     };
@@ -153,6 +160,7 @@ class PauseMenuStage extends Stage {
 
     // Shows the pause menu, indicating whether it's game over or not
     void show() {
+
         scorer.pause();
         scorer.saveScore();
 
@@ -168,16 +176,54 @@ class PauseMenuStage extends Stage {
 
     void showGameOver(final String gameOverReason, final boolean timeMode) {
         // Allow the players to exit the game (issue #23)
+        if (resurrectionBtn == null) {
+            resurrectionBtn = new SoftButton(1, "bg_r_texture");
+            resurrectionBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.iActivityRequestHandler.showRewardAd(customButton, board, gameScreen, customChangeListener, game, gameOverReason);
+                    game.iActivityRequestHandler.loadRewardAd();
+                    hide();
+                }
+            });
+            table.add(resurrectionBtn).colspan(2).fill().space(16);
+        }
         customButton.removeListener(customChangeListener);
         customButton.updateImage("power_off_texture");
         customButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
+
             }
         });
+        if (game.shareChallenge != null && gameScreen.holder.enabled && !gameScreen.gameOverDone) {
+            playButton.removeListener(playChangeListener);
+            playButton.updateImage("share_texture");
+            playButton.addListener(new ChangeListener() {
+                public void changed(ChangeEvent event, Actor actor) {
+                    // Don't dispose because then it needs to take us to the previous screen
+                    game.transitionTo(new ShareScoreScreen(
+                            game, game.getScreen(), scorer.getCurrentScore(), timeMode), false);
+                }
+            });
+        }
 
-        if (game.shareChallenge != null) {
+        band.setMessage(gameOverReason);
+        show();
+    }
+
+    void showRealGameOver(final String gameOverReason, final boolean timeMode) {
+        customButton.removeListener(customChangeListener);
+        customButton.updateImage("power_off_texture");
+        customButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+
+            }
+        });
+        if (game.shareChallenge != null && gameScreen.holder.enabled && !gameScreen.gameOverDone) {
             playButton.removeListener(playChangeListener);
             playButton.updateImage("share_texture");
             playButton.addListener(new ChangeListener() {

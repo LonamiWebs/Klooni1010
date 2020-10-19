@@ -24,11 +24,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -71,17 +69,17 @@ public abstract class ShareChallenge {
         batch.begin();
         batch.draw(shareBase, 0, 0);
 
-        // Render the achieved score
-        final Label.LabelStyle style = new Label.LabelStyle();
-        style.font = new BitmapFont(Gdx.files.internal("font/x1.0/geosans-light64.fnt"));
-        Label label = new Label("just scored " + score + " on", style);
-        label.setColor(Color.BLACK);
-        label.setPosition(40, 500);
-        label.draw(batch, 1);
-
-        label.setText("try to beat me if you can");
-        label.setPosition(40, 40);
-        label.draw(batch, 1);
+//        // Render the achieved score
+//        final Label.LabelStyle style = new Label.LabelStyle();
+//        style.font = new BitmapFont(Gdx.files.internal("font/x1.0/geosans-light64.fnt"));
+//        Label label = new Label("just scored " + score + " on", style);
+//        label.setColor(Color.BLACK);
+//        label.setPosition(40, 500);
+//        label.draw(batch, 1);
+//
+//        label.setText("try to beat me if you can");
+//        label.setPosition(40, 40);
+//        label.draw(batch, 1);
 
         if (timeMode) {
             Texture timeModeTexture = new Texture("ui/x1.5/stopwatch.png");

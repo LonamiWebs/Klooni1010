@@ -128,6 +128,7 @@ public class EffectCard extends ShopCard {
 
     @Override
     public void use() {
+        game.iActivityRequestHandler.showInterstitial();
         game.updateEffect(effect);
         usedItemUpdated();
     }
