@@ -19,10 +19,13 @@ package dev.lonami.klooni;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -39,6 +42,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -77,6 +82,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
     private boolean readyToPurchase = false;
     private ReviewManager manager;
     private RewardedAd mRewardedVideoAd;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +143,26 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         InterstitialAdsManager.getInstance().init(this);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         gameView.setLayoutParams(gameViewParams);
-        setContentView(gameView);
+        adView = new AdView(this);
+        adView.setAdUnitId("ca-app-pub-3241270777052923/3238587066");
+        adView.setAdSize(getAdSize());
+        RelativeLayout.LayoutParams adViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        adViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        adViewParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+        adView.setLayoutParams(adViewParams);
+        layout.addView(gameView);
+        layout.addView(adView);
+        setContentView(layout);
+    }
+
+    private AdSize getAdSize() {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+        int adWidth = (int) (widthPixels / density);
+       return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
 
     @Override
@@ -150,6 +175,32 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
                     GoogleInterstitialAdsPool.showAd("gameover");
                 }
             });
+    }
+
+    @Override
+    public void showBanner() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AdRequest adRequest =
+                        new AdRequest.Builder()
+                                .build();
+                if (adView.getParent() == null)
+                    layout.addView(adView);
+                adView.loadAd(adRequest);
+            }
+        });
+    }
+
+    @Override
+    public void hideBanner() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adView.getParent() != null)
+                    layout.removeView(adView);
+            }
+        });
     }
 
     @Override

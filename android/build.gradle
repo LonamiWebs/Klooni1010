@@ -4,7 +4,6 @@ ext.myKeyAlias = 'BlockPuzzle'
 ext.myKeyPassword = 'wmj141519'
 //def playcoreDir = file('../play-core-native-sdk/playcore.cmake')
 android {
-
     compileSdkVersion 29
     sourceSets {
         main {
@@ -26,8 +25,8 @@ android {
         //noinspection MinSdkTooLow
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 998
-        versionName "9.9.8"
+        versionCode 999
+        versionName "9.9.9"
     }
     signingConfigs {
         release {

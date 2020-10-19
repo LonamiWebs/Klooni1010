@@ -105,7 +105,6 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
         batch = new SpriteBatch();
         this.game = game;
         this.gameMode = gameMode;
-
         final GameLayout layout = new GameLayout();
         switch (gameMode) {
             case GAME_MODE_SCORE:
@@ -121,7 +120,6 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
             default:
                 throw new RuntimeException("Unknown game mode given: " + gameMode);
         }
-
         board = new Board(layout, BOARD_SIZE);
         holder = new PieceHolder(layout, board, HOLDER_PIECE_COUNT, board.cellSize);
         switch (BOARD_SIZE) {
@@ -149,8 +147,8 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
                 deleteSave();
             }
         }
+        game.iActivityRequestHandler.showBanner();
     }
-
     //endregion
 
     //region Private methods
@@ -358,7 +356,10 @@ public class GameScreen implements Screen, InputProcessor, BinSerializable {
     }
 
     @Override
-    public void hide() { /* Hide can only be called if the menu was shown. Place logic there. */ }
+    public void hide() {
+        /* Hide can only be called if the menu was shown. Place logic there. */
+        game.iActivityRequestHandler.hideBanner();
+    }
 
     @Override
     public boolean keyDown(int keycode) {

@@ -12,6 +12,10 @@ public interface IActivityRequestHandler {
     //    void showBannerAds(boolean isTop, boolean isBottom);
     void showInterstitial();
 
+    void showBanner();
+
+    void hideBanner();
+
     void removeAd(Table table, SoftButton softButton);
 
     boolean isAdAvaliable();
