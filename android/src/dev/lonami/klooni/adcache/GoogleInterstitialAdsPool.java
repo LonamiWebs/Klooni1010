@@ -19,20 +19,17 @@ import dev.lonami.klooni.Klooni;
 
 
 public class GoogleInterstitialAdsPool {
-    private static Map<String, InterstitialAd> adsIdlePool = new HashMap<>();
-    private static Map<String, InterstitialAd> adsLoadingPool = new HashMap<>();
-    private static ArrayList<InterstitialAd> adsLoadedPool = new ArrayList<>();
+    private static final Map<String, InterstitialAd> adsIdlePool = new HashMap<>();
+    private static final Map<String, InterstitialAd> adsLoadingPool = new HashMap<>();
+    private static final ArrayList<InterstitialAd> adsLoadedPool = new ArrayList<>();
     private static Context context;
     private static final String TAG = "GoogleInterstitialAds";
 
     public static void init(Context ctx) {
         context = ctx;
-        // 缓存一些广告
         if (!Klooni.getIsRemove()) {
-            add("ca-app-pub-3241270777052923/7165836741");
-            add("ca-app-pub-3241270777052923/9681081186");
-//        add("ca-app-pub-3940256099942544/1033173712");
-//        add("ca-app-pub-3940256099942544/1033173712");
+            add("ca-app-pub-3940256099942544/1033173712");
+            add("ca-app-pub-3940256099942544/1033173712");
         }
     }
 
@@ -53,12 +50,10 @@ public class GoogleInterstitialAdsPool {
             }
 
             @Override
-            public void onAdLoaded() { // 广告加载完成了，放入到完成map中
+            public void onAdLoaded() {
                 super.onAdLoaded();
                 Log.i(TAG, "onAdLoaded: " + ad.getAdUnitId());
-                // 从加载中map中移除
                 adsLoadingPool.remove(ad.getAdUnitId());
-                // 添加到加载完成队列中
                 adsLoadedPool.add(ad);
             }
 
@@ -66,19 +61,15 @@ public class GoogleInterstitialAdsPool {
             public void onAdFailedToLoad(LoadAdError i) { // 加载失败
                 super.onAdFailedToLoad(i);
                 Log.e(TAG, "onAdFailedToLoad: " + ad.getAdUnitId());
-                // 做统计
                 Bundle bundleEvent = new Bundle();
                 bundleEvent.putString("errormsg", ad.getAdUnitId() + " errorcode:" + i);
                 bundleEvent.putString("type", "onGoogleAdFailedToLoad");
                 FirebaseAnalytics.getInstance(context).logEvent("onAdFailedToLoad", bundleEvent);
-                // 从加载中map中移除
                 adsLoadingPool.remove(ad.getAdUnitId());
                 add(ad.getAdUnitId(), false);
             }
         });
-        // 加入到空闲广告map中
         adsIdlePool.put(adKey, ad);
-        // 判断要不要激活加载事件
         if (bFireLoadEvent) {
             fire2LoadAd();
         }
@@ -86,22 +77,18 @@ public class GoogleInterstitialAdsPool {
 
     private static void fire2LoadAd() {
         for (Map.Entry<String, InterstitialAd> entry : adsIdlePool.entrySet()) {
-            // 加载广告
             AdRequest adRequest = new AdRequest.Builder()
                     .addTestDevice("5EB85F7D497B2DF45A4F3846A535BB13")
                     .build();
             entry.getValue().loadAd(adRequest);
             adsLoadingPool.put(entry.getKey(), entry.getValue());
         }
-        // 清空待加载列表
         adsIdlePool.clear();
     }
 
-    // 显示广告
     public static boolean showAd(String fref) {
         Bundle bundleEvent = new Bundle();
-        if (adsLoadedPool.isEmpty()) // 如果已加载列表为空
-        {
+        if (adsLoadedPool.isEmpty()) {
             fire2LoadAd();
             bundleEvent.putString("type", "NoCacheGoogleAd");
             FirebaseAnalytics.getInstance(context).logEvent("NoCacheAd", bundleEvent);

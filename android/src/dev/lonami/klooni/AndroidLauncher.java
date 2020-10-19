@@ -19,7 +19,6 @@ package dev.lonami.klooni;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -45,15 +44,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
@@ -62,20 +55,18 @@ import com.google.android.play.core.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import dev.lonami.klooni.actors.SoftButton;
 import dev.lonami.klooni.adcache.GoogleInterstitialAdsPool;
-import dev.lonami.klooni.adcache.InterstitialAdsManager;
 import dev.lonami.klooni.game.Board;
 import dev.lonami.klooni.screens.GameScreen;
 import es.dmoral.toasty.Toasty;
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler {
     public RelativeLayout layout;
-    private static final String PRODUCT_ID = "com.vision.remove.ad";
-    private static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+M7RqVtF6DObnwCFBnW9Stb+RbL63M1zOb+UeFmbcfLSB+zy2oOUO0aiak3JIZHZ5Lr7Efg2kB2kxUEEYI8uvcf9CafMSLA/Rb6pB7yqVIK4MzsNFPbPQE/NL5shRqIRmN4PXdFGGo6UpgwbUyKjNDZKtGqZ8aqVeW5fOoBkbZPzpqpr9BA8kvU3+WLcazIDtjOWkHgI1kaH1/J+aXrm+andy9HB+EYS+z5lHmfjLaJx9AATxdsFFa9xa/GKCFDr8CBmhzey68KLELrRiDLgRxNcXsg5EbD5R54UyKPgb3u/Tua9hDnvIqJMkB6p+CSimhe7Cp0Ew1ZPj5PHGUTlQIDAQAB";
-    private static final String MERCHANT_ID = "01548378342793731645";
+    private static final String PRODUCT_ID = "sample_product";
+    private static final String LICENSE_KEY = "sample_key";
+    private static final String MERCHANT_ID = "sample_id";
     private Table table;
     private SoftButton softButton;
     private BillingProcessor bp;
@@ -140,11 +131,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
         final AndroidShareChallenge shareChallenge = new AndroidShareChallenge(this);
         Klooni game = new Klooni(shareChallenge, this);
         View gameView = initializeForView(game, config);
-        InterstitialAdsManager.getInstance().init(this);
+        GoogleInterstitialAdsPool.init(this);
         RelativeLayout.LayoutParams gameViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         gameView.setLayoutParams(gameViewParams);
         adView = new AdView(this);
-        adView.setAdUnitId("ca-app-pub-3241270777052923/3238587066");
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         adView.setAdSize(getAdSize());
         RelativeLayout.LayoutParams adViewParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         adViewParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);

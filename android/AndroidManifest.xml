@@ -28,7 +28,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3241270777052923~1175143466" />
+            android:value="sample_id" />
 
         <activity
             android:name="dev.lonami.klooni.AndroidLauncher"

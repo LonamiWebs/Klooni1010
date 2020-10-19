@@ -10,8 +10,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.util.Arrays;
 import java.util.List;
 
-import dev.lonami.klooni.adcache.InterstitialAdsManager;
-
 public class App extends Application {
     @Override
     public void onCreate() {

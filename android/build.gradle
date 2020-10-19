@@ -1,7 +1,7 @@
-ext.myStoreFile = file("BlockPuzzle.jks")
-ext.myStorePassword = 'wmj141519'
-ext.myKeyAlias = 'BlockPuzzle'
-ext.myKeyPassword = 'wmj141519'
+ext.myStoreFile = file("sample.jks")
+ext.myStorePassword = 'sample'
+ext.myKeyAlias = 'sample'
+ext.myKeyPassword = 'sample'
 //def playcoreDir = file('../play-core-native-sdk/playcore.cmake')
 android {
     compileSdkVersion 29
