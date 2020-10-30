@@ -4,6 +4,8 @@ Play 1010! for free! Add your own themes! Contribute! Make the game yours!
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/dev.lonami.klooni)
 
+(Desktop builds are available on the [releases page](https://github.com/LonamiWebs/Klooni1010/releases).)
+
 This project is licensed under [GPLv3+](LICENSE).
 
 **Table of contents**:

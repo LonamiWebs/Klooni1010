@@ -23,6 +23,14 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew desktop:dist
 
+    - name: Define env vars
+      id: vars
+      run: |
+        echo ::set-output name=jar_file::\
+        $(echo ./desktop/build/libs/*.jar)
+        echo ::set-output name=version::\
+        $(echo ./desktop/build/libs/*.jar | grep -Po -- '(?<=-)(.+?)(?=\.jar)')
+
     - name: Create release
       id: create_release
       uses: actions/create-release@v1
@@ -40,6 +48,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./desktop/build/libs/*.jar
-        asset_name: Klooni-${{ github.ref }}.jar
+        asset_path: ${{ steps.vars.outputs.jar_file }}
+        asset_name: Klooni-${{ steps.vars.outputs.version }}.jar
         asset_content_type: application/java-archive
