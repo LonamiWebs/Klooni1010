@@ -29,7 +29,7 @@ jobs:
         echo ::set-output name=jar_file::\
         $(echo ./desktop/build/libs/*.jar)
         echo ::set-output name=version::\
-        $(echo ./desktop/build/libs/*.jar | grep -Po -- '(?<=-)(.+?)(?=\.jar)')
+        $(echo ./desktop/build/libs/*.jar | sed 's/.*-\([0-9.]\+\)\.jar/\1/')
 
     - name: Create release
       id: create_release
