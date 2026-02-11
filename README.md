@@ -1,3 +1,7 @@
+Moved to https://codeberg.org/Lonami/Klooni1010. The GitHub repository may be deleted in the future.
+
+---
+
 Klooni 1010!
 ============
 Play 1010! for free! Add your own themes! Contribute! Make the game yours!
